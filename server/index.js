@@ -11,9 +11,9 @@ const
 
 const app = new express();
 
+app.use('/api/index', require('./routers/api/index.js'));
+
 app.use(bodyParser.json());
 app.use(cors());
 
 app.listen(port, () => console.log(`server has been started on port ${port}`));
-
-
