@@ -2,9 +2,8 @@
   <div class="home">
       <h1>Start page</h1>
 
-      <div class="wrap-link" v-for="link in links" :key="link.route">
-
-          <div class="link">
+      <div class="wrap-link">
+          <div class="link" v-for="link in links" :key="link.route">
               <router-link :to="link.route">
                   <div class="col-1"><img :src="require(`@/assets/img/home-page/${link.img}`)" alt=""></div>
                   <div class="col-2">
@@ -34,7 +33,8 @@
         data: function(){
             return {
                 links: [
-                    {route: '/crud', img: 'crud-img.svg', text: 'CRUD for articles with material design from GOOGLE', header: 'CRUD'},
+                    {route: '/crud',     img: 'crud-img.svg',     text: 'CRUD for articles with material design from GOOGLE',                                        header: 'CRUD'},
+                    {route: '/seq-crud', img: 'seq-crud-img.svg', text: 'CRUD for articles with material design from GOOGLE and SEQUENCE ORM. Sequence orm in back', header: 'Sequlize CRUD'},
                 ] as Array<linkObject>,
             }
         },
@@ -50,11 +50,11 @@
         margin-top: 40px;
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+        gap: 20px;
 
         .link a{
             display: grid;
             grid-template-columns: 200px auto;
-            column-gap: 20px;
             text-decoration: none;
             background: rgb(233, 227, 233);
             padding: 20px;
