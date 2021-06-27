@@ -6,7 +6,7 @@
 
           <div class="link">
               <router-link :to="link.route">
-                  <div class="col-1"><img :src="require(`@/assets/img/${link.img}`)" alt=""></div>
+                  <div class="col-1"><img :src="require(`@/assets/img/home-page/${link.img}`)" alt=""></div>
                   <div class="col-2">
                       <h2>{{link.header}}</h2>
                       <p>{{link.text}}</p>
@@ -34,24 +34,44 @@
         data: function(){
             return {
                 links: [
-                    {route: '/crud', img: 'logo.png', text: 'CRUD for articles with material design from GOOGLE', header: 'CRUD'},
+                    {route: '/crud', img: 'crud-img.svg', text: 'CRUD for articles with material design from GOOGLE', header: 'CRUD'},
                 ] as Array<linkObject>,
             }
         },
 
-        // created: function(){
-            
-        // },
     });
 
-    // @Options({
-
-    //     
-
-    //     created: function(){
-    //         console.log()
-    //     }
-    // })
-
-    // export default class Home extends Vue {}
 </script>
+
+
+<style lang="scss" scoped>
+
+    .wrap-link{
+        margin-top: 40px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+
+        .link a{
+            display: grid;
+            grid-template-columns: 200px auto;
+            column-gap: 20px;
+            text-decoration: none;
+            background: rgb(233, 227, 233);
+            padding: 20px;
+            color: #000;
+            border: 2px dashed #000;
+
+            &:hover{
+                border: 2px solid rgb(7, 161, 141);
+            }
+
+            p{
+                font-size: 18px;
+            }
+
+            img{
+                width: 100%;
+            }
+        }
+    }
+</style>
