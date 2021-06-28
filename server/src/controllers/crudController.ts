@@ -35,10 +35,30 @@ export default class CrudController{
         }
 
         try {
-            mysql!.query('select * from `article` limit ?, ?', [Number(POST.skip), Number(POST.take)])
+            mysql!.query('select * from `article` order by id desc limit ?, ? ', [Number(POST.skip), Number(POST.take)])
             .then((value) => {
                 res.status(200).send({articles: value[0]});
-            })
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    private static getAmountArticles(req: Request, res: Response){
+
+        let mysql = pool();
+
+        if(mysql == undefined){
+            res.status(400).send({error: Error.db()});
+            return;
+        }
+        
+        try {
+            mysql!.query('select count(*) from `article`')
+            .then((value) => {
+                res.status(200).send({amount: (value[0] as any)[0]['count(*)']});
+            });
         } catch (error) {
             console.error(error);
         }
@@ -46,7 +66,8 @@ export default class CrudController{
 
 
     public static routes(){
-        this.router.post('/', this.getArticles);
+        this.router.post('/',       this.getArticles);
+        this.router.post('/amount', this.getAmountArticles);
 
         return this.router;
     }
