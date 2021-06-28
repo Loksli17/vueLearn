@@ -3,3 +3,15 @@ vue-cli: write command create vue (vue cli save standart settings)
 
 
 ---------------- Node.js --------------------------
+1.  npm init
+2.  npm i -D ts-node nodemon @types/node @types/express
+3.  npm i -D typescript
+4.  tsc --init (create tsconfig)
+5.  npm i cors express
+6.  npm i @types/cors @types/express
+7.  scripts for package.json
+    "scripts": {
+        "start": "node dist/index.js",
+        "dev": "nodemon src/index.ts",
+        "build": "tsc -p"
+    },

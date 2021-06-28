@@ -1,6 +1,6 @@
 export default{
     db: {
-        name    : 'onlineCorel',
+        name    : 'vueLearn',
         user    : 'root',
         password: '1234',
         port    : 3306,
