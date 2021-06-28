@@ -1,5 +1,6 @@
 <template>
     <div class="app-wrap">
+        <FlashMessage class="flash-message" position="right bottom"/>
         <router-view/>
     </div>
 </template>

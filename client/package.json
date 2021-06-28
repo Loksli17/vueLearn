@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@smartweb/vue-flash-message": "^1.0.0-alpha.12",
     "@types/axios": "^0.14.0",
     "@types/moment": "^2.13.0",
     "axios": "^0.21.1",

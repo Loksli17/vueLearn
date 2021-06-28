@@ -56,7 +56,7 @@
 
     import {defineComponent} from 'vue';
     import Pagination        from '../../components/crudComponent/Pagination.vue';
-
+    import flashMessageData  from '../../libs/flashMessage';
 
     export default defineComponent({
 
@@ -88,6 +88,7 @@
                         alert('SOO sad. Status in not 200ok');
                     }
                     this.articles = responce.data.articles;
+                    this.$flashMessage.show(flashMessageData.errorMessage('title', 'text'));
                 });
             },
 
