@@ -133,7 +133,6 @@
             
             init: function(): void{
                 this.maxPage = Math.ceil(this.amountElements / this.take);
-                console.log(this.maxPage, this.amountElements);
                 
                 this.classNameData       = this.className       == undefined ? 'pages-wrap' : this.className;
                 this.itemClassData       = this.itemClass       == undefined ? 'page' : this.itemClass;

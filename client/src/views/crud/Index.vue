@@ -1,5 +1,6 @@
 <template>
     <div class="crud-index">
+
         <h1>Index page of CRUD</h1>
 
         <div class="add-line">
@@ -47,7 +48,8 @@
                 />   
             </div> 
         </div>
-    </div>    
+    </div> 
+       
 </template>
 
 <script lang="ts">
