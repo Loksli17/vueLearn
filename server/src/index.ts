@@ -2,7 +2,6 @@ import express, {Request, Response, NextFunction} from 'express';
 
 import config                           from './config';
 import Router                           from './routes';
-import connectDb                        from './config/database';
 import cors                             from 'cors';
 import fileUpload                       from 'express-fileupload';
 import {createServer, Server}           from 'http';
@@ -22,7 +21,6 @@ export class App{
         this.server = createServer(this.app);
 
         this.createMiddlewares();
-        connectDb();
         this.app.use('/', Router.routes);
 
         this.app.use(this.logErrors);

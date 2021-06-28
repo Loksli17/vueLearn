@@ -1,5 +1,8 @@
 ------------- Vue.js -----------------------
-vue-cli: write command create vue (vue cli save standart settings)
+1.  vue-cli: write command create vue (vue cli save standart settings)
+2.  npm i axios @types/axios
+3.  npm i moment @types/moment
+
 
 
 ---------------- Node.js --------------------------
