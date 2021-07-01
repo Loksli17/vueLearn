@@ -2,7 +2,6 @@ import { Router, Request, Response } from "express";
 import Error                         from "../libs/error";
 import Post                          from "../libs/post";
 import pool                          from '../config/database';
-import { OkPacket, ResultSetHeader, RowDataPacket } from "mysql2";
 
 
 export default class CrudController{
@@ -34,14 +33,14 @@ export default class CrudController{
             return;
         }
 
-        try {
-            mysql!.query('select * from `article` order by id desc limit ?, ? ', [Number(POST.skip), Number(POST.take)])
-            .then((value) => {
-                res.status(200).send({articles: value[0]});
-            });
-        } catch (error) {
-            console.error(error);
-        }
+        mysql!.query('select * from `article` order by id desc limit ?, ? ', [Number(POST.skip), Number(POST.take)])
+        .then((value) => {
+            res.status(200).send({articles: value[0]});
+        })
+        .catch((reason: any) => {
+            console.error(reason);
+        });
+
     }
 
 
@@ -54,14 +53,14 @@ export default class CrudController{
             return;
         }
         
-        try {
-            mysql!.query('select count(*) from `article`')
-            .then((value) => {
-                res.status(200).send({amount: (value[0] as any)[0]['count(*)']});
-            });
-        } catch (error) {
-            console.error(error);
-        }
+        mysql!.query('select count(*) from `article`')
+        .then((value) => {
+            res.status(200).send({amount: (value[0] as any)[0]['count(*)']});
+        })
+        .catch((reason: any) => {
+            console.error(reason);
+        })
+    
     }
 
 

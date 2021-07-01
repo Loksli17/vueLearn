@@ -54,9 +54,12 @@
 
 <script lang="ts">
 
-    import {defineComponent} from 'vue';
-    import Pagination        from '../../components/crudComponent/Pagination.vue';
-    import flashMessageData  from '../../libs/flashMessage';
+    import { defineComponent } from 'vue';
+    import Pagination          from '../../components/crudComponent/Pagination.vue';
+    import flashMessageData    from '../../libs/flashMessage';
+    import axios               from '../../libs/axios';
+    import { AxiosResponse }   from 'axios'
+
 
     export default defineComponent({
 
@@ -80,27 +83,30 @@
         
         methods: {
             
-            getArticles: function(data: {take: number; skip: number}){
+            getArticles: async function(data: {take: number; skip: number}){
 
-                this.$axios.post('/crud', {skip: data.skip, take: data.take})
-                .then((responce) => {
-                    if(responce.status != 200){
-                        alert('SOO sad. Status in not 200ok');
+                await axios.post({
+                    url: '/crud',
+                    data: {skip: data.skip, take: data.take},
+                    status: 200,
+                    flashMessage: this.$flashMessage,
+                    handler: (res: AxiosResponse) => {
+                        this.articles = res.data.articles;
                     }
-                    this.articles = responce.data.articles;
-                    this.$flashMessage.show(flashMessageData.errorMessage('title', 'text'));
                 });
+
             },
 
-            getArticlesAmount: function(){
-                this.$axios.post('/crud/amount')
-                .then((responce) => {
-                    if(responce.status != 200){
-                        alert('SOO sad. Status in not 200ok');
+            getArticlesAmount: async function(){
+
+                await axios.post({
+                    url: '/crud/amount',
+                    status: 200,
+                    flashMessage: this.$flashMessage,
+                    handler: (res: AxiosResponse) => {
+                        const pagination = this.$refs.pagination! as any;
+                        pagination.setAmountElements(res.data.amount);
                     }
-                    
-                    const pagination          = this.$refs.pagination! as any;
-                    pagination.setAmountElements(responce.data.amount);
                 });
             },
 
