@@ -33,8 +33,11 @@ export default class CrudController{
             return;
         }
 
-        mysql!.query('select * from `article` order by id desc limit ?, ? ', [Number(POST.skip), Number(POST.take)])
+        mysql!.query(
+            'select `article`.id, `article`.views, `article`.`date`, `article`.`time`, `article`.isReady, `articleType`.`title` as `t_title`, `article`.title from `article` left join `articleType` on `articleType`.`id` = `article`.`articleTypeId` order by `article`.`id` desc limit ?, ? ', 
+            [Number(POST.skip), Number(POST.take)])
         .then((value) => {
+            console.log((value[0] as Array<any>).length);
             res.status(200).send({articles: value[0]});
         })
         .catch((reason: any) => {

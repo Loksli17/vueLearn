@@ -28,7 +28,7 @@
                     <tr v-for="item in articles" :key="item.id">
                         <td>{{item.id}}</td>
                         <td>{{item.title}}</td>
-                        <td>{{item.articleTypeId}}</td>
+                        <td>{{item.t_title}}</td>
                         <td>{{item.isReady}}</td>
                         <td>{{item.time}}</td>
                         <td>{{item.date}}</td>
@@ -101,6 +101,12 @@
                     }
                 });
 
+                this.articles.map(item => {
+                    item.isReady = item.isReady ? 'Ready' : 'Not Ready';
+                    item.time    = this.$filters.timeToView('0000-01-01 ' + item.time as string);
+                    item.date    = this.$filters.dateToView(item.date as string);
+                    return item;
+                });
             },
 
             getArticlesAmount: async function(){

@@ -224,7 +224,6 @@
                 this.currentPageData = newPage;
                 this.render();
                 
-                console.log('page', e);
                 this.$emit('page-change', {skip: this.skip, take: this.take});
             },
 
