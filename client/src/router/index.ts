@@ -17,13 +17,13 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/crud/Create.vue'),
     },
     {
-        path: '/crud/view',
+        path: '/crud/:id/view',
         name: 'Crud-view',
         component: () => import('../views/crud/View.vue'),
     },
     {
-        path: '/crud/Edit',
-        name: 'Crud-view',
+        path: '/crud/:id/edit',
+        name: 'Crud-edit',
         component: () => import('../views/crud/Edit.vue'),
     },
 ];

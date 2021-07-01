@@ -22,6 +22,7 @@
                         <th>isReady</th>
                         <th>time</th>
                         <th>date</th>
+                        <th>actions</th>
                     </tr>
 
                     <tr v-for="item in articles" :key="item.id">
@@ -31,6 +32,11 @@
                         <td>{{item.isReady}}</td>
                         <td>{{item.time}}</td>
                         <td>{{item.date}}</td>
+                        <td>
+                            <!-- <router-link>Delete</router-link> -->
+                            <router-link :to="`/crud/${item.id}/edit`">Edit</router-link>
+                            <router-link :to="`/crud/${item.id}/view`">View</router-link>
+                        </td>
                     </tr>
 
                 </table>

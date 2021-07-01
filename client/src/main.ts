@@ -1,7 +1,6 @@
 import { createApp }                      from 'vue';
 import App                                from './App.vue';
 import router                             from './router';
-// import axios, {AxiosInstance}             from 'axios';
 import filters                            from './libs/filters';
 import flashMessage, {FlashMessagePlugin} from '@smartweb/vue-flash-message';
 // import store                  from './store';
@@ -10,7 +9,6 @@ import flashMessage, {FlashMessagePlugin} from '@smartweb/vue-flash-message';
 declare module '@vue/runtime-core'{
     interface ComponentCustomProperties{
         $filters: typeof filters;
-        // $axios: AxiosInstance;
         $flashMessage: FlashMessagePlugin;
         // $store: typeof store;
     }
@@ -26,6 +24,5 @@ app.use(flashMessage, {
 });
 
 app.config.globalProperties.$filters = filters;
-// app.config.globalProperties.$axios   = axios;
 
 app.use(router).mount('#app');
