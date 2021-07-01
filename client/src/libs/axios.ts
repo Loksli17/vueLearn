@@ -18,8 +18,6 @@ interface axiosData{
 }
 
 
-axios.
-
 export default {
 
     post: async (axiosData: axiosData) => {
