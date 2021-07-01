@@ -14,7 +14,7 @@
         <div class="section">
 
             <div class="table-wrap">
-                <table>
+                <table border="1">
                     <tr>
                         <th>id</th>
                         <th>title</th>

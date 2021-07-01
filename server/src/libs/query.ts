@@ -1,5 +1,5 @@
 
-export default class Post{
+export default class Query{
     
     public static checkData<T extends object>(obj: T, props: Array<keyof T>): Array<keyof T>{
 
