@@ -33,7 +33,7 @@
                         <td>{{item.time}}</td>
                         <td>{{item.date}}</td>
                         <td>
-                            <!-- <router-link>Delete</router-link> -->
+                            <a href="" @click.prevent="removeArticle(item.id)">Delete</a>
                             <router-link :to="`/crud/${item.id}/edit`">Edit</router-link>
                             <router-link :to="`/crud/${item.id}/view`">View</router-link>
                         </td>
@@ -75,9 +75,10 @@
 
         data: function(){
             return {
-                articles   : [] as Array<Record<string, unknown>>,
-                take       : 10 as number,
-                currentPage: 1 as number,
+                articles      : [] as Array<Record<string, unknown>>,
+                take          : 10 as number,
+                currentPage   : 1 as number,
+                amountArticles: 0 as number, 
             }
         },
 
@@ -118,6 +119,7 @@
                     handler: (res: AxiosResponse) => {
                         const pagination = this.$refs.pagination! as any;
                         pagination.setAmountElements(res.data.amount);
+                        this.amountArticles = res.data.amount;
                     }
                 });
             },
@@ -125,6 +127,19 @@
             pageChangeEvt: function(data: {take: number; skip: number}){
                 this.getArticles(data);
             },
+
+            removeArticle: async function(id: number){
+                await axios.delete({
+                    url: `/crud/${id}/remove`,
+                    status: 200,
+                    flashMessage: this.$flashMessage,
+                    handler: (res: AxiosResponse) => {
+                        const pagination = this.$refs.pagination! as any;
+                        pagination.setAmountElements(this.amountArticles--);
+                        this.getArticles({take: pagination.take, skip: pagination.skip});
+                    }
+                })
+            }
 
         },
     });
