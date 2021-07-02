@@ -69,18 +69,18 @@ async function query(axiosData: AxiosData, type: string){
 export default {
 
     post: async (axiosData: AxiosData) => {
-        query(axiosData, 'post');
+        await query(axiosData, 'post');
     },
 
     get: async (axiosData: AxiosData) => {
-        query(axiosData, 'get');
+        await query(axiosData, 'get');
     },
 
     delete: async (axiosData: AxiosData) => {
-        query(axiosData, 'delete');
+        await query(axiosData, 'delete');
     },
 
     put: async (axiosData: AxiosData) => {
-        query(axiosData, 'put');
+        await query(axiosData, 'put');
     },
 };

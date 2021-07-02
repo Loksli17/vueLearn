@@ -64,7 +64,7 @@
     import Pagination          from '../../components/crudComponent/Pagination.vue';
     import flashMessageData    from '../../libs/flashMessage';
     import axios               from '../../libs/axios';
-    import { AxiosResponse }   from 'axios'
+    import { AxiosResponse }   from 'axios';
 
 
     export default defineComponent({
@@ -82,9 +82,9 @@
             }
         },
 
-        mounted: function(){
-            this.getArticles({take: this.take, skip: 0});
-            this.getArticlesAmount();
+        mounted: async function(){
+            await this.getArticles({take: this.take, skip: 0});
+            await this.getArticlesAmount();
         },
 
         

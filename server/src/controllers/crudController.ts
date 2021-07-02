@@ -137,16 +137,73 @@ export default class CrudController{
         .catch(error => {
             console.error(error);
             res.status(400).send({error: Error.db()})
-        });
+        }); 
+    }
+
+
+    private static getTypes(req: Request, res: Response){
+        
+        let mysql = pool();
+
+        if(mysql == undefined){
+            res.status(400).send({error: Error.db()});
+            return;
+        }
+
+        mysql.query('select * from articleType')
+        .then(value => {
+            res.status(200).send({types: value[0]});
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(400).send({error: Error.db()});
+        })
+    }
+
+
+    private static addArticle(req: Request, res: Response){
+        
+        interface QueryData{
+            article: {
+                title        : string;
+                text         : string;
+                isReady      : boolean;
+                date         : Date;
+                time         : string;
+                articleTypeId: string;
+                img          : string;
+            };
+        }
+
+        let
+            mysql = pool(),
+            QueryData : QueryData              = req.params as any,
+            dataErrors: Array<keyof QueryData> = [];
+
+        dataErrors = Query.checkData(QueryData, ['article']);
+        
+        if(dataErrors.length){
+            res.status(400).send({error: Error.dataNotSended(dataErrors[0])});
+            return;
+        }
+
+        if(mysql == undefined){
+            res.status(400).send({error: Error.db()});
+            return;
+        }
         
     }
 
 
     public static routes(){
+        //* order of routes affects working
         this.router.post(  '/',           this.getArticles);
         this.router.post(  '/amount',     this.getAmountArticles);
+        this.router.get(   '/types',      this.getTypes);
         this.router.get(   '/:id',        this.getArticle);
         this.router.delete('/:id/remove', this.removeArticle);
+        this.router.put(   '/add',        this.addArticle);
+        
 
         return this.router;
     }
