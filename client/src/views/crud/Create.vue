@@ -49,7 +49,6 @@
                 await axios.get({
                     url: '/crud/types',
                     flashMessage: this.$flashMessage,
-                    status: 200,
                     // successMessage: {title: 'Sex', text: 'types was taken'},
                     handler: (res: AxiosResponse) => {
                         console.log(res.data.types);

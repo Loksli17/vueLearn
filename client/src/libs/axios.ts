@@ -6,7 +6,7 @@ import FlashMessageData                       from '../libs/flashMessage';
 
 interface AxiosData{
     url: string,
-    status: number,
+    status?: number,
     errorHandler?: (...args: any[]) => void,
     handler: (...args: any[]) => void,
     data?: Record<string, unknown>,
@@ -19,7 +19,7 @@ interface AxiosData{
 export interface AxiosSettings{
     autoServerErrorFlashMessage?: boolean;
     autoSuccessFlashMessage?: boolean;
-    defaultStatus?: number;
+    defaultStatus: number;
     autoLogResponce?: boolean;
 }
 
@@ -85,6 +85,8 @@ class FacadeAxios{
 
     private checkResponseStatus(response: AxiosResponse){
 
+        const status: number | undefined = this.axiosData!.status || this.settings_.defaultStatus;
+
         if(response.status !== this.axiosData!.status){
 
             if(this.axiosData!.errorHandler == undefined) {
@@ -125,7 +127,7 @@ class FacadeAxios{
 
     private constructor() {
         axios.defaults.baseURL  = config.server.path;
-        this.settings_          = {};
+        this.settings_          = {defaultStatus: 200};
         this.errorServerMessage = config.server.errorMessage;
         this.errorStatusMessage = 'Bad status';
         this.axiosData          = null;

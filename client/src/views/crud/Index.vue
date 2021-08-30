@@ -95,7 +95,6 @@
                 await axios.post({
                     url: '/crud',
                     data: {skip: data.skip, take: data.take},
-                    status: 200,
                     flashMessage: this.$flashMessage,
                     handler: (res: AxiosResponse) => {
                         this.articles = res.data.articles;
@@ -114,7 +113,6 @@
 
                 await axios.post({
                     url: '/crud/amount',
-                    status: 200,
                     flashMessage: this.$flashMessage,
                     handler: (res: AxiosResponse) => {
                         const pagination = this.$refs.pagination! as any;
@@ -131,7 +129,6 @@
             removeArticle: async function(id: number){
                 await axios.delete({
                     url: `/crud/${id}/remove`,
-                    status: 200,
                     flashMessage: this.$flashMessage,
                     handler: (res: AxiosResponse) => {
                         const pagination = this.$refs.pagination! as any;
