@@ -50,8 +50,9 @@
                     url: '/crud/types',
                     flashMessage: this.$flashMessage,
                     status: 200,
-                    successMessage: {title: 'Sex', text: 'types was taken'},
+                    // successMessage: {title: 'Sex', text: 'types was taken'},
                     handler: (res: AxiosResponse) => {
+                        console.log(res.data.types);
                         this.types = res.data.types;
                     },
                 });

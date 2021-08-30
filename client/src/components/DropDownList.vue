@@ -11,13 +11,17 @@
 
         <div v-if="statusList" class="list-item-wrap">
             <div class="item" v-for="item in listItems" :key="item" @click="setCurrentValue(item.id)">
-                <span class="img">{{item.img}}</span>
+                <img width="25" :src="require(`@/assets/img/article-types/${item.img}`)" alt="">
                 <span class="value">{{item.value}}</span>
             </div>
         </div>
     </div>
 
 </template>
+
+<style lang="scss" scoped>
+
+</style>
 
 
 <script lang="ts">
