@@ -19,25 +19,19 @@ interface AxiosData{
 }
 
 
-async function query(axiosData: AxiosData, type: string){
 
-    let promise: AxiosPromise;
+async function query(axiosData: AxiosData, type: 'get' | 'post' | 'put' | 'delete'){
 
-    switch(type){
-        case 'get':
-            promise = axios.get(axiosData.url, axiosData.data);
-            break;
-        case 'post':
-            promise = axios.post(axiosData.url, axiosData.data);
-            break;
-        case 'put':
-            promise = axios.put(axiosData.url, axiosData.data);
-            break;
-        case 'delete':
-            promise = axios.delete(axiosData.url, axiosData.data);
-            break;
-    }
+    const 
+        actions: {[index: string]: any} = {
+            'get'   : (url: string, data: any) => axios.get(url, data),
+            'post'  : (url: string, data: any) => axios.post(url, data),
+            'put'   : (url: string, data: any) => axios.put(url, data),
+            'delete': (url: string, data: any) => axios.delete(url, data),
+        },
+        promise: AxiosPromise = actions[type](axiosData.url, axiosData.data);
 
+        
     const response: AxiosResponse | void = await promise!.catch(
         err => {
             axiosData.flashMessage.show(flashMessageData.errorMessage('Error', 'Error with server. Please try to reload page. (You can press F5)'));

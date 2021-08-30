@@ -13,8 +13,8 @@ export default {
         return {
             blockClass: 'error',
             image     : require("@/assets/img/flash/error.svg"),
-            text      : title,
-            title     : text,
+            title     : title,
+            text      : text,
         }
     },
 
@@ -24,8 +24,8 @@ export default {
         return {
             blockClass: 'success',
             image     : require("@/assets/img/flash/success.svg"),
-            text      : title,
-            title     : text,
+            title     : title,
+            text      : text,
         }
     },
 
@@ -35,8 +35,8 @@ export default {
         return {
             blockClass: 'info',
             image     : require("@/assets/img/flash/info.svg"),
-            text      : title,
-            title     : text,
+            title     : title,
+            text      : text,
         }
     },
 
@@ -46,8 +46,8 @@ export default {
         return {
             blockClass: 'warning',
             image     : require("@/assets/img/flash/warning.svg"),
-            text      : title,
-            title     : text,
+            title     : title,
+            text      : text,
         }
     },
 };
