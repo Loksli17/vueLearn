@@ -47,10 +47,8 @@
             getTypes: async function(){
 
                 await axios.get({
-                    url: '/crud/types',
-                    // successMessage: {title: 'Sex', text: 'types was taken'},
+                    url: '/crud/article-types',
                     handler: (res: AxiosResponse) => {
-                        console.log(res.data.types);
                         this.types = res.data.types;
                     },
                 });

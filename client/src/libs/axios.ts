@@ -5,19 +5,21 @@ import FlashMessageData                       from '../libs/flashMessage';
 
 
 interface AxiosData{
-    url: string,
-    status?: number,
-    errorHandler?: (...args: any[]) => void,
-    handler: (...args: any[]) => void,
-    data?: Record<string, unknown>,
-    successMessage?: {title: string, text: string},
-    errorStatusMessage?: {title: string, text: string},
-    log?: boolean,
+    url: string;
+    status?: number;
+    errorHandler?: (...args: any[]) => void;
+    handler: (...args: any[]) => void;
+    data?: Record<string, unknown>;
+    successFlashMessage?:  boolean | {title: string, text: string};
+    errorStatusFlashMessage?: boolean | {title: string, text: string};
+    errorServerFlashMessage?: boolean | {title: string, text: string};
+    logResponce?: boolean;
 }
 
 export interface AxiosSettings{
-    autoServerErrorFlashMessage?: boolean;
-    autoSuccessFlashMessage?: boolean;
+    autoServerErrorFlashMessage?: boolean | {title: string, text: string};
+    autoSuccessFlashMessage?: boolean | {title: string, text: string};
+    autoStatusFlashMessage?: boolean | {title: string, text: string};
     defaultStatus: number;
     autoLogResponce?: boolean;
     flashMessage?: FlashMessagePlugin
@@ -47,11 +49,9 @@ class FacadeAxios{
     private async query(type: 'get' | 'post' | 'put' | 'delete'): Promise<void> {
         const response: AxiosResponse = await this.response(type);
         this.checkResponseStatus(response);
-        
-        if(this.axiosData!.successMessage) this.settings_.flashMessage!.show(FlashMessageData.successMessage(this.axiosData!.successMessage.title, this.axiosData!.successMessage.text));
+        this.showFlashMessage('success');
         this.axiosData!.handler(response);
     }
-
 
     private async response(type: 'get' | 'post' | 'put' | 'delete'): Promise<AxiosResponse>{
         
@@ -60,8 +60,8 @@ class FacadeAxios{
         // ! query to server are located here
         const response: AxiosResponse | void = await promise!.catch(
             err => {
-                if(this.settings_.autoServerErrorFlashMessage)
-                    this.settings_.flashMessage!.show(FlashMessageData.errorMessage('Error', this.errorServerMessage));
+
+                this.showFlashMessage('server');
                 
                 if(this.axiosData!.errorHandler == undefined) {
                     console.error(err); 
@@ -72,7 +72,7 @@ class FacadeAxios{
             }
         );
 
-        if(this.settings_.autoLogResponce || this.axiosData!.log) console.log(response);
+        if(this.settings_.autoLogResponce || this.axiosData!.logResponce) console.log(response);
 
         if(response == undefined) throw new Error('Bad response');
 
@@ -86,17 +86,55 @@ class FacadeAxios{
 
         if(response.status !== status){
 
+            this.showFlashMessage('status');
+
             if(this.axiosData!.errorHandler == undefined) {
-                this.settings_.flashMessage!.show(FlashMessageData.errorMessage('Error', this.errorStatusMessage));
                 console.error(this.errorStatusMessage); 
                 return;
             }
 
-            this.axiosData!.errorHandler(this.errorStatusMessage);
+            this.axiosData!.errorHandler(new Error(this.errorStatusMessage));
         }
     }
 
+
+    private showFlashMessage(messageType: 'server' | 'success' | 'status'){
+
+        const
+            adapterSettings: {[index: string]: keyof AxiosSettings} = {
+                server : 'autoServerErrorFlashMessage',
+                success: 'autoSuccessFlashMessage',
+                status : 'autoStatusFlashMessage',
+            },
+            adapterData: {[index: string]: keyof AxiosData} = {
+                server : 'errorServerFlashMessage',
+                success: 'successFlashMessage',
+                status : 'errorStatusFlashMessage'
+            },
+            messageData: any = this.axiosData![adapterData[messageType]] || this.settings_[adapterSettings[messageType]];
+        
+        if(this.axiosData![adapterData[messageType]] === false) return; // !think about this variant
+
+        if(!messageData) return;
+
+        const type: string = typeof messageData;
+
+        if(type === "boolean"){
+            if(messageType == "success") { 
+                this.settings_.flashMessage!.show(FlashMessageData.successMessage('Responce', 'Good responce')); // !think about default message
+            } else {
+                this.settings_.flashMessage!.show(FlashMessageData.errorMessage('Error', 'Bad responce')); // !think about default message
+            }  
+        }else{
+            if(messageType == "success") { 
+                this.settings_.flashMessage!.show(FlashMessageData.successMessage(messageData.title, messageData.text));
+            } else {
+                this.settings_.flashMessage!.show(FlashMessageData.errorMessage(messageData.title, messageData.text));
+            } 
+        }
+    }
     
+
     public async get(data: AxiosData): Promise<void> {
         this.axiosData = data;
         await this.query('get');
@@ -126,7 +164,7 @@ class FacadeAxios{
         axios.defaults.baseURL  = config.server.path;
         this.settings_          = {defaultStatus: 200}; // * TS demands it
         this.errorServerMessage = config.server.errorMessage;
-        this.errorStatusMessage = 'Bad status';
+        this.errorStatusMessage = 'Bad status'; // ! think about defaultMessage
         this.axiosData          = null;
     }
 

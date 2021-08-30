@@ -152,7 +152,7 @@ export default class CrudController{
 
         mysql.query('select * from articleType')
         .then(value => {
-            res.status(200).send({types: value[0], azaza: 'lol'});
+            res.status(200).send({types: value[0]});
         })
         .catch(error => {
             console.error(error);
@@ -197,12 +197,12 @@ export default class CrudController{
 
     public static routes(){
         //* order of routes affects working
-        this.router.post(  '/',           this.getArticles);
-        this.router.post(  '/amount',     this.getAmountArticles);
-        this.router.get(   '/types',      this.getTypes);
-        this.router.get(   '/:id',        this.getArticle);
-        this.router.delete('/:id/remove', this.removeArticle);
-        this.router.put(   '/add',        this.addArticle);
+        this.router.post(  '/',              this.getArticles);
+        this.router.post(  '/amount',        this.getAmountArticles);
+        this.router.get(   '/article-types', this.getTypes);
+        this.router.get(   '/:id',           this.getArticle);
+        this.router.delete('/:id/remove',    this.removeArticle);
+        this.router.put(   '/add',           this.addArticle);
         
 
         return this.router;
