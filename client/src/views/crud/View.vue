@@ -75,8 +75,6 @@
             await axios.get({
                 url: `/crud/${this.id}`,
                 data: {id: this.id},
-                status: 200,
-                flashMessage: this.$flashMessage,
                 handler: (res: AxiosResponse) => {
                     this.article = res.data.article;
                     console.log(this.article);

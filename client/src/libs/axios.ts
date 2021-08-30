@@ -10,7 +10,6 @@ interface AxiosData{
     errorHandler?: (...args: any[]) => void,
     handler: (...args: any[]) => void,
     data?: Record<string, unknown>,
-    flashMessage: FlashMessagePlugin,
     successMessage?: {title: string, text: string},
     errorStatusMessage?: {title: string, text: string},
     log?: boolean,
@@ -21,6 +20,7 @@ export interface AxiosSettings{
     autoSuccessFlashMessage?: boolean;
     defaultStatus: number;
     autoLogResponce?: boolean;
+    flashMessage?: FlashMessagePlugin
 }
 
 
@@ -45,18 +45,15 @@ class FacadeAxios{
      * @returns Promise<void>
      */
     private async query(type: 'get' | 'post' | 'put' | 'delete'): Promise<void> {
-
-        const response: AxiosResponse = await this.responce(type);
-
+        const response: AxiosResponse = await this.response(type);
         this.checkResponseStatus(response);
-
-        if(this.axiosData!.successMessage) this.axiosData!.flashMessage.show(FlashMessageData.successMessage(this.axiosData!.successMessage.title, this.axiosData!.successMessage.text));
-
+        
+        if(this.axiosData!.successMessage) this.settings_.flashMessage!.show(FlashMessageData.successMessage(this.axiosData!.successMessage.title, this.axiosData!.successMessage.text));
         this.axiosData!.handler(response);
     }
 
 
-    private async responce(type: 'get' | 'post' | 'put' | 'delete'): Promise<AxiosResponse>{
+    private async response(type: 'get' | 'post' | 'put' | 'delete'): Promise<AxiosResponse>{
         
         const promise: AxiosPromise = this.actions[type](this.axiosData!.url, this.axiosData!.data);
 
@@ -64,7 +61,7 @@ class FacadeAxios{
         const response: AxiosResponse | void = await promise!.catch(
             err => {
                 if(this.settings_.autoServerErrorFlashMessage)
-                    this.axiosData!.flashMessage.show(FlashMessageData.errorMessage('Error', this.errorServerMessage));
+                    this.settings_.flashMessage!.show(FlashMessageData.errorMessage('Error', this.errorServerMessage));
                 
                 if(this.axiosData!.errorHandler == undefined) {
                     console.error(err); 
@@ -90,7 +87,7 @@ class FacadeAxios{
         if(response.status !== status){
 
             if(this.axiosData!.errorHandler == undefined) {
-                this.axiosData!.flashMessage.show(FlashMessageData.errorMessage('Error', this.errorStatusMessage));
+                this.settings_.flashMessage!.show(FlashMessageData.errorMessage('Error', this.errorStatusMessage));
                 console.error(this.errorStatusMessage); 
                 return;
             }
@@ -127,7 +124,7 @@ class FacadeAxios{
 
     private constructor() {
         axios.defaults.baseURL  = config.server.path;
-        this.settings_          = {defaultStatus: 200};
+        this.settings_          = {defaultStatus: 200}; // * TS demands it
         this.errorServerMessage = config.server.errorMessage;
         this.errorStatusMessage = 'Bad status';
         this.axiosData          = null;

@@ -29,6 +29,7 @@ axios.settings = {
     defaultStatus              : 200,
     autoServerErrorFlashMessage: true,
     autoSuccessFlashMessage    : false,
+    flashMessage               : app.config.globalProperties.$flashMessage
 }
 
 app.use(router).mount('#app');
