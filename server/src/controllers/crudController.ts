@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import Error                         from "../libs/error";
-import Query                          from "../libs/query";
+import Query                         from "../libs/query";
 import pool                          from '../config/database';
 
 
@@ -152,12 +152,12 @@ export default class CrudController{
 
         mysql.query('select * from articleType')
         .then(value => {
-            res.status(200).send({types: value[0]});
+            res.status(200).send({types: value[0], azaza: 'lol'});
         })
         .catch(error => {
             console.error(error);
             res.status(400).send({error: Error.db()});
-        })
+        });
     }
 
 

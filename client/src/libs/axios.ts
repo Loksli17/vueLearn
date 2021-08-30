@@ -15,6 +15,7 @@ interface AxiosData{
     data?: Record<string, unknown>,
     flashMessage: FlashMessagePlugin,
     successMessage?: {title: string, text: string},
+    log?: boolean,
 }
 
 
@@ -37,16 +38,20 @@ async function query(axiosData: AxiosData, type: string){
             break;
     }
 
-    const response: AxiosResponse | void = await promise!
-    .catch(err => {
-        axiosData.flashMessage.show(flashMessageData.errorMessage('Error', 'Error with server. Please try to reload page. (You can press F5)'));
-        
-        if(axiosData.error == undefined) {
-            console.error(err); 
-            return;
+    const response: AxiosResponse | void = await promise!.catch(
+        err => {
+            axiosData.flashMessage.show(flashMessageData.errorMessage('Error', 'Error with server. Please try to reload page. (You can press F5)'));
+            
+            if(axiosData.error == undefined) {
+                console.error(err); 
+                return;
+            }
+
+            axiosData.error(err);
         }
-        axiosData.error(err);
-    });
+    );
+
+    if(axiosData.log) console.log(response);
 
     if(response == undefined) throw new Error('Bad response');
 
@@ -62,6 +67,7 @@ async function query(axiosData: AxiosData, type: string){
     }
 
     if(axiosData.successMessage != undefined) axiosData.flashMessage.show(flashMessageData.successMessage(axiosData.successMessage.title, axiosData.successMessage.text));
+
     axiosData.handler(response);
 }
 

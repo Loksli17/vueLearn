@@ -8,7 +8,7 @@
         </div>
 
         <div class="from-wrap">
-            <DropDawnList ref="dropList"/>
+            <DropDownList ref="dropList"/>
         </div>
 
     </div>    
@@ -18,14 +18,14 @@
 <script lang="ts">
     import {defineComponent} from 'vue';
     import axios             from '../../libs/axios';
-    import DropDawnList      from '../../components/DropDawnList.vue';
-    import { AxiosResponse } from 'axios;'
+    import DropDownList      from '../../components/DropDownList.vue';
+    import { AxiosResponse } from 'axios';
     
 
     export default defineComponent({
 
         components: {
-            DropDawnList,
+            DropDownList,
         },
 
 
@@ -39,7 +39,7 @@
 
         mounted: async function(){
             await this.getTypes();
-            this.initDropDawnList();
+            this.initDropDownList();
         },
 
         methods: {
@@ -52,7 +52,7 @@
                     status: 200,
                     handler: (res: AxiosResponse) => {
                         this.types = res.data.types;
-                    }
+                    },
                 });
 
                 this.types.map(item => {
@@ -62,8 +62,8 @@
                 });
             },
 
-            initDropDawnList: function(){
-                this.currentValueId = this.types[0].id;
+            initDropDownList: function(){
+                this.currentValueId = this.types[0].id as number;
                 const dropList = this.$refs.dropList! as any;
                 dropList.setListItems(this.types);
                 dropList.setCurrentValueId(this.types[0].id);

@@ -33,10 +33,10 @@
 
         data: function(){
             return {
-                currentItem: {} as ListItem,
-                listItems  : [] as Array<ListItem>,
+                currentItem   : {} as ListItem | undefined,
+                listItems     : [] as Array<ListItem>,
                 currentValueId: 0 as number,
-                statusList: false as boolean,
+                statusList    : false as boolean,
             }
         },
 
@@ -44,18 +44,17 @@
 
             setListItems: function(data: Array<ListItem>){
                 this.listItems = data.slice();
-                console.log(this.listItems);
             },
 
             setCurrentValueId: function(value: number){
                 this.currentValueId = value;
-                this.currentItem = this.listItems.find(item => item.id == this.currentValueId);
+                this.currentItem    = this.listItems.find(item => item.id == this.currentValueId);
             },
 
             setCurrentValue: function(value: number){
                 this.currentValueId = value;
-                this.currentItem = this.listItems.find(item => item.id == this.currentValueId);
-                this.statusList = false;
+                this.currentItem    = this.listItems.find(item => item.id == this.currentValueId);
+                this.statusList     = false;
             },
         }
     });
