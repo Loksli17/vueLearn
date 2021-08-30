@@ -1,7 +1,7 @@
 import axios, { AxiosPromise, AxiosResponse } from "axios";
 import config                                 from '../config/config';
 import {FlashMessagePlugin}                   from '@smartweb/vue-flash-message';
-import FlashMessage                           from '../libs/flashMessage';
+import FlashMessageData                       from '../libs/flashMessage';
 
 
 interface AxiosData{
@@ -45,7 +45,7 @@ class FacadeAxios{
 
         const response: AxiosResponse | void = await promise!.catch(
             err => {
-                axiosData.flashMessage.show(FlashMessage.errorMessage('Error', 'Error with server. Please try to reload page. (You can press F5)'));
+                axiosData.flashMessage.show(FlashMessageData.errorMessage('Error', 'Error with server. Please try to reload page. (You can press F5)'));
                 
                 if(axiosData.errorHandler == undefined) {
                     console.error(err); 
@@ -64,7 +64,7 @@ class FacadeAxios{
             const message: string = 'Bad status';
             
             if(axiosData.errorHandler == undefined) {
-                axiosData.flashMessage.show(FlashMessage.errorMessage('Error', message));
+                axiosData.flashMessage.show(FlashMessageData.errorMessage('Error', message));
                 console.error(message); 
                 return;
             }
@@ -72,7 +72,7 @@ class FacadeAxios{
             axiosData.errorHandler(message);
         }
 
-        if(axiosData.successMessage != undefined) axiosData.flashMessage.show(FlashMessage.successMessage(axiosData.successMessage.title, axiosData.successMessage.text));
+        if(axiosData.successMessage != undefined) axiosData.flashMessage.show(FlashMessageData.successMessage(axiosData.successMessage.title, axiosData.successMessage.text));
 
         axiosData.handler(response);
     }

@@ -62,7 +62,7 @@
 
     import { defineComponent } from 'vue';
     import Pagination          from '../../components/crudComponent/Pagination.vue';
-    import flashMessageData    from '../../libs/flashMessage';
+    import FlashMessageData    from '../../libs/flashMessage';
     import axios               from '../../libs/axios';
     import { AxiosResponse }   from 'axios';
 
@@ -138,7 +138,9 @@
                         pagination.setAmountElements(this.amountArticles--);
                         this.getArticles({take: pagination.take, skip: pagination.skip});
                     }
-                })
+                });
+
+                this.$flashMessage.show(FlashMessageData.successMessage('Removing of article', `Article with id = ${id} was removed`));
             }
 
         },
