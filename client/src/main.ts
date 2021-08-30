@@ -3,7 +3,7 @@ import App                                from './App.vue';
 import router                             from './router';
 import filters                            from './libs/filters';
 import flashMessage, {FlashMessagePlugin} from '@smartweb/vue-flash-message';
-// import store                  from './store';
+import axios                              from './libs/axios';
 
 
 declare module '@vue/runtime-core'{
@@ -24,5 +24,11 @@ app.use(flashMessage, {
 });
 
 app.config.globalProperties.$filters = filters;
+
+axios.settings = {
+    defaultStatus              : 200,
+    autoServerErrorFlashMessage: true,
+    autoSuccessFlashMessage    : false,
+}
 
 app.use(router).mount('#app');
