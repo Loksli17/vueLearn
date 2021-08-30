@@ -87,7 +87,7 @@ class FacadeAxios{
 
         const status: number | undefined = this.axiosData!.status || this.settings_.defaultStatus;
 
-        if(response.status !== this.axiosData!.status){
+        if(response.status !== status){
 
             if(this.axiosData!.errorHandler == undefined) {
                 this.axiosData!.flashMessage.show(FlashMessageData.errorMessage('Error', this.errorStatusMessage));
