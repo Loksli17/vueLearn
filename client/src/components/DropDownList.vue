@@ -13,6 +13,11 @@
         <input type="hidden" v-model="currentItemData.id">
 
         <div v-if="statusList" class="list-content">
+
+            <div v-if="search" class="search-wrap">
+                <input type="search" v-model="searchData">
+            </div>
+
             <div  class="list-item-wrap">
                 <div class="item" v-for="item in listItemsData" :key="item" @click="setCurrentItem(item)">
                     <img width="25" v-if="item.img" :src="require(`@/assets/img/article-types/${item.img}`)" alt="">
@@ -41,7 +46,8 @@
                 currentItemData  : {} as ListItem | undefined,
                 currentIdData    : 0 as number,
                 statusList       : false as boolean,
-                choiceMessegeData: this.choiceMessege as string, 
+                choiceMessegeData: this.choiceMessege as string,
+                searchData       : "" as string, 
             }
         },
 
@@ -61,9 +67,8 @@
         },
 
         computed: {
-
             listItemsData: function(): Array<ListItem>{
-                return this.listItems.slice();
+                return this.listItems.filter((item: ListItem) => item.value.toString().includes(this.searchData)).slice();
             },
         },
 
@@ -79,7 +84,6 @@
             },
 
             setCurrentItem: function(listItem: ListItem){
-
                 this.currentIdData   = listItem.id;
                 this.currentItemData = listItem;
                 this.statusList      = false;
@@ -127,8 +131,22 @@
         }
 
         .list-content{
-            height: 220px;
+            height: max-content;
+            max-height: 220px;
             overflow-y: auto;
+
+            .search-wrap{
+                width: 100%;
+                padding: 10px;
+                box-sizing:  border-box;
+
+                input{
+                    width: 100%;
+                    font-size: 18px;
+                    padding: 8px;
+                    box-sizing: border-box;
+                }
+            }
 
             .item:hover{
                 transition: 0.4s;

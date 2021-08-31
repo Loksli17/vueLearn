@@ -11,6 +11,7 @@
             <DropDownList 
                 ref="dropList"
                 :listItems="types"
+                :search="true"
             />
         </div>
 
