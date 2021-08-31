@@ -5,7 +5,7 @@ import Pool   from 'mysql2/typings/mysql/lib/Pool';
 const init = () => {
     try {
         return mysql2.createPool({
-            connectionLimit: 1,
+            connectionLimit: 10,
             host           : '127.0.0.1',
             user           : config.db.user,
             password       : config.db.password,
