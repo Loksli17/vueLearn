@@ -109,7 +109,7 @@
 
         position: relative;
         margin-top: 30px;
-        max-width: 300px;
+        max-width: 340px;
 
         .current-value{
             display: grid;
@@ -132,7 +132,7 @@
 
         .list-content{
             height: max-content;
-            max-height: 220px;
+            max-height: 270px;
             overflow-y: auto;
 
             .search-wrap{
