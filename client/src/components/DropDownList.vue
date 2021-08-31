@@ -3,25 +3,26 @@
     <div class="drop-dawn-list-wrap">
 
         <div class="current-value" @click="statusList = !statusList">
-            <img src="" alt="">
-            <span>{{currentItem.value}}</span>
+            <div class="item">
+                <img width="25" v-if="currentItemData.img" :src="require(`@/assets/img/article-types/${currentItemData.img}`)" alt="">
+                <span>{{currentItemData.value || choiceMessegeData}}</span>
+            </div>
+            <div class="arrow"></div>
         </div>
 
-        <input type="hidden" v-model="currentItem.id">
+        <input type="hidden" v-model="currentItemData.id">
 
-        <div v-if="statusList" class="list-item-wrap">
-            <div class="item" v-for="item in listItems" :key="item" @click="setCurrentValue(item.id)">
-                <img width="25" :src="require(`@/assets/img/article-types/${item.img}`)" alt="">
-                <span class="value">{{item.value}}</span>
+        <div v-if="statusList" class="list-content">
+            <div  class="list-item-wrap">
+                <div class="item" v-for="item in listItemsData" :key="item" @click="setCurrentItem(item)">
+                    <img width="25" v-if="item.img" :src="require(`@/assets/img/article-types/${item.img}`)" alt="">
+                    <span class="value">{{item.value}}</span>
+                </div>
             </div>
         </div>
     </div>
 
 </template>
-
-<style lang="scss" scoped>
-
-</style>
 
 
 <script lang="ts">
@@ -37,29 +38,114 @@
 
         data: function(){
             return {
-                currentItem   : {} as ListItem | undefined,
-                listItems     : [] as Array<ListItem>,
-                currentValueId: 0 as number,
-                statusList    : false as boolean,
+                currentItemData  : {} as ListItem | undefined,
+                currentIdData    : 0 as number,
+                statusList       : false as boolean,
+                choiceMessegeData: this.choiceMessege as string, 
             }
+        },
+
+        props: {
+            listItems: {
+                type   : Array as () => Array<ListItem>,
+                default: () => [],
+            },
+            choiceMessege: {
+                type   : String,
+                default: 'Please, choose item',
+            },
+            search: {
+                type   : Boolean,
+                default: false,
+            },
+        },
+
+        computed: {
+
+            listItemsData: function(): Array<ListItem>{
+                return this.listItems.slice();
+            },
         },
 
         methods: {
 
             setListItems: function(data: Array<ListItem>){
-                this.listItems = data.slice();
+                this.listItemsData = data.slice();
             },
 
-            setCurrentValueId: function(value: number){
-                this.currentValueId = value;
-                this.currentItem    = this.listItems.find(item => item.id == this.currentValueId);
+            setCurrentItemId: function(id: number){
+                this.currentIdData   = id;
+                this.currentItemData = this.listItemsData.find(item => item.id == this.currentIdData);
             },
 
-            setCurrentValue: function(value: number){
-                this.currentValueId = value;
-                this.currentItem    = this.listItems.find(item => item.id == this.currentValueId);
-                this.statusList     = false;
+            setCurrentItem: function(listItem: ListItem){
+
+                this.currentIdData   = listItem.id;
+                this.currentItemData = listItem;
+                this.statusList      = false;
             },
         }
     });
 </script>
+
+
+
+
+<style lang="scss" scoped>
+
+    .list-content{
+        width: 100%;
+        background: white;
+        position: absolute;
+        border: 2px solid rgb(237, 237, 243);;
+        box-sizing: border-box;
+    }
+
+    .drop-dawn-list-wrap{
+
+        position: relative;
+        margin-top: 30px;
+        max-width: 300px;
+
+        .current-value{
+            display: grid;
+            grid-auto-flow: column;
+            justify-content: space-between;
+            background: rgb(237, 237, 243);
+            cursor: pointer;
+
+            &:hover{
+                transition: 0.4s;
+                background: gainsboro;
+            }
+
+            .arrow{
+                width: 40px;
+                height: 100%;
+                font-size: 30px;
+            }
+        }
+
+        .list-content{
+            height: 220px;
+            overflow-y: auto;
+
+            .item:hover{
+                transition: 0.4s;
+                background: rgb(212, 212, 238);
+                cursor: pointer;
+            }
+        }
+
+        .item{
+            display: grid;
+            grid-auto-flow: column;
+            grid-template-columns: max-content auto;
+            column-gap: 12px;
+            align-items: center;
+            padding: 13px 16px;
+            font-size: 20px;
+        }
+    }
+
+</style>

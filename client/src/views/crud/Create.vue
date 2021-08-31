@@ -7,8 +7,11 @@
             <router-link :to="'/crud'">Go index-crud</router-link>
         </div>
 
-        <div class="from-wrap">
-            <DropDownList ref="dropList"/>
+        <div class="form-wrap">
+            <DropDownList 
+                ref="dropList"
+                :listItems="types"
+            />
         </div>
 
     </div>    
@@ -37,9 +40,8 @@
             }
         },
 
-        mounted: async function(){
+        created: async function(){
             await this.getTypes();
-            this.initDropDownList();
         },
 
         methods: {
@@ -58,14 +60,9 @@
                     delete item.title;
                     return item;
                 });
-            },
 
-            initDropDownList: function(){
-                this.currentValueId = this.types[0].id as number;
-                const dropList = this.$refs.dropList! as any;
-                dropList.setListItems(this.types);
-                dropList.setCurrentValueId(this.types[0].id);
-            }
+                console.log('types: ', this.types);
+            },
         },
     });
 </script>
