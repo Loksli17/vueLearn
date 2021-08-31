@@ -27,10 +27,10 @@ app.use(flashMessage, {
 app.config.globalProperties.$filters = filters;
 
 axios.settings = {
-    defaultStatus              : 200,
-    autoServerErrorFlashMessage: {title: 'Erorr', text: config.server.errorMessage},
-    autoStatusFlashMessage     : {title: 'Error', text: 'bad request'},
-    flashMessage               : app.config.globalProperties.$flashMessage,
+    defaultStatus          : 200,
+    errorServerFlashMessage: {title: 'Erorr', text: config.server.errorMessage},
+    errorStatusFlashMessage: {title: 'Error', text: 'bad request'},
+    flashMessage           : app.config.globalProperties.$flashMessage,
 }
 
 app.use(router).mount('#app');

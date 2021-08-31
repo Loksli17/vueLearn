@@ -17,9 +17,9 @@ interface AxiosData{
 }
 
 export interface AxiosSettings{
-    autoServerErrorFlashMessage?: boolean | {title: string, text: string};
-    autoSuccessFlashMessage?: boolean | {title: string, text: string};
-    autoStatusFlashMessage?: boolean | {title: string, text: string};
+    errorServerFlashMessage?: boolean | {title: string, text: string};
+    successFlashMessage?: boolean | {title: string, text: string};
+    errorStatusFlashMessage?: boolean | {title: string, text: string};
     defaultStatus: number;
     autoLogResponce?: boolean;
     flashMessage?: FlashMessagePlugin
@@ -33,6 +33,7 @@ class FacadeAxios{
     private settings_: AxiosSettings;
     private errorServerMessage: string;
     private errorStatusMessage: string;
+
     private readonly actions: {[index: string]: any} = {
         'get'   : (url: string, data: any) => axios.get   (url, data),
         'post'  : (url: string, data: any) => axios.post  (url, data),
@@ -40,9 +41,9 @@ class FacadeAxios{
         'delete': (url: string, data: any) => axios.delete(url, data),
     }
     
+
     /**
      * Method for axios query
-     * @param axiosData 
      * @param type 
      * @returns Promise<void>
      */
@@ -53,6 +54,11 @@ class FacadeAxios{
         this.axiosData!.handler(response);
     }
 
+
+    /**
+     * @param type 
+     * @returns AxiosResponce
+     */
     private async response(type: 'get' | 'post' | 'put' | 'delete'): Promise<AxiosResponse>{
         
         const promise: AxiosPromise = this.actions[type](this.axiosData!.url, this.axiosData!.data);
@@ -79,7 +85,10 @@ class FacadeAxios{
         return response;
     }
 
-
+    /**
+     * @param response: AxiosResponce
+     * @returns void
+     */
     private checkResponseStatus(response: AxiosResponse){
 
         const status: number | undefined = this.axiosData!.status || this.settings_.defaultStatus;
@@ -97,14 +106,18 @@ class FacadeAxios{
         }
     }
 
-
+    /**
+     * 
+     * @param messageType 
+     * @returns void
+     */
     private showFlashMessage(messageType: 'server' | 'success' | 'status'){
 
         const
             adapterSettings: {[index: string]: keyof AxiosSettings} = {
-                server : 'autoServerErrorFlashMessage',
-                success: 'autoSuccessFlashMessage',
-                status : 'autoStatusFlashMessage',
+                server : 'errorServerFlashMessage',
+                success: 'successFlashMessage',
+                status : 'errorStatusFlashMessage',
             },
             adapterData: {[index: string]: keyof AxiosData} = {
                 server : 'errorServerFlashMessage',
@@ -134,28 +147,37 @@ class FacadeAxios{
         }
     }
     
-
+    /**
+     * @param data 
+     */
     public async get(data: AxiosData): Promise<void> {
         this.axiosData = data;
         await this.query('get');
     }
 
+    /**
+     * @param data 
+     */
     public async post(data: AxiosData): Promise<void> {
         this.axiosData = data;
         await this.query('post');
     }
 
+    /**
+     * @param data 
+     */
     public async delete(data: AxiosData): Promise<void> {
         this.axiosData = data;
         await this.query('delete');
     }
 
+    /**
+     * @param data 
+     */
     public async put(data: AxiosData): Promise<void> {
         this.axiosData = data;
         await this.query('put');
     }
-
-
     public set settings(settings: AxiosSettings){
         this.settings_ = settings;
     }
@@ -163,8 +185,8 @@ class FacadeAxios{
     private constructor() {
         axios.defaults.baseURL  = config.server.path;
         this.settings_          = {defaultStatus: 200}; // * TS demands it
-        this.errorServerMessage = config.server.errorMessage;
-        this.errorStatusMessage = 'Bad status'; // ! think about defaultMessage
+        this.errorServerMessage = 'Error with server. Please, reload your page.';
+        this.errorStatusMessage = 'Server sended wrong status.';
         this.axiosData          = null;
     }
 
