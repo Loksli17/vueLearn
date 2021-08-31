@@ -61,8 +61,6 @@
                     delete item.title;
                     return item;
                 });
-
-                console.log('types: ', this.types);
             },
         },
     });

@@ -3,11 +3,15 @@
     <div class="drop-dawn-list-wrap">
 
         <div class="current-value" @click="statusList = !statusList">
+            
+            <div class="arrow"></div>
+            
             <div class="item">
                 <img width="25" v-if="currentItemData.img" :src="require(`@/assets/img/article-types/${currentItemData.img}`)" alt="">
                 <span>{{currentItemData.value || choiceMessegeData}}</span>
             </div>
-            <div class="arrow"></div>
+            
+            <div class="reset-button" @click.stop="resetChoice"><span>&#10006;</span></div>
         </div>
 
         <input type="hidden" v-model="currentItemData.id">
@@ -88,6 +92,11 @@
                 this.currentItemData = listItem;
                 this.statusList      = false;
             },
+
+            resetChoise: function(){
+                console.log('reset'); //! problem with click on child
+                this.currentItemData = undefined; 
+            }
         }
     });
 </script>
@@ -114,6 +123,7 @@
         .current-value{
             display: grid;
             grid-auto-flow: column;
+            grid-template-columns: 10px 1fr 40px;
             justify-content: space-between;
             background: rgb(237, 237, 243);
             cursor: pointer;
@@ -123,10 +133,14 @@
                 background: gainsboro;
             }
 
-            .arrow{
-                width: 40px;
-                height: 100%;
-                font-size: 30px;
+            .reset-button{
+                display: grid;
+                justify-content: center;
+                align-items: center;
+
+                span{
+                    font-size: 24px;
+                }
             }
         }
 
