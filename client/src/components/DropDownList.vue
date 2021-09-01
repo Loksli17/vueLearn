@@ -1,6 +1,6 @@
 <template>
 
-    <div class="drop-dawn-list-wrap">
+    <div class="drop-dawn-list-wrap" v-click-outside="hideList">
 
         <div class="current-value" @click="statusList = !statusList">
             
@@ -15,7 +15,6 @@
         </div>
 
         <input type="hidden" v-model="currentItemData.id">
-
 
         <transition-group name="list-content-animation">
             <div v-if="statusList" class="list-content">
@@ -101,6 +100,10 @@
             resetChoice: function(){
                 //! problem with click on child
                 this.currentItemData = {} as ListItem; 
+            },
+
+            hideList: function(): void{
+                this.statusList = false;
             }
         }
     });

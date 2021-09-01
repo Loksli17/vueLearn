@@ -24,8 +24,28 @@ app.use(flashMessage, {
     strategy: 'single',
 });
 
+
+// ! think about code it in another file
+app.directive('click-outside', {
+
+    mounted(el: any, binding: any) {
+        el.clickOutsideEvent = function (e: any) {
+            if (!(el == e.target || el.contains(e.target))){
+                binding.value(e);
+            }
+        };
+        document.body.addEventListener('click', el.clickOutsideEvent)
+    },   
+
+    unmounted(el: any) {
+        document.body.removeEventListener('click', el.clickOutsideEvent)
+    },
+});
+
+
 app.config.globalProperties.$filters = filters;
 
+// ! think about replace it in config file 
 axios.settings = {
     defaultStatus          : 200,
     errorServerFlashMessage: {title: 'Erorr', text: config.server.errorMessage},
