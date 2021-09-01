@@ -15,9 +15,14 @@
                     >
                     </textarea>
 
-                    <select class="custom-select" v-else-if="item.type == 'select'" v-model="item.selected" :name=item.name :multiple=item.multiple :disabled=item.disabled>
+                    <DropDownList
+                        v-else-if="item.type == 'select'"
+                        :listItems="item.options"
+                    />
+
+                    <!-- <select class="custom-select" v-else-if="item.type == 'select'" v-model="item.selected" :name=item.name :multiple=item.multiple :disabled=item.disabled>
                         <option v-for="option in item.options" :key="option.id" :value="option.id">{{option.text}}</option>
-                    </select>
+                    </select> -->
                     
                     <input v-else :type=item.type :name=item.name v-model="item.value"
                         :max=item.max
@@ -42,8 +47,9 @@
 
 <script lang="ts">
     declare const require: any;
-    import {defineComponent} from "vue";
-    // import config            from '../config/config';
+
+    import {defineComponent}        from "vue";
+    import DropDownList, {ListItem} from '../DropDownList.vue';
 
     interface Prop{
         name: string;
@@ -74,7 +80,7 @@
         autocomplete?: boolean;
 
         //select
-        options?: Array<Option>;
+        options?: Array<ListItem>;
         selected?: string | number;
         multiple?: boolean;
 
@@ -91,11 +97,9 @@
         props: {
             action: {
                 type    : String,
-                required: true,
             },
             successCode: {
                 type    : Number,
-                required: true,
             },
             id: {
                 type: String,
@@ -117,7 +121,7 @@
                 default: undefined,
             },
             rows: {
-                default : [], 
+                default : () => [], 
                 type    : Array as () => Array<Array<FormItem>>,
                 required: true,
             },
@@ -197,73 +201,57 @@
                 console.log(this.formData);
             },
 
-            sendAxios: async function(){
+            // sendAxios: async function(){
 
-                this.$emit('before-send');
+            //     this.$emit('before-send');
 
-                try {
+            //     try {
 
-                    // this.result = await this.$axios.post(this.action, JSON.stringify(this.formData), {
-                    //     headers: config.headers,
-                    // });
+            //         this.result = await this.$axios.post(this.action, JSON.stringify(this.formData), {
+            //             headers: config.headers,
+            //         });
 
-                    // if(this.overloadParseResult){
-                    //     this.$emit('result-parser', this.result);
-                    //     return;
-                    // }
+            //         if(this.overloadParseResult){
+            //             this.$emit('result-parser', this.result);
+            //             return;
+            //         }
 
-                    // if(this.result.status == this.successCode){
-                    //     this.$flashMessage.show({
-                    //         blockClass: 'success',
-                    //         image     : require("@/assets/flash/success.svg"),
-                    //         text      : this.result.data.msg,
-                    //         title     : "Users were founded",
-                    //     });
-                    // }else{
-                    //     this.$flashMessage.show({
-                    //         blockClass: 'error',
-                    //         image     : require("@/assets/flash/fail.svg"),
-                    //         text      : "Error with query",
-                    //         title     : "Server",
-                    //     });
-                    // }
-                }catch(err){
+            //         if(this.result.status == this.successCode){
+            //             this.$flashMessage.show({
+            //                 blockClass: 'success',
+            //                 image     : require("@/assets/flash/success.svg"),
+            //                 text      : this.result.data.msg,
+            //                 title     : "Users were founded",
+            //             });
+            //         }else{
+            //             this.$flashMessage.show({
+            //                 blockClass: 'error',
+            //                 image     : require("@/assets/flash/fail.svg"),
+            //                 text      : "Error with query",
+            //                 title     : "Server",
+            //             });
+            //         }
+            //     }catch(err){
 
-                    // Object.assign(this.result, err.response);
-                    // if(this.overloadParseResult){
-                    //     this.$emit('result-parser', this.result);
-                    // }
-                    // this.parseErrors();
-                    // throw new Error(err);
-                }
-            },
-
-            sendSocket: function(){
-                try{
-                    this.result = this.$socket?.emit(this.action, this.formData);
-                }catch(err){
-                    Object.assign(this.result, err.response);
-                    if(this.overloadParseResult){
-                        this.$emit('result-parser', this.result);
-                    }
-                    this.parseErrors();
-                    throw new Error(err);
-                }
-            },
+            //         Object.assign(this.result, err.response);
+            //         if(this.overloadParseResult){
+            //             this.$emit('result-parser', this.result);
+            //         }
+            //         this.parseErrors();
+            //         throw new Error(err);
+            //     }
+            // },
             
-            sendData: async function(){
-                this.resetRows();
-                this.pullFormData();
+            // sendData: async function(){
+            //     this.resetRows();
+            //     this.pullFormData();
 
-                switch(this.typeSend){
-                    case 'socket':
-                        this.sendSocket();
-                        break;
-                    case 'axios':
-                        this.sendAxios();
-                        break;
-                }                
-            },
+            //     switch(this.typeSend){
+            //         case 'axios':
+            //             this.sendAxios();
+            //             break;
+            //     }                
+            // },
 
             parseErrors: function(){
                 for(let i = 0; i < this.result.data.errors.length; i++){
@@ -274,14 +262,6 @@
                             }
                         }
                     }
-                }
-            },
-
-            checkTypeSend: function(){
-                const whileList: Array<string> = ['axios', 'socket'];
-
-                if(!whileList.includes(this.typeSend)){
-                    throw new Error('Type of checkSendType must be axios or socket');
                 }
             },
 
@@ -335,21 +315,21 @@
                             case 'select': 
                                 for(const key in this.rows[i][j]){
                                     if(!selectProp.includes(key)){
-                                        throw new Error(`error select in row: ${i} and elem: ${j} with prop: ${key}`);
+                                        throw new Error(`Error select in row: ${i} and elem: ${j} with prop: ${key}`);
                                     }
                                 }
                                 break;
                             case 'textarea':
                                 for(const key in this.rows[i][j]){
                                     if(!textProp.includes(key)){
-                                        throw new Error(`error text in row: ${i} and elem: ${j} with prop: ${key}`);
+                                        throw new Error(`Error text in row: ${i} and elem: ${j} with prop: ${key}`);
                                     }
                                 }
                                 break;
                             default:
                                 for(const key in this.rows[i][j]){
                                     if(!inputProp.includes(key)){
-                                        throw new Error(`error input in row: ${i} and elem: ${j} with prop: ${key}`);
+                                        throw new Error(`Error input in row: ${i} and elem: ${j} with prop: ${key}`);
                                     }
                                 }
                         }
@@ -360,7 +340,33 @@
 
         created(){
             this.checkRows();
-            this.checkTypeSend();
+        },
+
+        components: {
+            DropDownList,
         }
     });
 </script>
+
+
+<style lang="scss" scoped>
+    
+    form{
+        display: grid;
+        max-width: 500px;
+        margin-top: 30px;
+        border: 1px dashed;
+
+        .form-row{
+            display: grid;
+            grid-auto-flow: column;
+            column-gap: 20px;
+            padding: 20px;
+
+            label{
+                display: grid;
+                row-gap: 10px;
+            }
+        }
+    }
+</style>
