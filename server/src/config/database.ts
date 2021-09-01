@@ -1,6 +1,5 @@
 import mysql2 from 'mysql2';
 import config from './../config';
-import Pool   from 'mysql2/typings/mysql/lib/Pool';
 
 const init = () => {
     try {

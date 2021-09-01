@@ -25,6 +25,11 @@
     import DropDownList      from '../../components/DropDownList.vue';
     import { AxiosResponse } from 'axios';
     
+    interface ArtcileType{
+        value?: string;
+        id    : number;
+        title?: string;
+    }
 
     export default defineComponent({
 
@@ -32,10 +37,9 @@
             DropDownList,
         },
 
-
         data: function(){
             return {
-                types         : [] as Array<Record<string, unknown>>,
+                types         : [] as Array<ArtcileType>,
                 currentValueId: 0 as number,
                 article       : {} as Record<string, unknown>,
             }
@@ -61,6 +65,7 @@
                     delete item.title;
                     return item;
                 });
+
             },
         },
     });

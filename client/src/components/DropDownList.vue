@@ -16,19 +16,24 @@
 
         <input type="hidden" v-model="currentItemData.id">
 
-        <div v-if="statusList" class="list-content">
 
-            <div v-if="search" class="search-wrap">
-                <input type="search" v-model="searchData">
-            </div>
+        <transition-group name="list-content-animation">
+            <div v-if="statusList" class="list-content">
 
-            <div  class="list-item-wrap">
-                <div class="item" v-for="item in listItemsData" :key="item" @click="setCurrentItem(item)">
-                    <img width="25" v-if="item.img" :src="require(`@/assets/img/article-types/${item.img}`)" alt="">
-                    <span class="value">{{item.value}}</span>
+                <div v-if="search" class="search-wrap">
+                    <input type="search" v-model="searchData">
+                </div>
+
+                <div  class="list-item-wrap">
+                    <div class="item" v-for="item in listItemsData" :key="item" @click="setCurrentItem(item)">
+                        <img width="25" v-if="item.img" :src="require(`@/assets/img/article-types/${item.img}`)" alt="">
+                        <span class="value">{{item.value}}</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </transition-group>
+        
+        
     </div>
 
 </template>
@@ -93,18 +98,30 @@
                 this.statusList      = false;
             },
 
-            resetChoise: function(){
-                console.log('reset'); //! problem with click on child
-                this.currentItemData = undefined; 
+            resetChoice: function(){
+                //! problem with click on child
+                this.currentItemData = {} as ListItem; 
             }
         }
     });
 </script>
 
 
-
-
 <style lang="scss" scoped>
+
+    .list-content-animation-enter-active, .list-content-animation-leave-active{
+        transition: all 0.2s ease;
+    }
+
+    .list-content-animation-enter-from{
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    .list-content-animation-leave-to{
+        transform: translateY(20px);
+        opacity: 0;
+    }
 
     .list-content{
         width: 100%;

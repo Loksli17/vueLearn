@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
-import Error                         from "../libs/error";
+import ErrorMessage                  from "../libs/error";
 import Query                         from "../libs/query";
-import pool                          from '../config/database';
+import pool                          from '../config/database';           
 
 
 export default class CrudController{
@@ -24,12 +24,12 @@ export default class CrudController{
         dataErrors = Query.checkData(QueryData, ['skip', 'take']);
         
         if(dataErrors.length){
-            res.status(400).send({error: Error.dataNotSended(dataErrors[0])});
+            res.status(400).send({error: ErrorMessage.dataNotSended(dataErrors[0])});
             return;
         }
 
         if(mysql == undefined){
-            res.status(400).send({error: Error.db()});
+            res.status(400).send({error: ErrorMessage.db()});
             return;
         }
 
@@ -42,7 +42,7 @@ export default class CrudController{
         })
         .catch(error => {
             console.error(error);
-            res.status(400).send({error: Error.db()});
+            res.status(400).send({error: ErrorMessage.db()});
         });
 
     }
@@ -53,7 +53,7 @@ export default class CrudController{
         let mysql = pool();
 
         if(mysql == undefined){
-            res.status(400).send({error: Error.db()});
+            res.status(400).send({error: ErrorMessage.db()});
             return;
         }
         
@@ -63,7 +63,7 @@ export default class CrudController{
         })
         .catch(error => {
             console.error(error);
-            res.status(400).send({error: Error.db()});
+            res.status(400).send({error: ErrorMessage.db()});
         });
     
     }
@@ -83,12 +83,12 @@ export default class CrudController{
         dataErrors = Query.checkData(QueryData, ['id']);
         
         if(dataErrors.length){
-            res.status(400).send({error: Error.dataNotSended(dataErrors[0])});
+            res.status(400).send({error: ErrorMessage.dataNotSended(dataErrors[0])});
             return;
         }
 
         if(mysql == undefined){
-            res.status(400).send({error: Error.db()});
+            res.status(400).send({error: ErrorMessage.db()});
             return;
         }
 
@@ -101,7 +101,7 @@ export default class CrudController{
         })
         .catch((reason: any) => {
             console.error(reason);
-            res.status(400).send({error: Error.db()});
+            res.status(400).send({error: ErrorMessage.db()});
         });
 
     }
@@ -121,12 +121,12 @@ export default class CrudController{
         dataErrors = Query.checkData(QueryData, ['id']);
         
         if(dataErrors.length){
-            res.status(400).send({error: Error.dataNotSended(dataErrors[0])});
+            res.status(400).send({error: ErrorMessage.dataNotSended(dataErrors[0])});
             return;
         }
 
         if(mysql == undefined){
-            res.status(400).send({error: Error.db()});
+            res.status(400).send({error: ErrorMessage.db()});
             return;
         }
 
@@ -136,7 +136,7 @@ export default class CrudController{
         })
         .catch(error => {
             console.error(error);
-            res.status(400).send({error: Error.db()})
+            res.status(400).send({error: ErrorMessage.db()})
         }); 
     }
 
@@ -146,7 +146,7 @@ export default class CrudController{
         let mysql = pool();
 
         if(mysql == undefined){
-            res.status(400).send({error: Error.db()});
+            res.status(400).send({error: ErrorMessage.db()});
             return;
         }
 
@@ -156,7 +156,7 @@ export default class CrudController{
         })
         .catch(error => {
             console.error(error);
-            res.status(400).send({error: Error.db()});
+            res.status(400).send({error: ErrorMessage.db()});
         });
     }
 
@@ -183,12 +183,12 @@ export default class CrudController{
         dataErrors = Query.checkData(QueryData, ['article']);
         
         if(dataErrors.length){
-            res.status(400).send({error: Error.dataNotSended(dataErrors[0])});
+            res.status(400).send({error: ErrorMessage.dataNotSended(dataErrors[0])});
             return;
         }
 
         if(mysql == undefined){
-            res.status(400).send({error: Error.db()});
+            res.status(400).send({error: ErrorMessage.db()});
             return;
         }
         
