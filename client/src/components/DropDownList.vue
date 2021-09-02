@@ -14,7 +14,7 @@
             <div class="reset-button" @click.stop="resetChoice"><span>&#10006;</span></div>
         </div>
 
-        <input type="hidden" v-model="currentItemData.id">
+        <input type="hidden" :name="name" v-model="currentItemData.id">
 
         <transition-group name="list-content-animation">
             <div v-if="statusList" class="list-content">
@@ -70,6 +70,10 @@
                 type   : Boolean,
                 default: false,
             },
+            name: {
+                type: String,
+                default: 'select',
+            }
         },
 
         computed: {

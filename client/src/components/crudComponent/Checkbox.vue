@@ -2,7 +2,7 @@
     
     <div class="checkbox">
         <div ref="div" class="content" :class="{'checkbox-active': checked}" @click.prevent="setValue"></div>
-        <input type="checkbox" v-model="checked" hidden>
+        <input type="checkbox" :name="name" v-model="checked" hidden>
     </div>
 
 </template>
@@ -19,6 +19,10 @@
                 type: Boolean,
                 default: false,
             },
+            name: {
+                type: String,
+                default: 'checkbox',
+            }
         },
 
         data: function(){
@@ -36,6 +40,10 @@
             getValue: function(): boolean{
                 return this.checked;
             },
+        },
+
+        created(){
+            console.log(this.value);
         }
     });
 

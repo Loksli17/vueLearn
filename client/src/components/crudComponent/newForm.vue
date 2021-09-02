@@ -1,13 +1,15 @@
 <template>
-    <form v-if="printRows" :class=className :id=id @submit.prevent="sendData">
-        <div class="form-row" v-for="row in printRows" :key='row'>
+    <form :class=className :id=id @submit.prevent="sendData">
+        <div class="form-row" v-for="row in rows" :key='row'>
 
             <div v-for="item in row" :key='item.name'>
                 <label v-if="item.type != 'hidden'" :class="{'error': item.error}" class="form-col">
                     
                     <span v-if="item.type != 'submit'">{{item.label ?? $filters.upperFirst(item.name)}}</span>
-                    
-                    <textarea v-if="item.type == 'textarea'" v-model="item.value" :name=item.name
+
+                    <textarea v-if="item.type == 'textarea'" 
+                        v-model="localDataForm[item.name]" 
+                        :name=item.name
                         :maxlength=item.maxLength
                         :rows=item.rows
                         :cols=item.cols
@@ -16,18 +18,20 @@
                     >
                     </textarea>
 
-                    <DropDownList
-                        v-else-if="item.type == 'select'"
-                        :listItems="item.options"
+                    <DropDownList v-else-if="item.type == 'select'"
+                        :name="item.name"
+                        :listItems="localDataForm[item.name]"
                     />
 
-                    <Checkbox 
-                        v-else-if="item.type == 'checkbox'"
-                        :value=item.value
+                    <Checkbox v-else-if="item.type == 'checkbox'"
+                        :name="item.name"
+                        :value="localDataForm[item.name]"
                     />
                     
-                    <input v-else :type=item.type :name=item.name 
-                        v-model="item.value"
+                    <input v-else
+                        v-model="localDataForm[item.name]"
+                        :type=item.type 
+                        :name=item.name 
                         :max=item.max
                         :min=item.min 
                         :pattern=item.pattern
@@ -55,7 +59,8 @@
     import DropList, { ListItem } from '../DropDownList.vue';
     import { defineComponent }    from 'vue';
 
-    export interface FormItem{
+
+    export interface FormHtmlItem{
         type: string;
         name: string;
         error?: string;
@@ -74,7 +79,7 @@
         autocomplete?: boolean;
 
         //select
-        options?: Array<ListItem>;
+        // options?: Array<ListItem>;
         selected?: string | number;
         multiple?: boolean;
 
@@ -84,6 +89,11 @@
         rows?: number;
         tabindex?: number;
         wrap?: string;
+    }
+
+
+    export interface FormData{
+        [index: string]: Array<Record<string, unknown>> | string | Date | number | boolean;
     }
 
 
@@ -101,10 +111,43 @@
             },
             rows: {
                 default : () => [], 
-                type    : Array as () => Array<Array<FormItem>>,
+                type    : Array as () => Array<Array<FormHtmlItem>>,
                 required: true,
             },
+            data: {
+                type   : FormData,
+                default: null,
+            }
         },
+
+        computed: {
+            localDataForm: function(): any{
+                return Object.assign({}, this.data);
+            }
+        }
     });
 
 </script>
+
+
+<style lang="scss" scoped>
+    
+    form{
+        display: grid;
+        max-width: 500px;
+        margin-top: 30px;
+        border: 1px dashed;
+
+        .form-row{
+            display: grid;
+            grid-auto-flow: column;
+            column-gap: 20px;
+            padding: 20px;
+
+            label{
+                display: grid;
+                row-gap: 10px;
+            }
+        }
+    }
+</style>

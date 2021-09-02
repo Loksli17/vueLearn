@@ -20,7 +20,7 @@ export default {
         return moment(date).format('MMMM Do YYYY');
     },
     timeToDb: function(date: Date | string): string{
-        return moment(date).format('hh:mm:ss');
+        return moment(date).format('hh:mm');
     },
     timeToView: function(date: Date | string): string{
         return moment(date).format('h:mm a');

@@ -11,8 +11,10 @@
 
             <div class="form-wrap">
                 <Form 
+                    v-if="rowsForm && dataForm"
                     :rows="rowsForm"
-                    :tableName="article"
+                    :data="dataForm"
+                    :tableName="'article'"
                 />
             </div>
 
@@ -28,11 +30,11 @@
 
 
 <script lang="ts">
-    import { defineComponent }        from 'vue';
-    import axios                      from '../../libs/axios';
-    import DropDownList, { ListItem } from '../../components/DropDownList.vue';
-    import Form, { FormItem }         from '../../components/crudComponent/newForm.vue';
-    import { AxiosResponse }          from 'axios';
+    import { defineComponent }              from 'vue';
+    import axios                            from '../../libs/axios';
+    import DropDownList, { ListItem }       from '../../components/DropDownList.vue';
+    import Form, { FormHtmlItem, FormData } from '../../components/crudComponent/newForm.vue';
+    import { AxiosResponse }                from 'axios';
     
     interface ArtcleType{
         value?: string;
@@ -52,14 +54,16 @@
                 types         : [] as Array<ArtcleType>,
                 currentValueId: 0 as number,
                 article       : {} as Record<string, unknown>,
-                rowsForm      : null as Array<Array<FormItem>> | null,
+                rowsForm      : null as Array<Array<FormHtmlItem>> | null,
+                dataForm      : null as FormData | null,
             }
         },
 
         created: async function(){
             await this.getTypes();
             this.initRowsForm();
-            // console.log(this.$filters.dateToDb(new Date()));
+            this.initDataForm();
+            console.log(this.dataForm);
             // this.rowsForm[1][0].value = this.$filters.dateToDb(new Date());
             // this.rowsForm[1][1].value = this.$filters.timeToDb(new Date());
         },
@@ -87,9 +91,20 @@
                     [{type: 'text', name: 'title', label: 'Title of article'}, {type: 'checkbox', name: 'isReady', label: 'Readiness of the article'}],
                     [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
                     [{type: 'textarea', name: 'text'}],
-                    // [{type: 'select', name: 'articleTypeId', label: 'Article`s type', options: this.types}],
+                    [{type: 'select', name: 'articleTypeId', label: 'Article`s type'}],
                     [{type: 'submit', name: 'sendArticle'}]
                 ]
+            },
+
+            initDataForm: function(){
+                this.dataForm = {
+                    title        : "Name",
+                    date         : this.$filters.dateToDb(new Date()),
+                    time         : this.$filters.timeToDb(new Date()),
+                    articleTypeId: this.types,
+                    text         : "azazazaza",
+                    isReady      : true,
+                } as FormData
             },
 
             // formInit: function(){
