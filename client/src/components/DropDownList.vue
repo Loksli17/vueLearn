@@ -2,7 +2,7 @@
 
     <div class="drop-dawn-list-wrap" v-click-outside="hideList">
 
-        <div class="current-value" @click="statusList = !statusList">
+        <div class="current-value" @click.prevent="statusList = !statusList">
             
             <div class="arrow"></div>
             
@@ -98,7 +98,6 @@
             },
 
             resetChoice: function(){
-                //! problem with click on child
                 this.currentItemData = {} as ListItem; 
             },
 

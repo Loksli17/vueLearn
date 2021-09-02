@@ -21,7 +21,6 @@
                 :listItems="types"
             />
 
-            <Checkbox/>
         </div>
 
     </div>    
@@ -34,7 +33,6 @@
     import DropDownList, { ListItem } from '../../components/DropDownList.vue';
     import Form, {FormItem}           from '../../components/crudComponent/Form.vue';
     import { AxiosResponse }          from 'axios';
-    import Checkbox                   from '../../components/crudComponent/Checkbox.vue';
     
     interface ArtcleType{
         value?: string;
@@ -47,7 +45,6 @@
         components: {
             DropDownList,
             Form,
-            Checkbox,
         },
 
         data: function(){

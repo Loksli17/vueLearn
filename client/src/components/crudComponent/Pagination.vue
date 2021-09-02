@@ -58,7 +58,7 @@
                 type    : Number,
                 required: true,
             },
-            pageSize: {
+            pageGap: {
                 type    : Number,
                 required: true,
             },
@@ -151,15 +151,15 @@
                     first: number = 0,
                     last: number = 0;
                
-                if(Number(this.currentPageData) + (this.pageSize / 2) >= this.maxPage){
+                if(Number(this.currentPageData) + (this.pageGap / 2) >= this.maxPage){
                     last = this.maxPage;
-                    first = this.maxPage - this.pageSize + 1;
-                }else if(Number(this.currentPageData) - (this.pageSize / 2) <= 1){
+                    first = this.maxPage - this.pageGap + 1;
+                }else if(Number(this.currentPageData) - (this.pageGap / 2) <= 1){
                     first = 1;
-                    last = this.pageSize;
+                    last = this.pageGap;
                 }else{
-                    first = Math.ceil(Number(this.currentPageData) - this.pageSize / 2);
-                    last = first + this.pageSize - 1;
+                    first = Math.ceil(Number(this.currentPageData) - this.pageGap / 2);
+                    last = first + this.pageGap - 1;
                 }
                 
                 if(last > this.maxPage){

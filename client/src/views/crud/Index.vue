@@ -47,7 +47,7 @@
                     ref="pagination"
                     :take=take
                     :currentPage=currentPage
-                    :pageSize="7"
+                    :pageGap="7"
                     :endButton="true"
                     :startButton="true"
                     v-on:page-change="pageChangeEvt"

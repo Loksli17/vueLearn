@@ -1,5 +1,5 @@
 <template>
-    <form :class=className :id=id :action=action method='post' @submit.prevent="sendData">
+    <form :class=className :id=id @submit.prevent="sendData">
         <div class="form-row" v-for="row in printRows" :key='row'>
 
             <template v-for="item in row" :key='item.name'>
@@ -18,6 +18,11 @@
                     <DropDownList
                         v-else-if="item.type == 'select'"
                         :listItems="item.options"
+                    />
+
+                    <Checkbox 
+                        v-else-if="item.type == 'checkbox'"
+                        :value=item.value
                     />
 
                     <!-- <select class="custom-select" v-else-if="item.type == 'select'" v-model="item.selected" :name=item.name :multiple=item.multiple :disabled=item.disabled>
@@ -46,10 +51,10 @@
 
 
 <script lang="ts">
-    declare const require: any;
 
     import {defineComponent}        from "vue";
     import DropDownList, {ListItem} from '../DropDownList.vue';
+    import Checkbox                 from '../crudComponent/Checkbox.vue';
 
     interface Prop{
         name: string;
@@ -125,12 +130,7 @@
                 type    : Array as () => Array<Array<FormItem>>,
                 required: true,
             },
-            typeSend: {
-                default: 'axios',
-                type   : String,
-            }
         },
-
         
         data(){ 
             return{
@@ -200,48 +200,7 @@
 
                 console.log(this.formData);
             },
-
-            // sendAxios: async function(){
-
-            //     this.$emit('before-send');
-
-            //     try {
-
-            //         this.result = await this.$axios.post(this.action, JSON.stringify(this.formData), {
-            //             headers: config.headers,
-            //         });
-
-            //         if(this.overloadParseResult){
-            //             this.$emit('result-parser', this.result);
-            //             return;
-            //         }
-
-            //         if(this.result.status == this.successCode){
-            //             this.$flashMessage.show({
-            //                 blockClass: 'success',
-            //                 image     : require("@/assets/flash/success.svg"),
-            //                 text      : this.result.data.msg,
-            //                 title     : "Users were founded",
-            //             });
-            //         }else{
-            //             this.$flashMessage.show({
-            //                 blockClass: 'error',
-            //                 image     : require("@/assets/flash/fail.svg"),
-            //                 text      : "Error with query",
-            //                 title     : "Server",
-            //             });
-            //         }
-            //     }catch(err){
-
-            //         Object.assign(this.result, err.response);
-            //         if(this.overloadParseResult){
-            //             this.$emit('result-parser', this.result);
-            //         }
-            //         this.parseErrors();
-            //         throw new Error(err);
-            //     }
-            // },
-            
+           
             // sendData: async function(){
             //     this.resetRows();
             //     this.pullFormData();
@@ -344,6 +303,7 @@
 
         components: {
             DropDownList,
+            Checkbox,
         }
     });
 </script>
