@@ -26,17 +26,11 @@
                 checked: this.value as boolean,
             }
         },
-
-        created: function(){
-            console.log('checkbox:', this.value);
-            console.log('checked: ', this.checked);
-        },
         
         methods: {
             
             setValue: function(): void{
                 this.checked = !this.checked;
-                console.log(this.checked, !this.checked);
             },
 
             getValue: function(): boolean{

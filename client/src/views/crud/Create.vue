@@ -28,10 +28,10 @@
 
 
 <script lang="ts">
-    import {defineComponent}          from 'vue';
+    import { defineComponent }        from 'vue';
     import axios                      from '../../libs/axios';
     import DropDownList, { ListItem } from '../../components/DropDownList.vue';
-    import Form, {FormItem}           from '../../components/crudComponent/Form.vue';
+    import Form, { FormItem }         from '../../components/crudComponent/newForm.vue';
     import { AxiosResponse }          from 'axios';
     
     interface ArtcleType{
@@ -52,19 +52,16 @@
                 types         : [] as Array<ArtcleType>,
                 currentValueId: 0 as number,
                 article       : {} as Record<string, unknown>,
-                rowsForm      : [
-                    [{type: 'text', name: 'title', label: 'Title of article'}, {type: 'checkbox', name: 'isReady', label: 'Readiness of the article'}],
-                    [{type: 'date', value: '', name: 'date'}, {type: 'time', value: '', name: 'time'}],
-                    [{type: 'textarea', name: 'text'}],
-                    [{type: 'select', name: 'articleTypeId', label: 'Article`s type', options: this.types}],
-                    [{type: 'submit', name: 'sendArticle', value: 'Create article'}]
-                ] as Array<Array<FormItem>>
+                rowsForm      : null as Array<Array<FormItem>> | null,
             }
         },
 
         created: async function(){
             await this.getTypes();
-            await this.formInit();
+            this.initRowsForm();
+            // console.log(this.$filters.dateToDb(new Date()));
+            // this.rowsForm[1][0].value = this.$filters.dateToDb(new Date());
+            // this.rowsForm[1][1].value = this.$filters.timeToDb(new Date());
         },
 
         methods: {
@@ -85,11 +82,21 @@
                 });
             },
 
-            formInit: function(){
-                this.rowsForm[3][0].options = (this.types as Array<ListItem>);
-                // this.rowsForm[1][0] = new Date();
-                // this.rowsForm[1][1] = new Date();
+            initRowsForm: function(){
+                this.rowsForm = [
+                    [{type: 'text', name: 'title', label: 'Title of article'}, {type: 'checkbox', name: 'isReady', label: 'Readiness of the article'}],
+                    [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
+                    [{type: 'textarea', name: 'text'}],
+                    // [{type: 'select', name: 'articleTypeId', label: 'Article`s type', options: this.types}],
+                    [{type: 'submit', name: 'sendArticle'}]
+                ]
             },
+
+            // formInit: function(){
+            //     this.rowsForm[3][0].options = (this.types as Array<ListItem>);
+            //     this.rowsForm[1][0] = new Date();
+            //     this.rowsForm[1][1] = new Date();
+            // },
         },
     });
 </script>

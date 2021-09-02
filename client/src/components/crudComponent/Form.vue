@@ -1,5 +1,5 @@
 <template>
-    <form :class=className :id=id @submit.prevent="sendData">
+    <form v-if="printRows" :class=className :id=id @submit.prevent="sendData">
         <div class="form-row" v-for="row in printRows" :key='row'>
 
             <template v-for="item in row" :key='item.name'>
@@ -101,10 +101,10 @@
 
         props: {
             action: {
-                type    : String,
+                type: String,
             },
             successCode: {
-                type    : Number,
+                type: Number,
             },
             id: {
                 type: String,
@@ -297,8 +297,8 @@
             },
         },
 
-        created(){
-            this.checkRows();
+        updated: function(){
+            if(this.rows) this.checkRows();
         },
 
         components: {
