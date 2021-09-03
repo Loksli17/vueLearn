@@ -1,5 +1,6 @@
 <template>
-    <form :class=className :id=id @submit.prevent="sendData">
+    <form :class=className :id=id @submit.prevent="validateFormData">
+
         <div class="form-row" v-for="row in rows" :key='row'>
 
             <div v-for="item in row" :key='item.name'>
@@ -21,12 +22,17 @@
                     <DropDownList v-else-if="item.type == 'select'"
                         :name="item.name"
                         :listItems="localDataForm[item.name]"
+                        :search="item.search"
+                        :disabledOption="item.defaultMessage"
+                        :required="item.required"
                     />
 
                     <Checkbox v-else-if="item.type == 'checkbox'"
                         :name="item.name"
                         :value="localDataForm[item.name]"
                     />
+
+                    <input v-else-if="item.type == 'submit'" type="submit" :value="item.value || 'Send'">
                     
                     <input v-else
                         v-model="localDataForm[item.name]"
@@ -55,9 +61,9 @@
 
 <script lang="ts">
 
-    import Checkbox               from '../crudComponent/Checkbox.vue';
-    import DropList, { ListItem } from '../DropDownList.vue';
-    import { defineComponent }    from 'vue';
+    import Checkbox                   from '../crudComponent/Checkbox.vue';
+    import DropDownList, { ListItem } from '../DropDownList.vue';
+    import { defineComponent }        from 'vue';
 
 
     export interface FormHtmlItem{
@@ -82,6 +88,8 @@
         // options?: Array<ListItem>;
         selected?: string | number;
         multiple?: boolean;
+        search?: boolean;
+        disabledOption?: string;
 
         //textarea
         cols?: number;
@@ -98,6 +106,11 @@
 
 
     export default defineComponent({
+
+        components: {
+            Checkbox,
+            DropDownList,
+        },
         
         props: {
             id: {
@@ -123,6 +136,16 @@
         computed: {
             localDataForm: function(): any{
                 return Object.assign({}, this.data);
+            }
+        },
+
+        methods: {
+            validateFormData: function(){
+                console.log('validateData');
+            },
+
+            validateFormRows: function(){
+                console.log('validateRows');
             }
         }
     });

@@ -17,12 +17,6 @@
                     :tableName="'article'"
                 />
             </div>
-
-            <DropDownList 
-                ref="dropList"
-                :listItems="types"
-            />
-
         </div>
 
     </div>    
@@ -32,7 +26,6 @@
 <script lang="ts">
     import { defineComponent }              from 'vue';
     import axios                            from '../../libs/axios';
-    import DropDownList, { ListItem }       from '../../components/DropDownList.vue';
     import Form, { FormHtmlItem, FormData } from '../../components/crudComponent/newForm.vue';
     import { AxiosResponse }                from 'axios';
     
@@ -45,7 +38,6 @@
     export default defineComponent({
 
         components: {
-            DropDownList,
             Form,
         },
 
@@ -63,9 +55,6 @@
             await this.getTypes();
             this.initRowsForm();
             this.initDataForm();
-            console.log(this.dataForm);
-            // this.rowsForm[1][0].value = this.$filters.dateToDb(new Date());
-            // this.rowsForm[1][1].value = this.$filters.timeToDb(new Date());
         },
 
         methods: {
@@ -91,7 +80,7 @@
                     [{type: 'text', name: 'title', label: 'Title of article'}, {type: 'checkbox', name: 'isReady', label: 'Readiness of the article'}],
                     [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
                     [{type: 'textarea', name: 'text'}],
-                    [{type: 'select', name: 'articleTypeId', label: 'Article`s type'}],
+                    [{type: 'select', name: 'articleTypeId', label: 'Article`s type', search: true}],
                     [{type: 'submit', name: 'sendArticle'}]
                 ]
             },
@@ -104,14 +93,8 @@
                     articleTypeId: this.types,
                     text         : "azazazaza",
                     isReady      : true,
-                } as FormData
+                } as FormData;
             },
-
-            // formInit: function(){
-            //     this.rowsForm[3][0].options = (this.types as Array<ListItem>);
-            //     this.rowsForm[1][0] = new Date();
-            //     this.rowsForm[1][1] = new Date();
-            // },
         },
     });
 </script>
