@@ -209,6 +209,53 @@ export default class CrudController{
     }
 
 
+    private static editArticle(req: Request, res: Response){
+   
+        interface QueryData{
+            article: {
+                id           : number;
+                title        : string;
+                text         : string;
+                isReady      : boolean;
+                date         : Date;
+                time         : string;
+                articleTypeId: string;
+                img          : string;
+            };
+        }
+
+        let
+            mysql = pool(),
+            QueryData : QueryData               = req.body as any,
+            dataErrors: Array<keyof QueryData>  = [];
+
+        dataErrors = Query.checkData(QueryData, ['article']);
+
+        if(dataErrors.length){
+            res.status(400).send({error: ErrorMessage.dataNotSended(dataErrors[0])});
+            return;
+        }
+
+        if(mysql == undefined){
+            res.status(400).send({error: ErrorMessage.db()});
+            return;
+        }
+
+        mysql.query(
+            'update `article` set title = ?,text = ?, isReady = ?, date = ?, time = ?, articleTypeId = ? where id = ?',
+            [
+                QueryData.article.title, QueryData.article.text, QueryData.article.isReady, QueryData.article.date,
+                QueryData.article.time, 1, QueryData.article.id,
+            ]
+        ).then(value => {
+            res.status(200).send({types: value[0]});
+        }).catch(error => {
+            console.error(error);
+            res.status(400).send({error: ErrorMessage.db()});
+        });
+    }
+
+
     public static routes(){
         //* order of routes affects working
         this.router.post(  '/',              this.getArticles);
@@ -217,6 +264,7 @@ export default class CrudController{
         this.router.get(   '/:id',           this.getArticle);
         this.router.delete('/:id/remove',    this.removeArticle);
         this.router.put(   '/add',           this.addArticle);
+        this.router.put(   '/:id/edit',      this.editArticle);
         
 
         return this.router;

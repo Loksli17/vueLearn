@@ -30,7 +30,7 @@
     import Form, { FormHtmlItem, FormData } from '../../components/crudComponent/newForm.vue';
     import { AxiosResponse }                from 'axios';
     
-    interface ArtcleType{
+    interface ArticleType{
         value?: string;
         id    : number;
         title?: string;
@@ -44,7 +44,7 @@
 
         data: function(){
             return {
-                types         : [] as Array<ArtcleType>,
+                types         : [] as Array<ArticleType>,
                 currentValueId: 0 as number,
                 article       : {} as Record<string, unknown>,
                 rowsForm      : null as Array<Array<FormHtmlItem>> | null,
