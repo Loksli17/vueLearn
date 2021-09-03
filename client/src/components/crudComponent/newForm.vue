@@ -137,13 +137,92 @@
             }
         },
 
+        created: function(){
+            this.validateFormRows();
+        },
+
         methods: {
+
             emitFormData: function(){
                 this.$emit('send', this.localDataForm);
             },
 
             validateFormRows: function(){
-                console.log('validateRows');
+
+                //! check this props attentivle
+                const 
+                    selectProp: Array<string> = [
+                        'name',
+                        'type',
+                        'error',
+                        'label',
+
+                        'selected',
+                        'options',
+                        'multiple',
+                        'disabled',
+                    ],
+                    inputProp: Array<string> = [
+                        'name',
+                        'type',
+                        'error',
+                        'label',
+
+                        'max',
+                        'min',
+                        'pattern',
+                        'required',
+                        'disabled',
+                        'readonly',
+                        'placeholder',
+                        'step',
+                        'autocomplete',
+                        'autofocus',
+                    ],
+                    textProp: Array<string> = [
+                        'name',
+                        'type',
+                        'error',
+                        'label',
+
+                        'cols',
+                        'maxLength',
+                        'rows',
+                        'tabIndex',
+                        'wrap',
+                    ],
+                    checkboxProp: Array<string> = [
+                        'name',
+                        'type',
+                        'error',
+                        'label',
+                    ];
+
+                const checkInclude = (htmlItem: FormHtmlItem, props: Array<string>, rowInd: number, itemInd: number) => {
+                    for(const key in htmlItem){
+                        if(!props.includes(key)){
+                            throw new Error(`Error with ROWS of FORM in row: ${rowInd} and elem: ${itemInd} with prop: ${key}`);
+                        }
+                    }
+                };
+                
+                this.rows.forEach((row, i) => {
+                    row.forEach((htmlItem, j) => {    
+                        switch(htmlItem.type){
+                            case 'select':
+                                checkInclude(htmlItem, selectProp, i, j);
+                                break;
+                            case 'textarea':
+                                checkInclude(htmlItem, textProp, i, j);
+                                break;
+                            case 'checkbox':
+                                checkInclude(htmlItem, checkboxProp, i, j);
+                                break;
+                            default:
+                                checkInclude(htmlItem, inputProp, i, j);
+                        }
+                    });
+                });
             }
         }
     });
