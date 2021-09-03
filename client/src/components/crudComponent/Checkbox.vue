@@ -41,10 +41,6 @@
                 return this.checked;
             },
         },
-
-        created(){
-            console.log(this.value);
-        }
     });
 
 </script>

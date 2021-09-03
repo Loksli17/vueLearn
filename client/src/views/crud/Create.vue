@@ -15,6 +15,7 @@
                     :rows="rowsForm"
                     :data="dataForm"
                     :tableName="'article'"
+                    v-on:send="sendForm"
                 />
             </div>
         </div>
@@ -80,7 +81,7 @@
                     [{type: 'text', name: 'title', label: 'Title of article'}, {type: 'checkbox', name: 'isReady', label: 'Readiness of the article'}],
                     [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
                     [{type: 'textarea', name: 'text'}],
-                    [{type: 'select', name: 'articleTypeId', label: 'Article`s type', search: true}],
+                    // [{type: 'select', name: 'articleTypeId', label: 'Article`s type', search: true}],
                     [{type: 'submit', name: 'sendArticle'}]
                 ]
             },
@@ -94,6 +95,23 @@
                     text         : "azazazaza",
                     isReady      : true,
                 } as FormData;
+            },
+
+            sendForm: async function(formData: FormData){
+                
+                await axios.put({
+                    url: 'crud/add',
+                    handler: (res: AxiosResponse) => {
+                        console.log(res); // ! think about unconnect handler
+                    },
+                    data: {
+                        article: formData
+                    },
+                    successFlashMessage: {
+                        title: 'Inserting of artcile', 
+                        text : 'New article was created successfully',
+                    }
+                });
             },
         },
     });
