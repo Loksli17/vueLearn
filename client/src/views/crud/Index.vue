@@ -13,7 +13,7 @@
 
         <div class="section">
             <div>
-                <Table :columnNames="columnNames" :rowData="rowData">
+                <Table :columnNames="columnNames" :rowData="rowData" :actions="tableActions">
                     <template v-slot:footer>
                         this is a footer
                     </template>
@@ -73,8 +73,8 @@
     import axios               from '../../libs/axios';
     import { AxiosResponse }   from 'axios';
 
-    import Table, { columnType } from "../../components/table/Table.vue";
-    import { Column } from "../../components/table/TableHeader.vue";
+    import Table from "../../components/table/Table.vue";
+    import { Column, columnType, Action } from "../../components/table/types";
 
     export default defineComponent({
 
@@ -94,11 +94,16 @@
                         { name: "Time" },
                         { name: "Date" },
                         { name: "Actions" }
-                    ] as Array<Column>,
+                ] as Array<Column>,
                 rowData       : [
-                        { id: 0, title: "kek", type: "fuck", ready: false, time: new Date(), date: new Date(), actions: "custom cell here" },
-                        { id: 1, title: "kek2", type: "not fuck", ready: false, time: new Date(), date: new Date(), actions: "custom cell here" }
-                    ] as Array<Record<string, columnType>>,
+                        { id: 0, title: "kek", type: "fuck", ready: false, time: new Date(), date: new Date() },
+                        { id: 1, title: "kek2", type: "not fuck", ready: false, time: new Date(), date: new Date() }
+                ] as Array<Record<string, columnType>>,
+                tableActions: [
+                        {name: "View", path: (id: number) => `/crud/${id}/view` }, 
+                        {name: "Edit", path: (id: number) => `/crud/${id}/edit` }, 
+                        {name: "Delete", handler: (id: number) => {console.log(id)}}
+                    ] as Array<Action>,
                 take          : 10 as number,
                 currentPage   : 1 as number,
                 amountArticles: 0 as number, 

@@ -2,7 +2,7 @@
     <table border="1">
         <TableHeader :columnNames="columnNames" />
         <tbody>
-            <TableRow v-for="row in rowData" :key="row.id" :row="row" />
+            <TableRow v-for="row in rowData" :key="row.id" :row="row" :actions="actions" />
         </tbody>
         <tfoot>
             <slot name="footer"></slot>
@@ -12,10 +12,10 @@
 
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
-    import TableHeader, { Column } from './TableHeader.vue';
+    import TableHeader from './TableHeader.vue';
     import TableRow from "./TableRow.vue";
-
-    export type columnType = string | number | boolean | Date;
+    import { Column, columnType, Action } from "./types";
+   
 
     export default defineComponent({
         name: "Table",
@@ -31,6 +31,9 @@
             rowData: {
                 type: Object as PropType<Array<Record<string, columnType>>>,
                 required: true
+            },
+            actions: {
+                type: Object as PropType<Array<Action>>
             }
         }
     })

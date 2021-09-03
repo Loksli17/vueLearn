@@ -5,11 +5,9 @@
 </template>
 
 <script lang="ts">
-    export interface Column {
-        name: string;
-    }
+    import { defineComponent, PropType } from 'vue';
+    import { Column } from "./types";
 
-    import { defineComponent, PropType } from 'vue'
     export default defineComponent({
         name: "TableHeader",
         props: {
