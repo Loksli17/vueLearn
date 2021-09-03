@@ -12,6 +12,13 @@
         </div>
 
         <div class="section">
+            <div>
+                <Table :columnNames="columnNames" :rowData="rowData">
+                    <template v-slot:footer>
+                        this is a footer
+                    </template>
+                </Table> 
+            </div>
 
             <div class="table-wrap">
                 <table border="1">
@@ -66,16 +73,32 @@
     import axios               from '../../libs/axios';
     import { AxiosResponse }   from 'axios';
 
+    import Table, { columnType } from "../../components/table/Table.vue";
+    import { Column } from "../../components/table/TableHeader.vue";
 
     export default defineComponent({
 
         components: {
             Pagination,
+            Table
         },
 
         data: function(){
             return {
                 articles      : [] as Array<Record<string, unknown>>,
+                columnNames   : [ 
+                        { name: "Id" },
+                        { name: "Title" },
+                        { name: "Type" },
+                        { name: "Ready" },
+                        { name: "Time" },
+                        { name: "Date" },
+                        { name: "Actions" }
+                    ] as Array<Column>,
+                rowData       : [
+                        { id: 0, title: "kek", type: "fuck", ready: false, time: new Date(), date: new Date(), actions: "custom cell here" },
+                        { id: 1, title: "kek2", type: "not fuck", ready: false, time: new Date(), date: new Date(), actions: "custom cell here" }
+                    ] as Array<Record<string, columnType>>,
                 take          : 10 as number,
                 currentPage   : 1 as number,
                 amountArticles: 0 as number, 
