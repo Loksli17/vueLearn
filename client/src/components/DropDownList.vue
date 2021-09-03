@@ -2,37 +2,35 @@
 
     <div class="drop-dawn-list-wrap" v-click-outside="hideList">
 
-        <div class="current-value" @click="statusList = !statusList">
+        <div class="current-value" @click.prevent="statusList = !statusList">
             
             <div class="arrow"></div>
             
             <div class="item">
-                <img width="25" v-if="currentItemData.img" :src="require(`@/assets/img/article-types/${currentItemData.img}`)" alt="">
-                <span>{{currentItemData.value || choiceMessegeData}}</span>
+                <img width="25" v-if="currentItemLocal.img" :src="require(`@/assets/img/article-types/${currentItemLocal.img}`)" alt="">
+                <span>{{currentItemLocal.value || disabledOptionLocal}}</span>
             </div>
             
             <div class="reset-button" @click.stop="resetChoice"><span>&#10006;</span></div>
         </div>
 
-        <input type="hidden" v-model="currentItemData.id">
+        <input type="hidden" :name="name" v-model="currentItemLocal.id">
 
         <transition-group name="list-content-animation">
             <div v-if="statusList" class="list-content">
 
                 <div v-if="search" class="search-wrap">
-                    <input type="search" v-model="searchData">
+                    <input type="search" v-model="searchLocal">
                 </div>
 
                 <div  class="list-item-wrap">
-                    <div class="item" v-for="item in listItemsData" :key="item" @click="setCurrentItem(item)">
+                    <div class="item" v-for="item in listItemsLocal" :key="item" @click="setCurrentItem(item)">
                         <img width="25" v-if="item.img" :src="require(`@/assets/img/article-types/${item.img}`)" alt="">
                         <span class="value">{{item.value}}</span>
                     </div>
                 </div>
             </div>
         </transition-group>
-        
-        
     </div>
 
 </template>
@@ -51,12 +49,12 @@
 
         data: function(){
             return {
-                currentItemData  : {} as ListItem | undefined,
-                currentIdData    : 0 as number,
-                statusList       : false as boolean,
-                choiceMessegeData: this.choiceMessege as string,
-                searchData       : "" as string, 
-            }
+                currentItemLocal   : {} as ListItem | undefined,
+                currentIdLocal     : 0 as number,
+                statusList         : false as boolean,
+                disabledOptionLocal: this.disabledOption as string,
+                searchLocal        : "" as string, 
+            } 
         },
 
         props: {
@@ -64,7 +62,7 @@
                 type   : Array as () => Array<ListItem>,
                 default: () => [],
             },
-            choiceMessege: {
+            disabledOption: {
                 type   : String,
                 default: 'Please, choose item',
             },
@@ -72,34 +70,37 @@
                 type   : Boolean,
                 default: false,
             },
+            name: {
+                type: String,
+                default: 'select',
+            }
         },
 
         computed: {
-            listItemsData: function(): Array<ListItem>{
-                return this.listItems.filter((item: ListItem) => item.value.toString().includes(this.searchData)).slice();
+            listItemsLocal: function(): Array<ListItem>{
+                return this.listItems.filter((item: ListItem) => item.value.toString().includes(this.searchLocal)).slice();
             },
         },
 
         methods: {
 
             setListItems: function(data: Array<ListItem>){
-                this.listItemsData = data.slice();
+                this.listItemsLocal = data.slice();
             },
 
             setCurrentItemId: function(id: number){
-                this.currentIdData   = id;
-                this.currentItemData = this.listItemsData.find(item => item.id == this.currentIdData);
+                this.currentIdLocal   = id;
+                this.currentItemLocal = this.listItemsLocal.find(item => item.id == this.currentIdLocal);
             },
 
             setCurrentItem: function(listItem: ListItem){
-                this.currentIdData   = listItem.id;
-                this.currentItemData = listItem;
-                this.statusList      = false;
+                this.currentIdLocal   = listItem.id;
+                this.currentItemLocal = listItem;
+                this.statusList       = false;
             },
 
             resetChoice: function(){
-                //! problem with click on child
-                this.currentItemData = {} as ListItem; 
+                this.currentItemLocal = {} as ListItem; 
             },
 
             hideList: function(): void{
@@ -130,6 +131,7 @@
         width: 100%;
         background: white;
         position: absolute;
+        z-index: 9999;
         border: 2px solid rgb(237, 237, 243);;
         box-sizing: border-box;
     }

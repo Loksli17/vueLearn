@@ -1,8 +1,8 @@
 <template>
     
     <div class="checkbox">
-        <div ref="div" class="content" :class="{'checkbox-active': checked}" @click="setValue"></div>
-        <input type="checkbox" v-model="checked" hidden>
+        <div ref="div" class="content" :class="{'checkbox-active': checked}" @click.prevent="setValue"></div>
+        <input type="checkbox" :name="name" v-model="checked" hidden>
     </div>
 
 </template>
@@ -14,9 +14,20 @@
 
     export default defineComponent({
 
+        props: {
+            value: {
+                type: Boolean,
+                default: false,
+            },
+            name: {
+                type: String,
+                default: 'checkbox',
+            }
+        },
+
         data: function(){
             return {
-                checked: false as boolean,
+                checked: this.value as boolean,
             }
         },
         
@@ -27,8 +38,12 @@
             },
 
             getValue: function(): boolean{
-                return this.value;
+                return this.checked;
             },
+        },
+
+        created(){
+            console.log(this.value);
         }
     });
 

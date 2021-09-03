@@ -13,16 +13,16 @@ export default {
     datetimeToViewMessage: function(date: Date | string){
         return moment(date).format('h:mm a D MMMM');
     },
-    dateToDb: function(date: Date | string){
+    dateToDb: function(date: Date | string): string{
         return moment(date).format('YYYY-MM-DD');
     },
-    dateToView: function(date: Date | string){
+    dateToView: function(date: Date | string): string{
         return moment(date).format('MMMM Do YYYY');
     },
-    timeToDb: function(date: Date | string){
-        return moment(date).format('hh:mm:ss');
+    timeToDb: function(date: Date | string): string{
+        return moment(date).format('hh:mm');
     },
-    timeToView: function(date: Date | string){
+    timeToView: function(date: Date | string): string{
         return moment(date).format('h:mm a');
     }
 }
