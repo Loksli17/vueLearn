@@ -177,8 +177,8 @@ export default class CrudController{
 
         let
             mysql = pool(),
-            QueryData : QueryData              = req.params as any,
-            dataErrors: Array<keyof QueryData> = [];
+            QueryData : QueryData               = req.body as any,
+            dataErrors: Array<keyof QueryData>  = [];
 
         dataErrors = Query.checkData(QueryData, ['article']);
         
@@ -191,6 +191,20 @@ export default class CrudController{
             res.status(400).send({error: ErrorMessage.db()});
             return;
         }
+
+        mysql.query(
+            'insert into `article` (`title`, `views`, `text`, `isReady`, `img`, `date`, `time`, `articleTypeId`)' + 
+            'values (?, ?, ?, ?, ?, ?, ?, ?)',
+            [
+                QueryData.article.title, 0, QueryData.article.text, QueryData.article.isReady, 'default.jpg', QueryData.article.date,
+                QueryData.article.time, 1 
+            ]
+        ).then(value => {
+            res.status(200).send({types: value[0]});
+        }).catch(error => {
+            console.error(error);
+            res.status(400).send({error: ErrorMessage.db()});
+        });
         
     }
 

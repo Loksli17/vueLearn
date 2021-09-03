@@ -1,5 +1,5 @@
 <template>
-    <form :class=className :id=id @submit.prevent="validateFormData">
+    <form :class=className :id=id @submit.prevent="emitFormData">
 
         <div class="form-row" v-for="row in rows" :key='row'>
 
@@ -72,7 +72,6 @@
         error?: string;
 
         //input
-        // value?: string | number | Date;
         max?: number;
         min?: number;
         label?: string;
@@ -85,7 +84,6 @@
         autocomplete?: boolean;
 
         //select
-        // options?: Array<ListItem>;
         selected?: string | number;
         multiple?: boolean;
         search?: boolean;
@@ -140,8 +138,8 @@
         },
 
         methods: {
-            validateFormData: function(){
-                console.log('validateData');
+            emitFormData: function(){
+                this.$emit('send', this.localDataForm);
             },
 
             validateFormRows: function(){
