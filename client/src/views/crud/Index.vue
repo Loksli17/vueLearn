@@ -13,7 +13,12 @@
 
         <div class="section">
             <div>
-                <Table :columnNames="columnNames" :rowData="rowData" :actions="tableActions">
+                <Table 
+                    :columnNames="columnNames" 
+                    :rowData="rowData" 
+                    :actions="tableActions"
+                    :config="{ sortableByColumn: true }"
+                    >
                     <template v-slot:footer>
                         this is a footer
                     </template>
@@ -96,7 +101,7 @@
                         { name: "Actions" }
                 ] as Array<Column>,
                 rowData       : [
-                        { id: 0, title: "kek", type: "fuck", ready: false, time: new Date(), date: new Date() },
+                        { id: 0, title: "kek", type: "fuck", ready: true, time: new Date(), date: new Date() },
                         { id: 1, title: "kek2", type: "not fuck", ready: false, time: new Date(), date: new Date() }
                 ] as Array<Record<string, columnType>>,
                 tableActions: [

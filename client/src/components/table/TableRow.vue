@@ -1,6 +1,10 @@
 <template>
     <tr>
-        <td v-for="(value, name) in row" :key="name">{{ value }}</td>
+        <template v-for="(value, name) in row" :key="name">
+            <td 
+                
+            >{{ value }}</td>
+        </template>
         <TableRowActionCell v-if="actions" :actions="actions" :itemId="row.id" />
     </tr>
 </template>
@@ -22,6 +26,9 @@
             },
             actions: {
                 type: Object as PropType<Array<Action>>
+            },
+            hideColumn: {
+                type: Object as PropType<Array<{ pos: number }> | undefined>
             }
         }
     })
