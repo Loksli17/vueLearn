@@ -35,6 +35,7 @@
             
             setValue: function(): void{
                 this.checked = !this.checked;
+                this.$emit('emitValue', this.checked, this.name);
             },
 
             getValue: function(): boolean{

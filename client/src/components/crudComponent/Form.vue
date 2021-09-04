@@ -18,6 +18,7 @@
                     <DropDownList
                         v-else-if="item.type == 'select'"
                         :listItems="item.options"
+                        
                     />
 
                     <Checkbox 

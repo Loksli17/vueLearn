@@ -197,7 +197,7 @@ export default class CrudController{
             'values (?, ?, ?, ?, ?, ?, ?, ?)',
             [
                 QueryData.article.title, 0, QueryData.article.text, QueryData.article.isReady, 'default.jpg', QueryData.article.date,
-                QueryData.article.time, 1 
+                QueryData.article.time, QueryData.article.articleTypeId, 
             ]
         ).then(value => {
             res.status(200).send({types: value[0]});
@@ -245,7 +245,7 @@ export default class CrudController{
             'update `article` set title = ?,text = ?, isReady = ?, date = ?, time = ?, articleTypeId = ? where id = ?',
             [
                 QueryData.article.title, QueryData.article.text, QueryData.article.isReady, QueryData.article.date,
-                QueryData.article.time, 1, QueryData.article.id,
+                QueryData.article.time, QueryData.article.articleTypeId, QueryData.article.id,
             ]
         ).then(value => {
             res.status(200).send({types: value[0]});

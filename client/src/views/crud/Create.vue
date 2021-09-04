@@ -29,11 +29,12 @@
     import axios                            from '../../libs/axios';
     import Form, { FormHtmlItem, FormData } from '../../components/crudComponent/newForm.vue';
     import { AxiosResponse }                from 'axios';
+import { ListItem } from '../../components/DropDownList.vue';
     
     interface ArticleType{
-        value?: string;
-        id    : number;
-        title?: string;
+        id   : number;
+        title: string;
+        img  : string;
     }
 
     export default defineComponent({
@@ -49,6 +50,15 @@
                 article       : {} as Record<string, unknown>,
                 rowsForm      : null as Array<Array<FormHtmlItem>> | null,
                 dataForm      : null as FormData | null,
+            }
+        },
+
+        computed: {
+            optionsTypes: function(): Array<ListItem>{
+                return this.types.map((item): ListItem => {
+                    const newItem: ListItem = {value: item.title, id: item.id, img: item.img};
+                    return newItem;
+                });
             }
         },
 
@@ -68,12 +78,7 @@
                         this.types = res.data.types;
                     },
                 });
-
-                this.types.map(item => {
-                    item.value = item.title;
-                    delete item.title;
-                    return item;
-                });
+                
             },
 
             initRowsForm: function(){
@@ -81,24 +86,24 @@
                     [{type: 'text', name: 'title', label: 'Title of article'}, {type: 'checkbox', name: 'isReady', label: 'Readiness of the article'}],
                     [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
                     [{type: 'textarea', name: 'text'}],
-                    // [{type: 'select', name: 'articleTypeId', label: 'Article`s type', search: true}],
+                    [{type: 'select', name: 'articleTypeId', label: 'Article`s type', search: true, options: this.optionsTypes}],
                     [{type: 'submit', name: 'sendArticle'}]
                 ]
             },
 
             initDataForm: function(){
                 this.dataForm = {
-                    title        : "Name",
+                    title        : "",
                     date         : this.$filters.dateToDb(new Date()),
                     time         : this.$filters.timeToDb(new Date()),
-                    articleTypeId: this.types,
-                    text         : "azazazaza",
-                    isReady      : true,
+                    articleTypeId: /*this.types*/ 1,
+                    text         : "",
+                    isReady      : false,
                 } as FormData;
             },
 
             sendForm: async function(formData: FormData){
-                
+
                 await axios.put({
                     url: 'crud/add',
                     handler: (res: AxiosResponse) => {

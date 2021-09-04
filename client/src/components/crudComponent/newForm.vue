@@ -21,15 +21,17 @@
 
                     <DropDownList v-else-if="item.type == 'select'"
                         :name="item.name"
-                        :listItems="localDataForm[item.name]"
+                        :listItems="item.options"
                         :search="item.search"
                         :disabledOption="item.defaultMessage"
                         :required="item.required"
+                        v-on:emitValue="setItemValue"
                     />
 
                     <Checkbox v-else-if="item.type == 'checkbox'"
                         :name="item.name"
                         :value="localDataForm[item.name]"
+                        v-on:emitValue="setItemValue"
                     />
 
                     <input v-else-if="item.type == 'submit'" type="submit" :value="item.value || 'Send'">
@@ -88,6 +90,7 @@
         multiple?: boolean;
         search?: boolean;
         disabledOption?: string;
+        options?: Array<ListItem>;
 
         //textarea
         cols?: number;
@@ -109,6 +112,12 @@
             Checkbox,
             DropDownList,
         },
+
+        data: function(){
+            return {
+                localDataForm: Object.assign({}, this.data as unknown) as FormData,
+            }
+        },
         
         props: {
             id: {
@@ -128,12 +137,6 @@
             data: {
                 type   : FormData,
                 default: null,
-            }
-        },
-
-        computed: {
-            localDataForm: function(): any{
-                return Object.assign({}, this.data);
             }
         },
 
@@ -161,6 +164,7 @@
                         'options',
                         'multiple',
                         'disabled',
+                        'search',
                     ],
                     inputProp: Array<string> = [
                         'name',
@@ -223,7 +227,15 @@
                         }
                     });
                 });
-            }
+            },
+
+            //! it can be bad
+            setItemValue: function(val: any, name: string | number){
+                this.localDataForm[name] = val;
+                console.log('azaza:', this.localDataForm, val);
+            },
+
+            
         }
     });
 

@@ -31,11 +31,12 @@
     import axios                            from '../../libs/axios';
     import Form, { FormHtmlItem, FormData } from '../../components/crudComponent/newForm.vue';
     import { AxiosResponse }                from 'axios';
+    import { ListItem }                     from '../../components/DropDownList.vue';
 
     interface ArticleType{
-        value?: string;
-        id    : number;
-        title?: string;
+        id   : number;
+        title: string;
+        img  : string;
     }
 
     export default defineComponent({
@@ -60,6 +61,14 @@
             this.initDataForm();
         },
 
+        computed: {
+            optionsTypes: function(): Array<ListItem>{
+                return this.types.map((item): ListItem => {
+                    const newItem: ListItem = {value: item.title, id: item.id, img: item.img};
+                    return newItem;
+                });
+            }
+        },
 
         methods: {
             
@@ -70,12 +79,6 @@
                     handler: (res: AxiosResponse) => {
                         this.types = res.data.types;
                     },
-                });
-
-                this.types.map(item => {
-                    item.value = item.title;
-                    delete item.title;
-                    return item;
                 });
             },
 
@@ -94,22 +97,16 @@
                     [{type: 'text', name: 'title', label: 'Title of article'}, {type: 'checkbox', name: 'isReady', label: 'Readiness of the article'}],
                     [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
                     [{type: 'textarea', name: 'text'}],
-                    // [{type: 'select', name: 'articleTypeId', label: 'Article`s type', search: true}],
+                    [{type: 'select', name: 'articleTypeId', label: 'Article`s type', options: this.optionsTypes}],
                     [{type: 'submit', name: 'sendArticle'}]
                 ]
             },
 
             initDataForm: function(){
 
-                this.dataForm = {
-                    id           : this.article.id,
-                    title        : this.article.title,
-                    date         : this.$filters.dateToDb(this.article.date),
-                    time         : this.article.time,
-                    articleTypeId: this.types,
-                    text         : this.article.text,
-                    isReady      : this.article.isReady,
-                } as FormData;
+                this.dataForm = this.article as FormData;
+                this.dataForm.date = this.$filters.dateToDb(this.article.date as string);
+
             },
 
             sendForm: async function(formData: FormData){

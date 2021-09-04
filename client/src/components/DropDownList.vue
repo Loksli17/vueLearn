@@ -97,7 +97,12 @@
                 this.currentIdLocal   = listItem.id;
                 this.currentItemLocal = listItem;
                 this.statusList       = false;
+
+                console.log('droplist:', this.currentIdLocal);
+                this.$emit('emitValue', this.currentIdLocal, this.name);
             },
+
+            //! getMethods as additional way
 
             resetChoice: function(){
                 this.currentItemLocal = {} as ListItem; 
