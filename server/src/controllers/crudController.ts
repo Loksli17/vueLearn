@@ -1,13 +1,11 @@
 import { Router, Request, Response } from "express";
 import ErrorMessage                  from "../libs/error";
 import Query                         from "../libs/query";
-import pool                          from '../config/database';           
-
+import pool                          from '../config/database';
 
 export default class CrudController{
 
     private static router: Router = Router();
-
 
     private static getArticles(req: Request, res: Response){
 

@@ -11,6 +11,7 @@
                 <span>{{currentItemLocal.value || disabledOptionLocal}}</span>
             </div>
             
+            
             <div class="reset-button" @click.stop="resetChoice"><span>&#10006;</span></div>
         </div>
 
@@ -49,11 +50,11 @@
 
         data: function(){
             return {
-                currentItemLocal   : {} as ListItem | undefined,
+                currentItemLocal   : {} as ListItem | undefined, //! think about how i should connect currentItemLocal and currentItem
                 currentIdLocal     : 0 as number,
                 statusList         : false as boolean,
+                searchLocal        : "" as string,
                 disabledOptionLocal: this.disabledOption as string,
-                searchLocal        : "" as string, 
             } 
         },
 
@@ -65,6 +66,10 @@
             disabledOption: {
                 type   : String,
                 default: 'Please, choose item',
+            },
+            currentItem: {
+                type   : [String, Number, Object as () => ListItem],
+                default: null,
             },
             search: {
                 type   : Boolean,
@@ -80,6 +85,28 @@
             listItemsLocal: function(): Array<ListItem>{
                 return this.listItems.filter((item: ListItem) => item.value.toString().includes(this.searchLocal)).slice();
             },
+
+            // disabledOptionLocal: function(): ListItem{
+                
+            //     const type: string = typeof this.currentValue;
+            //     let option: ListItem;
+                
+            //     switch(type){
+            //         case 'object':
+            //             option = Object.assign({}, this.disabledOption as ListItem);
+            //             break;
+            //         case 'string':
+            //             option = Object.assign({}, this.listItems.find(item => item.value == this.disabledOption));
+            //             break;
+            //         case 'number':
+            //             option = Object.assign({}, this.listItems.find(item => item.id == this.disabledOption));
+            //             break;
+            //         default: 
+            //             throw(new Error('Unnessosary type of disabled option'));
+            //     }
+
+            //     return option;
+            // }
         },
 
         methods: {

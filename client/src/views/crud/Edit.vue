@@ -97,7 +97,7 @@
                     [{type: 'text', name: 'title', label: 'Title of article'}, {type: 'checkbox', name: 'isReady', label: 'Readiness of the article'}],
                     [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
                     [{type: 'textarea', name: 'text'}],
-                    [{type: 'select', name: 'articleTypeId', label: 'Article`s type', options: this.optionsTypes}],
+                    [{type: 'select', name: 'articleTypeId', label: 'Article`s type', options: this.optionsTypes, currentItem: this.article.articleTypeId as number}],
                     [{type: 'submit', name: 'sendArticle'}]
                 ]
             },

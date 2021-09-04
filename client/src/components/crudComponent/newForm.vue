@@ -23,8 +23,9 @@
                         :name="item.name"
                         :listItems="item.options"
                         :search="item.search"
-                        :disabledOption="item.defaultMessage"
+                        :disabledOption="item.disabledOption"
                         :required="item.required"
+                        :currentItem="item.currentItem"
                         v-on:emitValue="setItemValue"
                     />
 
@@ -89,8 +90,9 @@
         selected?: string | number;
         multiple?: boolean;
         search?: boolean;
-        disabledOption?: string | number | ListItem;
+        disabledOption?: string;
         options?: Array<ListItem>;
+        currentItem?: string | number | ListItem;
 
         //textarea
         cols?: number;
@@ -166,6 +168,7 @@
                         'multiple',
                         'disabledOption',
                         'search',
+                        'currentItem'
                     ],
                     inputProp: Array<string> = [
                         'name',
