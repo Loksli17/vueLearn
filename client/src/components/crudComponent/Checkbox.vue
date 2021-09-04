@@ -1,7 +1,7 @@
 <template>
     
     <div class="checkbox">
-        <div ref="div" :class="{'checkbox-active': checked}" @click.prevent="setValue"></div>
+        <div ref="div" class="content" :class="{'checkbox-active': checked}" @click.prevent="setValue"></div>
         <input type="checkbox" :name="name" v-model="checked" hidden>
     </div>
 
@@ -22,10 +22,6 @@
             name: {
                 type: String,
                 default: 'checkbox',
-            },
-            className: {
-                type: String,
-                default: 'checkbox'
             },
         },
 
