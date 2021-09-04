@@ -16,6 +16,7 @@
                 v-if="article"
                 :data="article"
                 :fields="fields"
+                :fieldsHandler="upperFirst"
             />
         </div>
     </div>    
@@ -52,6 +53,12 @@
                     this.article.date = this.$filters.dateToView(this.article.date as Date);
                 }
             });
+        },
+
+        methods: {
+            upperFirst: function(){
+                return this.$filters.upperFirst;
+            }
         }
     });
 
