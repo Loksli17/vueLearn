@@ -89,7 +89,7 @@
         selected?: string | number;
         multiple?: boolean;
         search?: boolean;
-        disabledOption?: string;
+        disabledOption?: string | number | ListItem;
         options?: Array<ListItem>;
 
         //textarea
@@ -115,6 +115,7 @@
 
         data: function(){
             return {
+                //! this property i wanted to do computed, but it doesn't work correctly
                 localDataForm: Object.assign({}, this.data as unknown) as FormData,
             }
         },
@@ -163,7 +164,7 @@
                         'selected',
                         'options',
                         'multiple',
-                        'disabled',
+                        'disabledOption',
                         'search',
                     ],
                     inputProp: Array<string> = [
@@ -229,10 +230,10 @@
                 });
             },
 
-            //! it can be bad
+            // ! it can be bad
+            // ? may be try to do localDataFrom is computed?
             setItemValue: function(val: any, name: string | number){
                 this.localDataForm[name] = val;
-                console.log('azaza:', this.localDataForm, val);
             },
 
             
