@@ -46,7 +46,7 @@ export default class CrudController{
     }
 
 
-    private static getAmountArticles(req: Request, res: Response){
+    private static async getAmountArticles(req: Request, res: Response){
 
         let mysql = pool();
 
@@ -63,7 +63,6 @@ export default class CrudController{
             console.error(error);
             res.status(400).send({error: ErrorMessage.db()});
         });
-    
     }
 
 

@@ -129,7 +129,6 @@
                 this.$emit('emitValue', this.currentIdLocal, this.name);
             },
 
-            //! getMethods as additional way
 
             resetChoice: function(){
                 this.currentItemLocal = {} as ListItem; 
@@ -137,7 +136,21 @@
 
             hideList: function(): void{
                 this.statusList = false;
-            }
+            },
+
+
+            getListItems: function(): Array<ListItem>{
+                return this.listItemsLocal;
+            },
+
+            getCurrentItemId: function(): number{
+                return this.currentIdLocal;
+            },
+
+            getCurrentItem: function(): ListItem{
+                return this.currentItemLocal as ListItem;
+            },
+              
         }
     });
 </script>
