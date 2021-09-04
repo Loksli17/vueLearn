@@ -12,45 +12,11 @@
         </div>
 
         <div class="table-wrap">
-
-            <table>
-                <tr>
-                    <td>Id: </td>
-                    <td>{{article.id}}</td>
-                </tr>
-                <tr>
-                    <td>title: </td>
-                    <td>{{article.title}}</td>
-                </tr>
-                <tr>
-                    <td>text: </td>
-                    <td>{{article.text}}</td>
-                </tr>
-                <tr>
-                    <td>type: </td>
-                    <td>{{article.t_title}}</td>
-                </tr>
-                <tr>
-                    <td>views: </td>
-                    <td>{{article.views}}</td>
-                </tr>
-                <tr>
-                    <td>date: </td>
-                    <td>{{article.date}}</td>
-                </tr>
-                <tr>
-                    <td>time: </td>
-                    <td>{{article.time}}</td>
-                </tr>
-                <tr>
-                    <td>isReady</td>
-                    <td>{{article.isReady}}</td>
-                </tr>
-                <!-- <tr>
-                    <td>img: </td>
-                    <td>{{article.img}}</td>
-                </tr> -->
-            </table>
+            <GridView
+                v-if="article"
+                :data="article"
+                :fields="fields"
+            />
         </div>
     </div>    
 </template>
@@ -58,14 +24,20 @@
 <script lang="ts">
     import {defineComponent} from 'vue';
     import axios             from '../../libs/axios';
-    import { AxiosResponse } from 'axios'
+    import { AxiosResponse } from 'axios';
+    import GridView          from '../../components/crudComponent/GridView.vue';
 
     export default defineComponent({
 
+        components: {
+            GridView,
+        },
+
         data: function(){
             return {
-                id: 0 as number,
+                id     : 0 as number,
                 article: {} as Record<string, unknown>,
+                fields : {'t_title': 'type of article'},
             }
         },
 
@@ -77,10 +49,10 @@
                 data: {id: this.id},
                 handler: (res: AxiosResponse) => {
                     this.article = res.data.article;
-                    console.log(this.article);
+                    this.article.date = this.$filters.dateToView(this.article.date as Date);
                 }
             });
-
         }
-    })
+    });
+
 </script>
