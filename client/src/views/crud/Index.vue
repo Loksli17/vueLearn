@@ -13,9 +13,14 @@
 
         <div class="section">
             <div>
-                <Table 
+                
+            </div>
+
+            <div class="table-wrap">
+                <Table
+                    v-if="mapArticles"
                     :columnNames="columnNames" 
-                    :rowData="rowData" 
+                    :rowData="mapArticles" 
                     :actions="tableActions"
                     :config="{ sortableByColumn: true }"
                     >
@@ -23,35 +28,6 @@
                         this is a footer
                     </template>
                 </Table> 
-            </div>
-
-            <div class="table-wrap">
-                <table border="1">
-                    <tr>
-                        <th>id</th>
-                        <th>title</th>
-                        <th>type</th>
-                        <th>isReady</th>
-                        <th>time</th>
-                        <th>date</th>
-                        <th>actions</th>
-                    </tr>
-
-                    <tr v-for="item in articles" :key="item.id">
-                        <td>{{item.id}}</td>
-                        <td>{{item.title}}</td>
-                        <td>{{item.t_title}}</td>
-                        <td>{{item.isReady}}</td>
-                        <td>{{item.time}}</td>
-                        <td>{{item.date}}</td>
-                        <td>
-                            <a href="" @click.prevent="removeArticle(item.id)">Delete</a>
-                            <router-link :to="`/crud/${item.id}/edit`">Edit</router-link>
-                            <router-link :to="`/crud/${item.id}/view`">View</router-link>
-                        </td>
-                    </tr>
-
-                </table>
             </div>
 
             <div class="pagination">
@@ -95,15 +71,15 @@
                         { name: "Id" },
                         { name: "Title" },
                         { name: "Type" },
-                        { name: "Ready" },
+                        { name: "isReady" },
                         { name: "Time" },
                         { name: "Date" },
                         { name: "Actions" }
                 ] as Array<Column>,
-                rowData       : [
-                        { id: 0, title: "kek", type: "fuck", ready: true, time: new Date(), date: new Date() },
-                        { id: 1, title: "kek2", type: "not fuck", ready: false, time: new Date(), date: new Date() }
-                ] as Array<Record<string, columnType>>,
+                // rowData       : [
+                //         { id: 0, title: "kek", type: "fuck", ready: true, time: new Date(), date: new Date() },
+                //         { id: 1, title: "kek2", type: "not fuck", ready: false, time: new Date(), date: new Date() }
+                // ] as Array<Record<string, columnType>>,
                 tableActions: [
                         {name: "View", path: (id: number) => `/crud/${id}/view` }, 
                         {name: "Edit", path: (id: number) => `/crud/${id}/edit` }, 
@@ -113,6 +89,19 @@
                 currentPage   : 1 as number,
                 amountArticles: 0 as number, 
             }
+        },
+
+        computed: {
+            mapArticles: function(): Array<Record<string, unknown>>{
+                return this.articles.map((item) => {
+                    item.isReady = item.isReady ? 'Ready' : 'Not Ready';
+                    item.time    = this.$filters.timeToView('0000-01-01 ' + item.time as string);
+                    item.date    = this.$filters.dateToView(item.date as string);
+
+                    console.log(item);
+                    return item;
+                });
+            },
         },
 
         mounted: async function(){
@@ -131,13 +120,6 @@
                     handler: (res: AxiosResponse) => {
                         this.articles = res.data.articles;
                     }
-                });
-
-                this.articles.map(item => {
-                    item.isReady = item.isReady ? 'Ready' : 'Not Ready';
-                    item.time    = this.$filters.timeToView('0000-01-01 ' + item.time as string);
-                    item.date    = this.$filters.dateToView(item.date as string);
-                    return item;
                 });
             },
 
