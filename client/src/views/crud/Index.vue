@@ -85,7 +85,7 @@
                 tableActions: [
                         {name: "View", path: (id: number) => `/crud/${id}/view` }, 
                         {name: "Edit", path: (id: number) => `/crud/${id}/edit` }, 
-                        {name: "Delete", handler: (id: number) => {console.log(id)}}
+                        {name: "Delete", handler: this.removeArticle},
                     ] as Array<Action>,
                 take          : 10 as number,
                 currentPage   : 1 as number,

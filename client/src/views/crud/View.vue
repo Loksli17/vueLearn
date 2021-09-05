@@ -19,6 +19,10 @@
                 :keysHandler="this.$filters.upperFirst"
             />
         </div>
+
+        <div>
+            <!-- <img :src="require('@/assets')" alt=""> -->
+        </div>
     </div>    
 </template>
 

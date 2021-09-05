@@ -48,7 +48,7 @@
                 for (const key in this.data) {
                     if (Object.prototype.hasOwnProperty.call(this.data, key)) {
                         let newKey: string = (this.fields ? (this.fields[key] || key) : key) as string;
-                        
+
                         newKey         = this.keysHandler ? this.keysHandler(newKey)         : newKey;
                         record[newKey] = this.dataHandler ? this.dataHandler(this.data[key]) : this.data[key];
                     }
@@ -68,9 +68,9 @@
     }
 
     table{
+        width: 100%;
         margin-top: 20px;
         border-collapse: collapse;
-        // border: 1px solid;
 
         td{
             padding: 10px;
