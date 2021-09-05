@@ -38,7 +38,7 @@
             return {
                 id     : 0 as number,
                 article: {} as Record<string, unknown>,
-                fields : {'t_title': 'type of article'},
+                fields : {'t_title': 'Type of article'},
             }
         },
 
@@ -54,12 +54,6 @@
                 }
             });
         },
-
-        methods: {
-            upperFirst: function(){
-                return this.$filters.upperFirst;
-            }
-        }
     });
 
 </script>

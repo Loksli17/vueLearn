@@ -2,7 +2,7 @@
     
     <table>
         <tr v-for="(value, index) in localRecord" :key=index>
-            <td>{{fields[index] || index}} BAAAAAD</td>
+            <td>{{index}}</td>
             <td>{{value}}</td>
         </tr>
     </table>
@@ -13,6 +13,7 @@
     
     /**
      * ! can I make normilized names of fields with callback or boolean props
+     * todo new data structure from data & fields
      */
 
     import {defineComponent} from 'vue';
@@ -41,21 +42,17 @@
 
         computed: {
             localRecord: function(): Record<string, unknown>{
-
-                //Todo checking of undefined variant of fieldsHandler
                 
                 const record: Record<string, unknown> = {};
 
-                if(this.keysHandler){
-                    for (const key in this.data) {
-                        if (Object.prototype.hasOwnProperty.call(this.data, key)) {
-                            let newKey: string = this.keysHandler(key);
-                            record[newKey] = this.dataHandler ? this.dataHandler(this.data[key]) : this.data[key];
-                        }
+                for (const key in this.data) {
+                    if (Object.prototype.hasOwnProperty.call(this.data, key)) {
+                        let newKey: string = (this.fields ? (this.fields[key] || key) : key) as string;
+                        
+                        newKey         = this.keysHandler ? this.keysHandler(newKey)         : newKey;
+                        record[newKey] = this.dataHandler ? this.dataHandler(this.data[key]) : this.data[key];
                     }
                 }
-
-                // todo variant without keysHandler
 
                 return record;
             }
