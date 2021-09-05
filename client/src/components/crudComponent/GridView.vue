@@ -2,7 +2,7 @@
     
     <table>
         <tr v-for="(value, index) in localRecord" :key=index>
-            <td>{{fields[index] || index}}</td>
+            <td>{{fields[index] || index}} BAAAAAD</td>
             <td>{{value}}</td>
         </tr>
     </table>
@@ -27,8 +27,13 @@
             fields: {
                 type   : Object as () => Record<string, unknown>,
                 default: null,
+            }, 
+            //? think about name
+            dataHandler: {
+                type   : Function,
+                default: undefined,
             },
-            fieldsHandler: {
+            keysHandler: {
                 type   : Function,
                 default: undefined,
             },
@@ -36,18 +41,23 @@
 
         computed: {
             localRecord: function(): Record<string, unknown>{
+
+                //Todo checking of undefined variant of fieldsHandler
                 
                 const record: Record<string, unknown> = {};
 
-                if(this.fieldsHandler){
-                    for (const key in record) {
-                        if (Object.prototype.hasOwnProperty.call(record, key)) {
-                            record[key] = this.fieldsHandler(record[key]);
+                if(this.keysHandler){
+                    for (const key in this.data) {
+                        if (Object.prototype.hasOwnProperty.call(this.data, key)) {
+                            let newKey: string = this.keysHandler(key);
+                            record[newKey] = this.dataHandler ? this.dataHandler(this.data[key]) : this.data[key];
                         }
                     }
                 }
 
-                return Object.assign({}, this.data);
+                // todo variant without keysHandler
+
+                return record;
             }
         },
     });

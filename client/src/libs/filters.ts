@@ -2,6 +2,7 @@ import moment from 'moment';
 
 export default {
     upperFirst: function(str: string){
+        console.log(str);
         return str[0].toUpperCase() + (str.slice(1, (str.length)));
     },
     datetimeToDb: function(date: Date | string){

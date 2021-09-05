@@ -16,7 +16,7 @@
                 v-if="article"
                 :data="article"
                 :fields="fields"
-                :fieldsHandler="upperFirst"
+                :keysHandler="this.$filters.upperFirst"
             />
         </div>
     </div>    
