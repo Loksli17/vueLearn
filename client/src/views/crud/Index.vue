@@ -74,7 +74,8 @@
                         { name: "isReady" },
                         { name: "Time" },
                         { name: "Date" },
-                        { name: "Actions" }
+                        { name: "Actions" },
+                        { name: 'Views'},
                 ] as Array<Column>,
                 // rowData       : [
                 //         { id: 0, title: "kek", type: "fuck", ready: true, time: new Date(), date: new Date() },
