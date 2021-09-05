@@ -68,7 +68,8 @@
             return {
                 articles      : [] as Array<Record<string, unknown>>,
                 columnNames   : [ 
-                        { name: "Id" },
+                        // ? can we create new structure such as : { objectName: 't_type', viewName: 'Type' } ?
+                        { name: "Id", oldName: 'id' },
                         { name: "Title" },
                         { name: "Type" },
                         { name: "isReady" },
@@ -98,8 +99,6 @@
                     item.isReady = item.isReady ? 'Ready' : 'Not Ready';
                     item.time    = this.$filters.timeToView('0000-01-01 ' + item.time as string);
                     item.date    = this.$filters.dateToView(item.date as string);
-
-                    console.log(item);
                     return item;
                 });
             },
