@@ -27,6 +27,11 @@
     import FileComponent               from './File.vue';
 
 
+    /*
+        ! think about loading one or many files...
+    */
+
+
     export default defineComponent({
 
         components: {
@@ -128,9 +133,9 @@
                 this.files = this.files.concat.apply(this.files, allowedFiles);
             },
 
-            loadFile: function(){
+            // loadFile: function(){
                 
-            },
+            // },
 
             removeFile: function(removeIndex: number): void{
                 this.files  = this.files.filter((file: File, index: number)     => index != removeIndex);
