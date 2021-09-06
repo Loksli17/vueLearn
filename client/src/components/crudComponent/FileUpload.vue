@@ -1,7 +1,7 @@
 <template>
     
     <div class="file-upload-container">
-        <div class="file-upload-field" :class="{'file-upload-field-drag': dragStatus}" @drop.prevent="dragDrop" @dragenter.prevent @dragover.prevent="dragOver" @dragleave="dragLeave">
+        <div v-if="files.length < maxFiles" class="file-upload-field" :class="{'file-upload-field-drag': dragStatus}" @drop.prevent="dragDrop" @dragenter.prevent @dragover.prevent="dragOver" @dragleave="dragLeave">
             <span>{{message}}</span>
         </div>
     </div>
@@ -63,7 +63,6 @@
                 });
                 
                 this.dragStatus = false;
-                console.log
             },
 
             dragOver: function(e: any){
