@@ -26,7 +26,7 @@
             <DropList
                 v-if="optionsTypes.length"
                 :optionsList="optionsTypes"
-                :currentOptionsId="1"
+                :currentOptionId="1"
             />
         </div>
 

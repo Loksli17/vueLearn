@@ -253,6 +253,10 @@ export default class CrudController{
     }
 
 
+    private static fileUpload(req: Request, res: Response){
+
+    }
+
     public static routes(){
         //* order of routes affects working
         this.router.post(  '/',              this.getArticles);
