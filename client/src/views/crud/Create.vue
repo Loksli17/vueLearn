@@ -26,7 +26,7 @@
                 :maxSize="4"
                 :repeatFiles="false"
                 :autoLoad="true"
-                v-on:oneLoadHandler="imageLoad"
+                v-on:loadHandler="imageLoad"
             />
         </div>
 

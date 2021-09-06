@@ -15,7 +15,7 @@
                 v-on:remove-file="removeFile"
             />
 
-            <button v-if="!this.autoLoad" @click="sendFiles">Send files</button>
+            <button v-if="!autoLoad" @click="loadFiles">Send files</button>
         </div>
     </div>
 
@@ -26,11 +26,7 @@
     import {defineComponent, PropType} from 'vue';
     import FileComponent               from './File.vue';
 
-
-    /*
-        ! think about loading one or many files...
-    */
-
+    // ! think about load one file on load many files
 
     export default defineComponent({
 
@@ -133,9 +129,9 @@
                 this.files = this.files.concat.apply(this.files, allowedFiles);
             },
 
-            // loadFile: function(){
-                
-            // },
+            loadFiles: function(){
+                console.log(this.files);
+            },
 
             removeFile: function(removeIndex: number): void{
                 this.files  = this.files.filter((file: File, index: number)     => index != removeIndex);
