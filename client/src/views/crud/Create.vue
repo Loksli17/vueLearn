@@ -23,7 +23,8 @@
         <div>
             <FileUpload
                 :message="'Drop files here'"
-                :maxFiles="10"
+                :maxSize="10"
+                :repeatFiles="false"
             />
         </div>
 
@@ -37,7 +38,7 @@
     import Form, { FormHtmlItem, FormData } from '../../components/crudComponent/newForm.vue';
     import { AxiosResponse }                from 'axios';
     import { ListItem }                     from '../../components/DropDownList.vue';
-    import FileUpload                       from '../../components/crudComponent/FileUpload.vue';
+    import FileUpload                       from '../../components/FileUpload/FileUpload.vue';
     
     interface ArticleType{
         id   : number;
