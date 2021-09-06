@@ -9,7 +9,7 @@ interface AxiosData{
     status?: number;
     errorHandler?: (...args: any[]) => void;
     handler: (...args: any[]) => void;
-    data?: Record<string, unknown>;
+    data?: Record<string, unknown> | FormData;
     successFlashMessage?:  boolean | {title: string, text: string};
     errorStatusFlashMessage?: boolean | {title: string, text: string};
     errorServerFlashMessage?: boolean | {title: string, text: string};

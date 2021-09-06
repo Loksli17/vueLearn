@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import ErrorMessage                  from "../libs/error";
 import Query                         from "../libs/query";
 import pool                          from '../config/database';
+import { FileArray } from "express-fileupload";
 
 export default class CrudController{
 
@@ -253,9 +254,15 @@ export default class CrudController{
     }
 
 
-    private static fileUpload(req: Request, res: Response){
+    private static imageUpload(req: Request, res: Response){
 
+        let files: FileArray | undefined = req.files;
+
+        console.log(files);
+
+        res.status(200).send({msg: 'Success'});
     }
+
 
     public static routes(){
         //* order of routes affects working
@@ -266,6 +273,7 @@ export default class CrudController{
         this.router.delete('/:id/remove',    this.removeArticle);
         this.router.put(   '/add',           this.addArticle);
         this.router.put(   '/:id/edit',      this.editArticle);
+        this.router.post(  '/article-image', this.imageUpload);
         
 
         return this.router;

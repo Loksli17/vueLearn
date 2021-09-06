@@ -13,7 +13,9 @@
                 :src="images[index]"
                 :index="index"
                 v-on:remove-file="removeFile"
-            /> 
+            />
+
+            <button v-if="!this.autoLoad" @click="sendFiles">Send files</button>
         </div>
     </div>
 
@@ -47,7 +49,11 @@
             repeatFiles: {
                 type   : Boolean,
                 default: true, 
-            }
+            },
+            autoLoad: {
+                type   : Boolean,
+                default: true,
+            },
         },
         
         data: function(){
@@ -86,9 +92,25 @@
             //? Can I decomposite this code?
             addFiles: function(newFiles: Array<File>): void{
 
-                 if(this.checkingHandler !== undefined){
+                let allowedFiles: Array<File> = [];
+
+                if(this.checkingHandler !== undefined){
                     this.files.forEach((file: File) => {
                         this.checkingHandler!(file); // !think about it
+                    });
+                }
+
+                this.dragStatus = false;
+
+                newFiles.forEach((newFile: File) => {
+                    if(this.files.length >= this.maxSize) return;
+                    if(this.repeatFiles) {allowedFiles.push(newFile)}
+                    if(!this.repeatFiles && !(this.files.find(file => file.name == newFile.name))) allowedFiles.push(newFile);
+                });
+                
+                if(this.autoLoad) {
+                    allowedFiles.forEach((file: File) => {
+                        this.$emit('loadHandler', file);
                     });
                 }
 
@@ -97,19 +119,17 @@
                     this.images.push(src);
                 };
 
-                newFiles.forEach((file: File) => {
+                allowedFiles.forEach((file: File) => {
                     const reader: FileReader = new FileReader();
                     reader.addEventListener('load', pushSourceOfFile);
                     reader.readAsDataURL(file);
                 });
-                
-                this.dragStatus = false;
 
-                newFiles.forEach((newFile: File) => {
-                    if(this.files.length >= this.maxSize) return;
-                    if(this.repeatFiles) {this.files.push(newFile)}
-                    if(!this.repeatFiles && !(this.files.find(file => file.name == newFile.name))) this.files.push(newFile);
-                });
+                this.files = this.files.concat.apply(this.files, allowedFiles);
+            },
+
+            loadFile: function(){
+                
             },
 
             removeFile: function(removeIndex: number): void{

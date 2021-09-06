@@ -23,8 +23,10 @@
         <div>
             <FileUpload
                 :message="'Drop files here'"
-                :maxSize="10"
+                :maxSize="4"
                 :repeatFiles="false"
+                :autoLoad="true"
+                v-on:oneLoadHandler="imageLoad"
             />
         </div>
 
@@ -33,12 +35,12 @@
 
 
 <script lang="ts">
-    import { defineComponent }              from 'vue';
-    import axios                            from '../../libs/axios';
-    import Form, { FormHtmlItem, FormData } from '../../components/crudComponent/newForm.vue';
-    import { AxiosResponse }                from 'axios';
-    import { ListItem }                     from '../../components/DropDownList.vue';
-    import FileUpload                       from '../../components/FileUpload/FileUpload.vue';
+    import { defineComponent }                    from 'vue';
+    import axios                                  from '../../libs/axios';
+    import Form, { FormHtmlItem, FormData as FD } from '../../components/crudComponent/newForm.vue';
+    import { AxiosResponse }                      from 'axios';
+    import { ListItem }                           from '../../components/DropDownList.vue';
+    import FileUpload                             from '../../components/FileUpload/FileUpload.vue';
     
     interface ArticleType{
         id   : number;
@@ -59,7 +61,7 @@
                 currentValueId: 0 as number,
                 article       : {} as Record<string, unknown>,
                 rowsForm      : null as Array<Array<FormHtmlItem>> | null,
-                dataForm      : null as FormData | null,
+                dataForm      : null as FD | null,
             }
         },
 
@@ -87,8 +89,22 @@
                     handler: (res: AxiosResponse) => {
                         this.types = res.data.types;
                     },
-                });
+                });  
+            },
+
+            imageLoad: async function(file: File){
                 
+                const data: FormData = new FormData();
+                data.append('image', file);
+                console.log(data);
+                
+                await axios.post({
+                    url : `/crud/article-image`,
+                    data: data,
+                    handler: (res: AxiosResponse) => {
+                        console.log(res);
+                    }
+                })
             },
 
             initRowsForm: function(){
@@ -109,10 +125,10 @@
                     articleTypeId: /*this.types*/ 1,
                     text         : "",
                     isReady      : false,
-                } as FormData;
+                } as FD;
             },
 
-            sendForm: async function(formData: FormData){
+            sendForm: async function(formData: FD){
 
                 await axios.put({
                     url: 'crud/add',
