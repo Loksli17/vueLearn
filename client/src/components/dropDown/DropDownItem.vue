@@ -5,11 +5,13 @@
     </div>
 </template>
 
+
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
     import { ListItem } from "./types";
     
     export default defineComponent({
+        
         props: {
             item: {
                 type: Object as PropType<ListItem>,
@@ -20,8 +22,11 @@
                 default: true
             }
         },
+
         emits: ["item-clicked"],
+        
         methods: {
+
             clickHandler(item: ListItem): void {
                 if (this.clickable) {
                     this.$emit("item-clicked", item);
@@ -30,6 +35,7 @@
         }
     });
 </script>
+
 
 <style lang="scss">
     .drop-down-item {
