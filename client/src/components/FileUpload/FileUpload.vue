@@ -1,8 +1,9 @@
 <template>
     
     <div class="file-upload-container">
-        <div v-if="files.length < maxSize" class="file-upload-field" :class="{'file-upload-field-drag': dragStatus}" @drop.prevent="dragDrop" @dragenter.prevent @dragover.prevent="dragOver" @dragleave="dragLeave">
+        <div v-if="files.length < maxSize" class="file-upload-field" @click="showDialogWindow" :class="{'file-upload-field-drag': dragStatus}" @drop.prevent="dragDrop" @dragenter.prevent @dragover.prevent="dragOver" @dragleave="dragLeave">
             <span>{{message}}</span>
+            <input ref="fileInput" type="file" multiple hidden @change="addFilesDialogWindow">
         </div>
 
         <div class="file-container">
@@ -31,7 +32,6 @@
         },
 
         props: {
-            
             maxSize: {
                 type   : Number,
                 default: 10,
@@ -54,52 +54,65 @@
             return {
                 files     : [] as Array<File>,
                 dragStatus: false as boolean,
-                // reader    : new FileReader() as FileReader,
                 images    : [] as Array<string>,
             }
         },
 
         methods: {
-            
-            dragDrop: function(e: any){
-                
-                const newFiles: Array<File> = e.dataTransfer.files;
 
-                if(this.checkingHandler !== undefined){
+            showDialogWindow: function(): void{
+                const input: HTMLInputElement = this.$refs.fileInput as HTMLInputElement;
+                input.click();
+            },
+
+            addFilesDialogWindow: function(e: any): void{
+                const newFiles: Array<File> = e.target.files;
+                this.addFiles(newFiles);
+            },
+            
+            dragDrop: function(e: any): void{
+                const newFiles: Array<File> = e.dataTransfer.files;
+                this.addFiles(newFiles);
+            },
+
+            dragOver: function(e: any): void{
+                this.dragStatus = true;
+            },
+
+            dragLeave: function(e: any): void{
+                this.dragStatus = false;
+            },
+            
+            //? Can I decomposite this code?
+            addFiles: function(newFiles: Array<File>): void{
+
+                 if(this.checkingHandler !== undefined){
                     this.files.forEach((file: File) => {
                         this.checkingHandler!(file); // !think about it
                     });
                 }
 
-                // ! RENAME this function. It is so stupid name. Do you think so?
-                const func = (e: any) => {
+                const pushSourceOfFile = (e: any) => {
                     const src: string = e.target.result;
                     this.images.push(src);
                 };
 
                 newFiles.forEach((file: File) => {
                     const reader: FileReader = new FileReader();
-                    reader.addEventListener('load', func);
+                    reader.addEventListener('load', pushSourceOfFile);
                     reader.readAsDataURL(file);
                 });
                 
                 this.dragStatus = false;
+
                 newFiles.forEach((newFile: File) => {
                     if(this.files.length >= this.maxSize) return;
-                    if(this.repeatFiles) {console.log('azaza'); this.files.push(newFile)}
+                    if(this.repeatFiles) {this.files.push(newFile)}
                     if(!this.repeatFiles && !(this.files.find(file => file.name == newFile.name))) this.files.push(newFile);
                 });
             },
 
-            dragOver: function(e: any){
-                this.dragStatus = true;
-            },
-
-            dragLeave: function(e: any){
-                this.dragStatus = false;
-            },
-
-            removeFile: function(removeIndex: number){
+            removeFile: function(removeIndex: number): void{
                 this.files  = this.files.filter((file: File, index: number)     => index != removeIndex);
                 this.images = this.images.filter((image: string, index: number) => index != removeIndex);
             }
