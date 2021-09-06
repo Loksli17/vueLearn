@@ -95,7 +95,7 @@
                 this.showList = !this.showList;
             },
 
-            setCurrentOption: function(newVal: ListItem): void{;
+            setCurrentOption: function(newVal: ListItem): void{
                 this.currentOption = newVal;
             }
         }
