@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import ErrorMessage                  from "../libs/error";
 import Query                         from "../libs/query";
 import pool                          from '../config/database';
-import { FileArray } from "express-fileupload";
+import { FileArray }                 from "express-fileupload";
 
 export default class CrudController{
 
