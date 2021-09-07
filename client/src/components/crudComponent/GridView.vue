@@ -2,7 +2,7 @@
     
     <table>
         <tr v-for="(value, index) in localRecord" :key=index>
-            <td>{{fields[index] || index}}</td>
+            <td>{{index}}</td>
             <td>{{value}}</td>
         </tr>
     </table>
@@ -13,6 +13,7 @@
     
     /**
      * ! can I make normilized names of fields with callback or boolean props
+     * todo new data structure from data & fields
      */
 
     import {defineComponent} from 'vue';
@@ -27,8 +28,13 @@
             fields: {
                 type   : Object as () => Record<string, unknown>,
                 default: null,
+            }, 
+            //? think about name
+            dataHandler: {
+                type   : Function,
+                default: undefined,
             },
-            fieldsHandler: {
+            keysHandler: {
                 type   : Function,
                 default: undefined,
             },
@@ -39,15 +45,16 @@
                 
                 const record: Record<string, unknown> = {};
 
-                if(this.fieldsHandler){
-                    for (const key in record) {
-                        if (Object.prototype.hasOwnProperty.call(record, key)) {
-                            record[key] = this.fieldsHandler(record[key]);
-                        }
+                for (const key in this.data) {
+                    if (Object.prototype.hasOwnProperty.call(this.data, key)) {
+                        let newKey: string = (this.fields ? (this.fields[key] || key) : key) as string;
+
+                        newKey         = this.keysHandler ? this.keysHandler(newKey)         : newKey;
+                        record[newKey] = this.dataHandler ? this.dataHandler(this.data[key]) : this.data[key];
                     }
                 }
 
-                return Object.assign({}, this.data);
+                return record;
             }
         },
     });
@@ -61,9 +68,9 @@
     }
 
     table{
+        width: 100%;
         margin-top: 20px;
         border-collapse: collapse;
-        // border: 1px solid;
 
         td{
             padding: 10px;

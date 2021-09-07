@@ -21,6 +21,15 @@
             </div>
         </div>
 
+        <div>
+
+            <DropList
+                v-if="optionsTypes.length"
+                :optionsList="optionsTypes"
+                :currentOptionId="1"
+            />
+        </div>
+
     </div>    
 </template>
 
@@ -31,7 +40,8 @@
     import axios                            from '../../libs/axios';
     import Form, { FormHtmlItem, FormData } from '../../components/crudComponent/newForm.vue';
     import { AxiosResponse }                from 'axios';
-    import { ListItem }                     from '../../components/DropDownList.vue';
+    import DropDownList, { ListItem }       from '../../components/DropDownList.vue';
+    import DropList                         from '../../components/dropDown/DropDown.vue';
 
     interface ArticleType{
         id   : number;
@@ -43,6 +53,7 @@
         
         components: {
             Form,
+            DropList
         },
 
         data: function(){

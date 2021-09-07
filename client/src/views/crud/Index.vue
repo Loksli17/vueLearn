@@ -68,15 +68,15 @@
             return {
                 articles      : [] as Array<Record<string, unknown>>,
                 columnNames   : [ 
-                        // ? can we create new structure such as : { objectName: 't_type', viewName: 'Type' } ?
-                        { name: "Id", oldName: 'id' },
-                        { name: "Title" },
-                        { name: "Type" },
-                        { name: "isReady" },
-                        { name: "Time" },
-                        { name: "Date" },
-                        { name: "Actions" },
-                        { name: 'Views'},
+                        // ? can we create new structure such as : { fieldName: 't_type', viewName: 'Type' } ?
+                        {name: "Id"},
+                        {name: "Title"},
+                        {name: "Type"},
+                        {name: "isReady"},
+                        {name: "Time"},
+                        {name: "Date"},
+                        {name: "Actions"},
+                        {name: 'Views'},
                 ] as Array<Column>,
                 // rowData       : [
                 //         { id: 0, title: "kek", type: "fuck", ready: true, time: new Date(), date: new Date() },
@@ -85,7 +85,7 @@
                 tableActions: [
                         {name: "View", path: (id: number) => `/crud/${id}/view` }, 
                         {name: "Edit", path: (id: number) => `/crud/${id}/edit` }, 
-                        {name: "Delete", handler: (id: number) => {console.log(id)}}
+                        {name: "Delete", handler: this.removeArticle},
                     ] as Array<Action>,
                 take          : 10 as number,
                 currentPage   : 1 as number,

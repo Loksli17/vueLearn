@@ -1,16 +1,15 @@
 <template>
     <div class="drop-down-container">
-        <div class="drop-down-current" v-click-outside="showList = !showList">
+        
+        <div class="drop-down-current" v-click-outside="toggleList">
             <div class="arrow"></div>
-            <DropDownItem :item="currentOption" :clickable="false" />
+            <DropDownItem :item="currentOption" :clickable="true" v-on:item-clicked="toggleList"/>
             <div class="reset-button" @click.stop="resetChoice"><span>&#10006;</span></div>
         </div>
 
         <transition-group name="drop-down-content-animation">
             <div class="drop-down-list" v-if="showList">
-                <!-- <div v-if="enableSearch" class="drop-down-search">
-                    <input type="search" v-model="searchQuery">
-                </div> -->
+                
                 <DropDownSearch
                     v-if="enableSearch"
                     v-model:search-query="searchQuery"
@@ -19,7 +18,8 @@
                 <DropDownItem 
                     v-for="option in options" 
                     :key="option.id" 
-                    :item="option" 
+                    :item="option"
+                    v-on:item-clicked="setCurrentOption"
                 />
             </div>
         </transition-group>
@@ -28,58 +28,80 @@
 
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
-    import DropDownItem from "./DropDownItem.vue";
-    import DropDownSearch from "./DropDownSearch.vue";
-    import { ListItem } from "./types";
+    import DropDownItem                  from "./DropDownItem.vue";
+    import DropDownSearch                from "./DropDownSearch.vue";
+    import { ListItem }                  from "./types";
 
     export default defineComponent({
         name: "DropDown",
+        
         components: {
             DropDownItem,
             DropDownSearch
         },
+
         props: {
             optionsList: {
-                type: Object as PropType<Array<ListItem>>,
+                type    : Object as PropType<Array<ListItem>>,
                 required: true
             },
             currentOptionId: {
-                type: Number,
+                type    : Number,
                 required: true
             },
             enableSearch: {
-                type: Boolean,
+                type   : Boolean,
                 default: false
             }
         },
+
         data() {
             return {
                 searchQuery: "" as string,
-                showList: false as boolean
+                showList   : false as boolean
             }
         },
+
         computed: {
+
             options(): Array<ListItem> {
                 return this.optionsList?.filter(item => item.value.toString().includes(this.searchQuery.toLowerCase()));
             },
+
             currentOption: {
+
                 get(): ListItem {
                     let val = this.options?.find(item => item.id === this.currentOptionId);
+
                     if (!val && this.options) {
                         this.$emit("update:current-option-id", 0);
                         val = this.options[0];
                     } else {
                         val = {id: 0, value: ""}
                     }
+
                     return val;
                 },
+
                 set(newVal: ListItem): void {
                     this.$emit("update:current-option-id", newVal.id);
                 }
             }
+        },
+
+        methods: {
+
+            toggleList: function(): void {
+                this.showList = !this.showList;
+            },
+
+            setCurrentOption: function(newVal: ListItem): void{
+                this.currentOption = newVal;
+            }
         }
     });
 </script>
+
 
 <style lang="scss" scoped>
     .drop-down-content-animation-enter-active, .drop-down-content-animation-leave-active {

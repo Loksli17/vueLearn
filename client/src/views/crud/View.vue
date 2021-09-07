@@ -16,8 +16,12 @@
                 v-if="article"
                 :data="article"
                 :fields="fields"
-                :fieldsHandler="upperFirst"
+                :keysHandler="this.$filters.upperFirst"
             />
+        </div>
+
+        <div>
+            <!-- <img :src="require('@/assets')" alt=""> -->
         </div>
     </div>    
 </template>
@@ -38,7 +42,7 @@
             return {
                 id     : 0 as number,
                 article: {} as Record<string, unknown>,
-                fields : {'t_title': 'type of article'},
+                fields : {'t_title': 'Type of article'},
             }
         },
 
@@ -54,12 +58,6 @@
                 }
             });
         },
-
-        methods: {
-            upperFirst: function(){
-                return this.$filters.upperFirst;
-            }
-        }
     });
 
 </script>
