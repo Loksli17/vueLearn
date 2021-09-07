@@ -78,43 +78,64 @@
                 const input: HTMLInputElement = this.$refs.fileInput as HTMLInputElement;
                 input.click();
             },
+            // ! e should have a type of EventType
+            // ! e.target has to be casted to HTMLInputElement
+            // ! There has to be a NULL check
+            // ! e.target.files returns FileList, not an array of File
+            // ! Using 'any' type generally doesn't make sense
+            addFilesDialogWindow: function(e: InputEvent): void{
+                // const newFiles: Array<File> = e.target.files;
+                // this.addFiles(newFiles);
+                const newFiles: FileList | null = (e.target as HTMLInputElement).files;
 
-            addFilesDialogWindow: function(e: any): void{
-                const newFiles: Array<File> = e.target.files;
-                this.addFiles(newFiles);
+                if (newFiles) {
+                    this.addFiles(newFiles);
+                }
             },
             
-            dragDrop: function(e: any): void{
-                const newFiles: Array<File> = e.dataTransfer.files;
+            // ! If it can be null, it will be null, eventually
+            dragDrop: function(e: DragEvent): void {
+                const newFiles: FileList = e.dataTransfer!.files;
                 this.addFiles(newFiles);
             },
 
-            dragOver: function(e: any): void{
+            dragOver: function(e: DragEvent): void{
                 this.dragStatus = true;
             },
 
-            dragLeave: function(e: any): void{
+            dragLeave: function(e: DragEvent): void{
                 this.dragStatus = false;
             },
             
             //? Can I decomposite this code?
-            addFiles: function(newFiles: Array<File>): void{
+            addFiles: function(newFiles: FileList): void{
 
                 let allowedFiles: Array<File> = [];
 
                 if(this.checkingHandler !== undefined){
-                    newFiles.forEach((file: File) => {
-                        this.checkingHandler!(file); // !think about it
-                    });
+                    // ! FileList type doesn't have forEach, it's not an array
+                    // ! this code wouldn't work
+                    // newFiles.forEach((file: File) => {
+                    //     this.checkingHandler!(file); // !think about it
+                    // });
+                    for (const file of newFiles) {
+                        this.checkingHandler(file);
+                    }
                 }
 
                 this.dragStatus = false;
 
-                newFiles.forEach((newFile: File) => {
+                // newFiles.forEach((newFile: File) => {
+                //     if(this.files.length >= this.maxSize) return;
+                //     if(this.repeatFiles) {allowedFiles.push(newFile)}
+                //     if(!this.repeatFiles && !(this.files.find(loadFile => loadFile.file.name == newFile.name))) allowedFiles.push(newFile);
+                // });
+
+                for (const newFile of newFiles) {
                     if(this.files.length >= this.maxSize) return;
                     if(this.repeatFiles) {allowedFiles.push(newFile)}
                     if(!this.repeatFiles && !(this.files.find(loadFile => loadFile.file.name == newFile.name))) allowedFiles.push(newFile);
-                });
+                }
 
                 allowedFiles.forEach((file: File) => {
                     const reader: FileReader = new FileReader();
