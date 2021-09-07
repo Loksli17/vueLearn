@@ -1,9 +1,7 @@
 <template>
     <tr>
         <template v-for="(value, name) in row" :key="name">
-            <td 
-                
-            >{{ value }}</td>
+            <td>{{ value }}</td>
         </template>
         <TableRowActionCell v-if="actions" :actions="actions" :itemId="row.id" />
     </tr>

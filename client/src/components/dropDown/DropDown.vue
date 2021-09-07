@@ -82,16 +82,16 @@
 </script>
 
 <style lang="scss" scoped>
-    .drop-down-content-animation-enter-active, .drop-down-content-animation-leave-active{
+    .drop-down-content-animation-enter-active, .drop-down-content-animation-leave-active {
         transition: all 0.2s ease;
     }
 
-    .drop-down-content-animation-enter-from{
+    .drop-down-content-animation-enter-from {
         transform: translateY(20px);
         opacity: 0;
     }
 
-    .drop-down-content-animation-leave-to{
+    .drop-down-content-animation-leave-to {
         transform: translateY(20px);
         opacity: 0;
     }
@@ -128,7 +128,7 @@
                 background: gainsboro;
             }
 
-            .reset-button{
+            .reset-button {
                 display: grid;
                 justify-content: center;
                 align-items: center;

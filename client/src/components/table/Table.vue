@@ -52,9 +52,9 @@
             config: {
                 type: Object as PropType<TableConfig>,
                 default: () => ({
-                    hideColumn: undefined,
+                    hideColumn:       undefined,
                     sortableByColumn: false,
-                    comparator: undefined
+                    comparator:       undefined
                 })
             }
         },
@@ -66,7 +66,7 @@
         },
         computed: {
             rows(): Array<Record<string, columnType>> {
-                let arr = [];
+                let arr: Array<Record<string, columnType>> = [];
 
                 if (this.config.sortableByColumn) {
                     const comparator = this.config.comparator ?? ((row1: Record<string, columnType>, row2: Record<string, columnType>): number => {
@@ -84,21 +84,12 @@
                         }
 
                         return (this.sortOrder === SortOrder.ASCENDING) ? res : res * -1;
-                    })
+                    });
 
                     arr = this.rowData.slice().sort(comparator);
                 } else {
                     arr = this.rowData;
                 }
-
-                // if (this.config.hideColumn) {
-                //     arr.forEach(row => {
-                //         // if (!this.columnsToBeHidden) return row;
-                //         for (const col of this.columnsToBeHidden) {
-                //             delete row[col];
-                //         }
-                //     })
-                // }
                 
                 return arr;
             },
@@ -122,5 +113,5 @@
                 this.sortOrder = (this.sortOrder === SortOrder.ASCENDING) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
             }
         }
-    })
+    });
 </script>
