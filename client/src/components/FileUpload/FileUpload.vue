@@ -8,10 +8,9 @@
 
         <div class="file-container">
             <FileComponent
-                v-for="(file, index) in files" :key="index"
-                :file="file"
-                :src="images[index]"
-                :index="index"
+                v-for="file in files" :key="file.index"
+                :loadingFile="file"
+                v-model:progress="file.progress"
                 v-on:remove-file="removeFile"
             />
 
@@ -26,8 +25,14 @@
     import {defineComponent, PropType} from 'vue';
     import FileComponent               from './File.vue';
 
-    // ! think about load one file on load many files
+    export interface LoadingFile{
+        file: File,
+        index: number,
+        image?: string | ArrayBuffer,
+        progress: number,
+    }
 
+    // ! think about load one file on load many files
     export default defineComponent({
 
         components: {
@@ -59,9 +64,11 @@
         
         data: function(){
             return {
-                files     : [] as Array<File>,
-                dragStatus: false as boolean,
-                images    : [] as Array<string>,
+                files        : [] as Array<LoadingFile>,
+                dragStatus   : false as boolean,
+                images       : [] as Array<string>,
+                filesProgress: [] as Array<number>,
+                currentIndex : 0 as number,
             }
         },
 
@@ -96,7 +103,7 @@
                 let allowedFiles: Array<File> = [];
 
                 if(this.checkingHandler !== undefined){
-                    this.files.forEach((file: File) => {
+                    newFiles.forEach((file: File) => {
                         this.checkingHandler!(file); // !think about it
                     });
                 }
@@ -106,36 +113,33 @@
                 newFiles.forEach((newFile: File) => {
                     if(this.files.length >= this.maxSize) return;
                     if(this.repeatFiles) {allowedFiles.push(newFile)}
-                    if(!this.repeatFiles && !(this.files.find(file => file.name == newFile.name))) allowedFiles.push(newFile);
+                    if(!this.repeatFiles && !(this.files.find(loadFile => loadFile.file.name == newFile.name))) allowedFiles.push(newFile);
                 });
-                
-                if(this.autoLoad) {
-                    allowedFiles.forEach((file: File) => {
-                        this.$emit('loadHandler', file);
-                    });
-                }
-
-                const pushSourceOfFile = (e: any) => {
-                    const src: string = e.target.result;
-                    this.images.push(src);
-                };
 
                 allowedFiles.forEach((file: File) => {
                     const reader: FileReader = new FileReader();
-                    reader.addEventListener('load', pushSourceOfFile);
+                    reader.addEventListener('load', (e) => {
+                        if(!e.target) return;
+                        const src: string | ArrayBuffer  | null = e.target.result;
+                        this.files.push({file: file, image: src || '', index: this.currentIndex++, progress: 0});
+                    });
                     reader.readAsDataURL(file);
                 });
 
-                this.files = this.files.concat.apply(this.files, allowedFiles);
+                if(this.autoLoad) {
+                    this.files.forEach((loadingFile: LoadingFile) => {
+                        if(loadingFile.progress === 100) return;
+                        this.$emit('loadHandler', loadingFile);
+                    });
+                }
             },
 
             loadFiles: function(){
                 console.log(this.files);
             },
 
-            removeFile: function(removeIndex: number): void{
-                this.files  = this.files.filter((file: File, index: number)     => index != removeIndex);
-                this.images = this.images.filter((image: string, index: number) => index != removeIndex);
+            removeFile: function(removingFile: LoadingFile): void{
+                this.files = this.files.filter((file: LoadingFile) => file.index != removingFile.index);
             }
         }
     });

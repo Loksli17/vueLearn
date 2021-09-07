@@ -1,9 +1,9 @@
 <template>
 
     <div class="file">
-        <img width="50" :src="src" alt="">
-        <span>{{file.name}}</span>
-        <progress :value="0"></progress>
+        <img width="50" :src="loadingFile.image" alt="">
+        <span>{{loadingFile.file.name}}</span>
+        <progress :value="progress" max="100"></progress>
         <div class="remove-file" @click="removeFile">&#10006;</div>
     </div>
     
@@ -12,27 +12,38 @@
 
 <script lang="ts">
     import {defineComponent} from 'vue';
+    import {LoadingFile}     from './FileUpload.vue';
 
     export default defineComponent({
         
         props: {
-            file: {
-                type    : Object as () => File,
+            loadingFile: {
+                type    : Object as () => LoadingFile,
                 required: true,
             },
-            src: {
-                type    : String,
-                required: true,
-            },
-            index: {
-                type    : Number,
-                required: true,
+            // src: {
+            //     type    : String,
+            //     required: true,
+            // },
+            // index: {
+            //     type    : Number,
+            //     required: true,
+            // },
+            progress: {
+                type   : Number,
+                default: 0, 
             }
+        },
+
+        watch: {
+            progress: function(newVal, oldVal){
+                console.log(`file[${this.loadingFile.index}]:`, oldVal, newVal);
+            },
         },
 
         methods: {
             removeFile: function(){
-                this.$emit('remove-file', this.index, this.file);
+                this.$emit('remove-file', this.loadingFile);
             }
         }
     });
