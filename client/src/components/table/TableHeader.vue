@@ -10,7 +10,7 @@
             <span v-if="index === columnId" :class="[
                 { 'arrow': sortOrder !== undefined },
                 { 'down': (sortOrder === 1) },
-                { 'up': (sortOrder === 0) }
+                { 'up': (sortOrder === -1) }
                 ]">
             </span>
         </th>
@@ -19,7 +19,7 @@
 
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
-    import { SortOrder } from './Table.vue';
+    import { SortOrder } from './types';
     import { Column } from "./types";
 
     export default defineComponent({
@@ -64,6 +64,9 @@
 
         .clickable {
             cursor: pointer;
+            &:hover {
+                background-color: #ccc;
+            }
         }
 
         .arrow {

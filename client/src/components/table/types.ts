@@ -32,4 +32,9 @@ export interface TableConfig {
     // comparator?: (row1: any, row2: any) => number;
 }
 
+export enum SortOrder {
+    ASCENDING = 1,
+    DESCENDING = -1
+}
+
 export type columnType = string | number | boolean | Date | Action | Array<Action>;

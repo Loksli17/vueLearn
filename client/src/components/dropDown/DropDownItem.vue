@@ -35,7 +35,7 @@
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
     .drop-down-item {
         display: grid;
         grid-auto-flow: column;

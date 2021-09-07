@@ -23,15 +23,10 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent, PropType } from 'vue';
-    import TableHeader from './TableHeader.vue';
-    import TableRow from "./TableRow.vue";
-    import { Column, columnType, Action, TableConfig } from "./types";
-   
-    export enum SortOrder {
-        ASCENDING,
-        DESCENDING
-    }
+    import { defineComponent, PropType }                          from 'vue';
+    import TableHeader                                            from './TableHeader.vue';
+    import TableRow                                               from "./TableRow.vue";
+    import { Column, columnType, Action, TableConfig, SortOrder } from "./types";
 
     export default defineComponent({
         name: "Table",
@@ -85,7 +80,7 @@
                             res = 1;
                         }
 
-                        return (this.sortOrder === SortOrder.ASCENDING) ? res : res * -1;
+                        return res * this.sortOrder;
                     });
 
                     arr = this.rowData.slice().sort(comparator);
