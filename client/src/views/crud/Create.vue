@@ -40,7 +40,7 @@
     import Form, { FormHtmlItem, FormData as FD } from '../../components/crudComponent/newForm.vue';
     import { AxiosResponse }                      from 'axios';
     import { ListItem }                           from '../../components/DropDownList.vue';
-    import FileUpload                             from '../../components/FileUpload/FileUpload.vue';
+    import FileUpload, { LoadingFile }                             from '../../components/FileUpload/FileUpload.vue';
     
     interface ArticleType{
         id   : number;
@@ -92,19 +92,24 @@
                 });  
             },
 
-            imageLoad: async function(file: File){
+            imageLoad: async function(loadingFile: LoadingFile){
                 
                 const data: FormData = new FormData();
-                data.append('image', file);
-                console.log(data);
+                data.append('image', loadingFile.file);
                 
                 await axios.post({
                     url : `/crud/article-image`,
                     data: data,
                     handler: (res: AxiosResponse) => {
                         console.log(res);
+                    },
+                    config: {
+                        onUploadProgress: (e) => {
+                            loadingFile.progress = Math.floor(e.loaded * 100 / e.total);
+                            console.log(loadingFile.progress);
+                        }
                     }
-                })
+                });
             },
 
             initRowsForm: function(){
