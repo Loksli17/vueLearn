@@ -1,4 +1,4 @@
-import axios, { AxiosPromise, AxiosResponse } from "axios";
+import axios, { AxiosPromise, AxiosRequestConfig, AxiosResponse } from "axios";
 import config                                 from '../config/config';
 import {FlashMessagePlugin}                   from '@smartweb/vue-flash-message';
 import FlashMessageData                       from '../libs/flashMessage';
@@ -14,6 +14,7 @@ interface AxiosData{
     errorStatusFlashMessage?: boolean | {title: string, text: string};
     errorServerFlashMessage?: boolean | {title: string, text: string};
     logResponce?: boolean;
+    config?: AxiosRequestConfig;
 }
 
 export interface AxiosSettings{
@@ -35,10 +36,10 @@ class FacadeAxios{
     private errorStatusMessage: string;
 
     private readonly actions: {[index: string]: any} = {
-        'get'   : (url: string, data: any) => axios.get   (url, data),
-        'post'  : (url: string, data: any) => axios.post  (url, data),
-        'put'   : (url: string, data: any) => axios.put   (url, data),
-        'delete': (url: string, data: any) => axios.delete(url, data),
+        'get'   : (url: string, data: any, config: AxiosRequestConfig) => axios.get   (url, data),
+        'post'  : (url: string, data: any, config: AxiosRequestConfig) => axios.post  (url, data, config),
+        'put'   : (url: string, data: any, config: AxiosRequestConfig) => axios.put   (url, data, config),
+        'delete': (url: string, data: any, config: AxiosRequestConfig) => axios.delete(url, data),
     }
     
 
@@ -61,7 +62,7 @@ class FacadeAxios{
      */
     private async response(type: 'get' | 'post' | 'put' | 'delete'): Promise<AxiosResponse>{
         
-        const promise: AxiosPromise = this.actions[type](this.axiosData!.url, this.axiosData!.data);
+        const promise: AxiosPromise = this.actions[type](this.axiosData!.url, this.axiosData!.data, this.axiosData!.config);
 
         // ! query to server are located here
         const response: AxiosResponse | void = await promise!.catch(
