@@ -1,7 +1,6 @@
 <template>
-    <div class="drop-down-container">
-        
-        <div class="drop-down-current" v-click-outside="toggleList">
+    <div class="drop-down-container" v-click-outside="showList = false">
+        <div class="drop-down-current">
             <div class="arrow"></div>
             <DropDownItem :item="currentOption" :clickable="true" v-on:item-clicked="toggleList"/>
             <div class="reset-button" @click.stop="resetChoice"><span>&#10006;</span></div>
@@ -19,7 +18,7 @@
                     v-for="option in options" 
                     :key="option.id" 
                     :item="option"
-                    v-on:item-clicked="setCurrentOption"
+                    @item-clicked="setCurrentOption"
                 />
             </div>
         </transition-group>
@@ -39,7 +38,7 @@
             DropDownItem,
             DropDownSearch
         },
-
+        emits: ["update:current-option-id"],
         props: {
             optionsList: {
                 type    : Object as PropType<Array<ListItem>>,
@@ -63,22 +62,25 @@
         },
 
         computed: {
-
             options(): Array<ListItem> {
                 return this.optionsList?.filter(item => item.value.toString().includes(this.searchQuery.toLowerCase()));
             },
 
             currentOption: {
-
                 get(): ListItem {
                     let val = this.options?.find(item => item.id === this.currentOptionId);
-
-                    if (!val && this.options) {
-                        this.$emit("update:current-option-id", 0);
+                    if (!this.options) {
+                        val = {id: 1, value: ""}
+                    } else if (!val) {
                         val = this.options[0];
-                    } else {
-                        val = {id: 0, value: ""}
                     }
+
+                    // if (!val || !this.options) {
+                    //     this.$emit("update:current-option-id", 0);
+                    //     val = this.options[0];
+                    // } else {
+                    //     val = {id: 0, value: ""}
+                    // }
 
                     return val;
                 },
@@ -90,13 +92,13 @@
         },
 
         methods: {
-
             toggleList: function(): void {
                 this.showList = !this.showList;
             },
 
-            setCurrentOption: function(newVal: ListItem): void{
+            setCurrentOption: function(newVal: ListItem): void {
                 this.currentOption = newVal;
+                this.toggleList();
             }
         }
     });

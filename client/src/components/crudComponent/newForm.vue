@@ -29,6 +29,16 @@
                         v-on:emitValue="setItemValue"
                     />
 
+                    <!-- <DropDown
+                        v-else-if="item.type == 'select'"
+                        :name="item.name"
+                        :optionsList="item.options"
+                        :enableSearch="item.search"
+                        :disabledOption="item.disabledOption"
+                        :required="item.required"
+                        v-model:current-option-id="localDataForm[item.name]"
+                    /> -->
+
                     <Checkbox v-else-if="item.type == 'checkbox'"
                         :name="item.name"
                         :value="localDataForm[item.name]"
@@ -66,6 +76,8 @@
 
     import Checkbox                   from '../crudComponent/Checkbox.vue';
     import DropDownList, { ListItem } from '../DropDownList.vue';
+    // import DropDown from "../dropDown/DropDown.vue";
+    // import { ListItem } from "../dropDown/types";
     import { defineComponent }        from 'vue';
 
 
@@ -113,6 +125,7 @@
         components: {
             Checkbox,
             DropDownList,
+            // DropDown
         },
 
         data: function(){

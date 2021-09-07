@@ -22,11 +22,11 @@
         </div>
 
         <div>
-
+            <!-- now it's correct -->
             <DropList
                 v-if="optionsTypes.length"
                 :optionsList="optionsTypes"
-                :currentOptionId="1"
+                v-model:current-option-id="curID"
             />
         </div>
 
@@ -60,6 +60,7 @@
             return {
                 types   : [] as Array<ArticleType>,
                 article : {} as Record<string, unknown>,
+                curID   : 1,
                 rowsForm: null as Array<Array<FormHtmlItem>> | null,
                 dataForm: null as FormData | null, 
             }

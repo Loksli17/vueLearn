@@ -1,5 +1,5 @@
 <template>
-    <div class="drop-down-item" @click.stop="clickHandler(item)" :class="{ 'selectable': clickable }">
+    <div class="drop-down-item" @click.stop="clickHandler(item)" :class="{ 'clickable': clickable }">
         <img width="25" v-if="item.img" :src="require(`@/assets/img/article-types/${item.img}`)" alt="">
         <span class="value">{{item.value}}</span>
     </div>
@@ -11,7 +11,6 @@
     import { ListItem } from "./types";
     
     export default defineComponent({
-        
         props: {
             item: {
                 type: Object as PropType<ListItem>,
@@ -26,7 +25,6 @@
         emits: ["item-clicked"],
         
         methods: {
-
             clickHandler(item: ListItem): void {
                 if (this.clickable) {
                     this.$emit("item-clicked", item);

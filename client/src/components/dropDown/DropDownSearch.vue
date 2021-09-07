@@ -1,6 +1,6 @@
 <template>
     <div class="drop-down-search">
-        <input type="search" :value="searchQuery" @input="onChange">
+        <input type="search" v-model="searchQueryLocal">
     </div>
 </template>
 
@@ -14,10 +14,14 @@
                 default: ""
             }
         },
-        methods: {
-            onChange(e: InputEvent): void {
-                const text = e.data ?? "";
-                this.$emit("update:search-query", text);
+        computed: {
+            searchQueryLocal: {
+                get(): string {
+                    return this.searchQuery;
+                },
+                set(newVal: string): void {
+                    this.$emit("update:search-query", newVal);
+                }
             }
         }
     })
