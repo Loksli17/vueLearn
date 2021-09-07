@@ -96,6 +96,8 @@
                 
                 const data: FormData = new FormData();
                 data.append('image', loadingFile.file);
+
+                console.log('loading: ', loadingFile);
                 
                 await axios.post({
                     url : `/crud/article-image`,

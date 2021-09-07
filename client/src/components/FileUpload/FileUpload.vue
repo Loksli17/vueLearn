@@ -128,10 +128,14 @@
 
                 if(this.autoLoad) {
                     this.files.forEach((loadingFile: LoadingFile) => {
-                        if(loadingFile.progress === 100) return;
+                        console.log('autoLoad: ', loadingFile.progress)
+                        if(loadingFile.progress == 100) return;
+                        console.log('autoLoad: ', loadingFile.progress)
                         this.$emit('loadHandler', loadingFile);
                     });
                 }
+
+                console.log('end:', this.files);
             },
 
             loadFiles: function(){
