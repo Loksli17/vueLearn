@@ -1,5 +1,6 @@
 export interface Column {
-    name: string;
+    fieldName: string;
+    displayedName: string;
 }
 
 export interface Action {
@@ -25,8 +26,10 @@ export interface TableConfig {
     hideColumn?: Array<number>;
     /** Enables sorting of the table be the means of clicking on the column header */
     sortableByColumn: boolean;
-    /** Function for sorting the table. If undefined, a default comparator is used */
-    comparator?: (row1: any, row2: any) => number;
+    /** Function for sorting the table. If undefined, a default comparator is used
+     * ! I have suddenly realised, that this couldn't possibly work
+     */
+    // comparator?: (row1: any, row2: any) => number;
 }
 
 export type columnType = string | number | boolean | Date | Action | Array<Action>;

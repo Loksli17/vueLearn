@@ -3,6 +3,8 @@
         <TableHeader 
             :columnNames="cols" 
             @selected-column="setSelectedColumn"
+            :columnId="columnId"
+            :sortOrder="sortOrder"
             :table-is-sortable="config.sortableByColumn"
             :has-actions="!!actions" 
         />
@@ -26,7 +28,7 @@
     import TableRow from "./TableRow.vue";
     import { Column, columnType, Action, TableConfig } from "./types";
    
-    enum SortOrder {
+    export enum SortOrder {
         ASCENDING,
         DESCENDING
     }
@@ -54,14 +56,14 @@
                 default: () => ({
                     hideColumn:       undefined,
                     sortableByColumn: false,
-                    comparator:       undefined
+                    // comparator:       undefined
                 })
             }
         },
         data() {
             return {
                 columnId: 0 as number,
-                sortOrder: SortOrder.ASCENDING as SortOrder
+                sortOrder: SortOrder.ASCENDING as SortOrder,
             }
         },
         computed: {
@@ -69,7 +71,7 @@
                 let arr: Array<Record<string, columnType>> = [];
 
                 if (this.config.sortableByColumn) {
-                    const comparator = this.config.comparator ?? ((row1: Record<string, columnType>, row2: Record<string, columnType>): number => {
+                    const comparator = /*this.config.comparator ?? */((row1: Record<string, columnType>, row2: Record<string, columnType>): number => {
                         const
                             columnName = Object.keys(this.rowData[0])[this.columnId],
                             val1       = row1[columnName].toString().toLowerCase(),
@@ -93,8 +95,28 @@
                 
                 return arr;
             },
+            /**
+             * Reorders the column names according to the order of the columns in rows
+             */
             cols(): Array<Column> {
-                return this.columnNames.filter((col, index) => !this.config.hideColumn?.includes(index));
+                // return this.columnNames.filter((col, index) => !this.config.hideColumn?.includes(index));
+                const newColumnNames: Array<Column> = [];
+                if (this.rowData.length > 0) {
+                    for (const fieldName in this.rowData[0]) {
+                        const name = this.columnNames.find(name => name.fieldName === fieldName);
+                        if (name) newColumnNames.push(name);
+                    }
+
+                    for (const name of this.columnNames) {
+                        if (!newColumnNames.includes(name)) {
+                            newColumnNames.push(name);
+                        }
+                    }
+                } else {
+                    newColumnNames.push(...this.columnNames);
+                }
+
+                return newColumnNames;
             },
             columnsToBeHidden(): Array<string> {
                 const columns: Array<string> = [];

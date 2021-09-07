@@ -2,17 +2,24 @@
     <thead class="table-header">
         <th v-for="(column, index) in columnNames" 
             :key="index"
-            @click="selectedColumn(index)"
+            @click="emitSelectedColumn(index)"
             class="table-header-column-names"
             :class="{ 'clickable': (tableIsSortable && index !== columnNames.length - 1) }"
         >
-            {{ column.name }}
+            {{ column.displayedName }}
+            <span v-if="index === columnId" :class="[
+                { 'arrow': sortOrder !== undefined },
+                { 'down': (sortOrder === 1) },
+                { 'up': (sortOrder === 0) }
+                ]">
+            </span>
         </th>
     </thead>
 </template>
 
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
+    import { SortOrder } from './Table.vue';
     import { Column } from "./types";
 
     export default defineComponent({
@@ -30,10 +37,17 @@
             hasActions: {
                 type: Boolean,
                 default: false
+            },
+            columnId: {
+                type: Number,
+                required: true
+            },
+            sortOrder: {
+                type: Object as PropType<SortOrder>,
             }
         },
         methods: {
-            selectedColumn(id: number): void {
+            emitSelectedColumn(id: number): void {
                 if (this.hasActions && id === this.columnNames.length - 1) return;
                 this.$emit("selected-column", id);
             }
@@ -50,6 +64,20 @@
 
         .clickable {
             cursor: pointer;
+        }
+
+        .arrow {
+            border: solid black;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+        }
+        .up {
+            transform: rotate(-135deg);
+        }
+
+        .down{
+            transform: rotate(45deg);
         }
     }
 </style>
