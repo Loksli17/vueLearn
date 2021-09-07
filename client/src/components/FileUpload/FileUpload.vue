@@ -79,17 +79,12 @@
                 const input: HTMLInputElement = this.$refs.fileInput as HTMLInputElement;
                 input.click();
             },
-            // ! e should have a type of EventType
-            // ! e.target has to be casted to HTMLInputElement
-            // ! There has to be a NULL check
-            // ! e.target.files returns FileList, not an array of File
-            // ! Using 'any' type generally doesn't make sense
+
             addFilesDialogWindow: function(e: InputEvent): void{
                 const newFiles: FileList | null = (e.target as HTMLInputElement).files;
                 if (newFiles) this.addFiles(newFiles);
             },
             
-            // ! If it can be null, it will be null, eventually
             dragDrop: function(e: DragEvent): void {
                 if(e.dataTransfer == null) new Error('Error with dataTransfer');
                 const newFiles: FileList | null = e.dataTransfer!.files;
@@ -110,11 +105,6 @@
                 let allowedFiles: Array<File> = [];
 
                 if(this.checkingHandler !== undefined){
-                    // ! FileList type doesn't have forEach, it's not an array
-                    // ! this code wouldn't work
-                    // newFiles.forEach((file: File) => {
-                    //     this.checkingHandler!(file); // !think about it
-                    // });
 
                     for (const file of newFiles) {
                         this.checkingHandler(file);
@@ -122,12 +112,6 @@
                 }
 
                 this.dragStatus = false;
-
-                // newFiles.forEach((newFile: File) => {
-                //     if(this.files.length >= this.maxSize) return;
-                //     if(this.repeatFiles) {allowedFiles.push(newFile)}
-                //     if(!this.repeatFiles && !(this.files.find(loadFile => loadFile.file.name == newFile.name))) allowedFiles.push(newFile);
-                // });
 
                 for (const newFile of newFiles) {
                     if(this.files.length >= this.maxSize) return;
@@ -157,7 +141,6 @@
                     reader.readAsDataURL(file);
                 });
 
-                console.log('autoload:', this.files);
 
                 if(this.autoLoad) {
                     this.files.forEach((loadingFile: LoadingFile) => {
@@ -167,8 +150,7 @@
                         loadingFile.loading = true;
                     });
                 }
-
-                console.log('end:', this.files);
+                
             },
 
             loadFiles: function(){
