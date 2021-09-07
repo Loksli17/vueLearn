@@ -21,7 +21,7 @@
                 type    : Object as () => LoadingFile,
                 required: true,
             },
-            // src: {
+            // image: {
             //     type    : String,
             //     required: true,
             // },

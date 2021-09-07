@@ -28,8 +28,9 @@
     export interface LoadingFile{
         file: File,
         index: number,
-        image?: string | ArrayBuffer,
         progress: number,
+        loading: boolean,
+        image: string,
     }
 
     // ! think about load one file on load many files
@@ -84,19 +85,15 @@
             // ! e.target.files returns FileList, not an array of File
             // ! Using 'any' type generally doesn't make sense
             addFilesDialogWindow: function(e: InputEvent): void{
-                // const newFiles: Array<File> = e.target.files;
-                // this.addFiles(newFiles);
                 const newFiles: FileList | null = (e.target as HTMLInputElement).files;
-
-                if (newFiles) {
-                    this.addFiles(newFiles);
-                }
+                if (newFiles) this.addFiles(newFiles);
             },
             
             // ! If it can be null, it will be null, eventually
             dragDrop: function(e: DragEvent): void {
-                const newFiles: FileList = e.dataTransfer!.files;
-                this.addFiles(newFiles);
+                if(e.dataTransfer == null) new Error('Error with dataTransfer');
+                const newFiles: FileList | null = e.dataTransfer!.files;
+                if (newFiles) this.addFiles(newFiles);
             },
 
             dragOver: function(e: DragEvent): void{
@@ -118,6 +115,7 @@
                     // newFiles.forEach((file: File) => {
                     //     this.checkingHandler!(file); // !think about it
                     // });
+
                     for (const file of newFiles) {
                         this.checkingHandler(file);
                     }
@@ -139,20 +137,34 @@
 
                 allowedFiles.forEach((file: File) => {
                     const reader: FileReader = new FileReader();
+
+                    const loadingFile: LoadingFile = {
+                        file    : file, 
+                        index   : this.currentIndex++, 
+                        progress: 0,
+                        image   : '',
+                        loading : false,
+                    };
+
+                    this.files.push(loadingFile);
+
                     reader.addEventListener('load', (e) => {
                         if(!e.target) return;
-                        const src: string | ArrayBuffer  | null = e.target.result;
-                        this.files.push({file: file, image: src || '', index: this.currentIndex++, progress: 0});
+                        const src: string | ArrayBuffer | null = e.target.result;
+                        if(typeof src == "string") loadingFile.image = src || '';
                     });
+
                     reader.readAsDataURL(file);
                 });
 
+                console.log('autoload:', this.files);
+
                 if(this.autoLoad) {
                     this.files.forEach((loadingFile: LoadingFile) => {
-                        console.log('autoLoad: ', loadingFile.progress)
-                        if(loadingFile.progress == 100) return;
+                        if(loadingFile.loading) return;
                         console.log('autoLoad: ', loadingFile.progress)
                         this.$emit('loadHandler', loadingFile);
+                        loadingFile.loading = true;
                     });
                 }
 
