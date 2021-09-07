@@ -33,7 +33,7 @@
         image: string,
     }
 
-    // ! think about load one file on load many files
+
     export default defineComponent({
 
         components: {
@@ -119,42 +119,48 @@
                     if(!this.repeatFiles && !(this.files.find(loadFile => loadFile.file.name == newFile.name))) allowedFiles.push(newFile);
                 }
 
-                allowedFiles.forEach((file: File) => {
-                    const reader: FileReader = new FileReader();
+                allowedFiles.forEach(async (file: File) => {
+
+                    const fileData: string | ArrayBuffer = await this.readFile(file);
 
                     const loadingFile: LoadingFile = {
                         file    : file, 
                         index   : this.currentIndex++, 
                         progress: 0,
-                        image   : '',
+                        image   : typeof fileData == "string" ? fileData : '',
                         loading : false,
                     };
 
                     this.files.push(loadingFile);
+                    
+                    // ! IT'S SO IMPORTANT do this with array item case JS has so STRANGE POINTERS. Please, DON'T EDIT IT
+                    if(this.autoLoad){
+                        this.$emit('loadHandler', this.files[this.files.length - 1]);
+                        this.files[this.files.length - 1].loading = true;
+                    }
 
-                    reader.addEventListener('load', (e) => {
-                        if(!e.target) return;
-                        const src: string | ArrayBuffer | null = e.target.result;
-                        if(typeof src == "string") loadingFile.image = src || '';
-                    });
+                });
+            },
 
+            readFile: function(file: File): Promise<string | ArrayBuffer>{
+                return new Promise((resolve, reject) => {
+                    const reader: FileReader = new FileReader();
+
+                    reader.onload = () => {
+                        resolve(reader.result || '');
+                    }
+
+                    reader.onerror = reject;
                     reader.readAsDataURL(file);
                 });
-
-
-                if(this.autoLoad) {
-                    this.files.forEach((loadingFile: LoadingFile) => {
-                        if(loadingFile.loading) return;
-                        console.log('autoLoad: ', loadingFile.progress)
-                        this.$emit('loadHandler', loadingFile);
-                        loadingFile.loading = true;
-                    });
-                }
-                
             },
 
             loadFiles: function(){
-                console.log(this.files);
+                this.files.forEach((loadingFile: LoadingFile) => {
+                    if(loadingFile.loading) return;
+                    this.$emit('loadHandler', loadingFile);
+                    loadingFile.loading = true;
+                });
             },
 
             removeFile: function(removingFile: LoadingFile): void{

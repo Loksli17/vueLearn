@@ -1,7 +1,7 @@
 <template>
 
     <div class="file">
-        <img width="50" :src="loadingFile.image" alt="">
+        <img width="50" v-if="loadingFile.image" :src="loadingFile.image" alt="">
         <span>{{loadingFile.file.name}}</span>
         <progress :value="progress" max="100"></progress>
         <div class="remove-file" @click="removeFile">&#10006;</div>
