@@ -6,7 +6,7 @@
             <input ref="fileInput" type="file" multiple hidden @change="addFilesDialogWindow">
         </div>
 
-        <div class="file-container">
+        <div v-if="files.length" class="file-container">
             <FileComponent
                 v-for="file in files" :key="file.index"
                 :loadingFile="file"
@@ -256,6 +256,7 @@
 <style lang="scss" scoped>
     .file-upload-container{
         margin-top: 20px;
+        cursor: pointer;
 
         .file-container{
             margin-top: 20px;
@@ -271,6 +272,11 @@
 
             span{
                 font-size: 20px;
+            }
+
+            &:hover{
+                transition: 0.4s;
+                background-color: rgba($color: #dafcf2, $alpha: 0.6);
             }
         }
 

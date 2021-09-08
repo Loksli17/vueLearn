@@ -22,7 +22,7 @@
 
         <div>
             <FileUpload
-                :maxFilesAmount="1"
+                :maxFilesAmount="5"
                 :autoLoad="true"
                 v-on:load-handler="imageLoad"
                 :types="['png', 'svg', 'jpeg', 'jpg']"

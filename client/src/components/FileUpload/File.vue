@@ -26,14 +26,6 @@
                 type    : Object as () => LoadingFile,
                 required: true,
             },
-            // image: {
-            //     type    : String,
-            //     required: true,
-            // },
-            // index: {
-            //     type    : Number,
-            //     required: true,
-            // },
             progress: {
                 type   : Number,
                 default: 0, 
@@ -61,9 +53,17 @@
         width: 100%;
         display: grid;
         column-gap: 20px;
-        grid-template-columns: 60px 1fr 3fr max-content;
+        grid-template-columns: 60px 1fr 4fr max-content;
         align-items: center;
         height: 50px;
+
+        .filename{
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: max-content;
+            justify-content: center;
+            font-size: 18px;
+        }
 
         .file-img{
             height: 100%;
@@ -85,6 +85,7 @@
 
         progress{
             @include progress;
+            appearance: none;
         }
 
         progress::-webkit-progress-value{
@@ -101,14 +102,6 @@
             @include progress;
             background-color: rgb(203, 216, 216);
         }
-
-        // progress:not([value]), progress:not([value])::-webkit-progress-bar, progress:not([value])::-webkit-progress-value {
-        //     @include progress(rgb(203, 216, 216));
-        // }
-
-        // progress:not([value])::-moz-progress-bar {
-        //     @include progress(rgb(203, 216, 216));
-        // }
     }
 
      @media screen and (max-width: 700px) {
@@ -116,6 +109,10 @@
             height: 40px;
             column-gap: 8px;
             grid-template-columns: 40px 1fr 2fr max-content;
+
+            .filename{
+                font-size: 16px;
+            }
         }
     }
 </style>
