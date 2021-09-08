@@ -113,6 +113,7 @@
 
                 return newColumnNames;
             },
+            
             columnsToBeHidden(): Array<string> {
                 const columns: Array<string> = [];
                 Object.keys(this.rowData[0]).forEach((val, index) => {

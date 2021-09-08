@@ -22,11 +22,13 @@
 
         <div>
             <FileUpload
-                :message="'Drop files here'"
-                :maxSize="4"
-                :repeatFiles="false"
+                :maxFilesAmount="4"
                 :autoLoad="true"
-                v-on:loadHandler="imageLoad"
+                v-on:load-handler="imageLoad"
+                :types="['png', 'svg', 'jpeg', 'jpg']"
+                :maxFileSize="1024 * 1024 * 2"
+                v-on:type-error-handler="fileTypeError"
+                v-on:size-error-handler="fileSizeError"
             />
         </div>
 
@@ -40,7 +42,8 @@
     import Form, { FormHtmlItem, FormData as FD } from '../../components/crudComponent/newForm.vue';
     import { AxiosResponse }                      from 'axios';
     import { ListItem }                           from '../../components/DropDownList.vue';
-    import FileUpload, { LoadingFile }                             from '../../components/FileUpload/FileUpload.vue';
+    import FileUpload, { LoadingFile }            from '../../components/FileUpload/FileUpload.vue';
+    import FlashMessageData                       from '../../libs/flashMessage';
     
     interface ArticleType{
         id   : number;
@@ -81,6 +84,14 @@
         },
 
         methods: {
+
+            fileSizeError: function(file: LoadingFile, msg: string){
+                this.$flashMessage.show(FlashMessageData.warningMessage('File loading', msg))
+            },
+
+            fileTypeError: function(file: LoadingFile, msg: string){
+                this.$flashMessage.show(FlashMessageData.warningMessage('File loading', msg))
+            },
             
             getTypes: async function(){
 

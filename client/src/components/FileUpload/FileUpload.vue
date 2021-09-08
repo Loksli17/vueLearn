@@ -1,7 +1,7 @@
 <template>
     
     <div class="file-upload-container">
-        <div v-if="files.length < maxSize" class="file-upload-field" @click="showDialogWindow" :class="{'file-upload-field-drag': dragStatus}" @drop.prevent="dragDrop" @dragenter.prevent @dragover.prevent="dragOver" @dragleave="dragLeave">
+        <div v-if="files.length < maxFilesAmount" class="file-upload-field" @click="showDialogWindow" :class="{'file-upload-field-drag': dragStatus}" @drop.prevent="dragDrop" @dragenter.prevent @dragover.prevent="dragOver" @dragleave="dragLeave">
             <span>{{message}}</span>
             <input ref="fileInput" type="file" multiple hidden @change="addFilesDialogWindow">
         </div>
@@ -41,25 +41,29 @@
         },
 
         props: {
-            maxSize: {
+            maxFilesAmount: {
                 type   : Number,
                 default: 10,
             },
             message: {
                 type   : String,
-                default: 'Drop files here!',
-            },
-            checkingHandler: {
-                type   : Function,
-                default: undefined, 
+                default: 'Click on this field or drop files here!',
             },
             repeatFiles: {
                 type   : Boolean,
-                default: true, 
+                default: false, 
             },
             autoLoad: {
                 type   : Boolean,
                 default: true,
+            },
+            types: {
+                type   : Array as () => Array<string>,
+                default: null,
+            },
+            maxFileSize: {
+                type   : Number,
+                default: null,
             },
         },
         
@@ -70,6 +74,42 @@
                 images       : [] as Array<string>,
                 filesProgress: [] as Array<number>,
                 currentIndex : 0 as number,
+            }
+        },
+
+        computed: {
+
+            normalMaxFileSize: function(): string{
+
+                if(!this.maxFileSize) throw new Error('maxFileSize is null');
+
+                let
+                    size    : number = this.maxFileSize,
+                    count   : number    = 0,
+                    dataType: string = '';
+
+                while(size > 1024){
+                    count++;
+                    size /= 1024;
+                    size = +size.toFixed(3);
+                }
+
+                switch(count){
+                    case 0:
+                        dataType = 'b';
+                        break;
+                    case 1:
+                        dataType = 'kb';
+                        break;
+                    case 2:
+                        dataType = 'mb';
+                        break;
+                    case 3:
+                        dataType = 'gb';
+                        break;
+                }
+
+                return `${size} ${dataType}`;
             }
         },
 
@@ -104,17 +144,15 @@
 
                 let allowedFiles: Array<File> = [];
 
-                if(this.checkingHandler !== undefined){
-
-                    for (const file of newFiles) {
-                        this.checkingHandler(file);
-                    }
+                for (const file of newFiles) {
+                    if(this.types != null)       this.checkFileType(file);
+                    if(this.maxFileSize != null) this.checkFileSize(file);
                 }
 
                 this.dragStatus = false;
 
                 for (const newFile of newFiles) {
-                    if(this.files.length >= this.maxSize) return;
+                    if(this.files.length >= this.maxFilesAmount) return;
                     if(this.repeatFiles) {allowedFiles.push(newFile)}
                     if(!this.repeatFiles && !(this.files.find(loadFile => loadFile.file.name == newFile.name))) allowedFiles.push(newFile);
                 }
@@ -135,7 +173,7 @@
                     
                     // ! IT'S SO IMPORTANT do this with array item case JS has so STRANGE POINTERS. Please, DON'T EDIT IT
                     if(this.autoLoad){
-                        this.$emit('loadHandler', this.files[this.files.length - 1]);
+                        this.$emit('load-handler', this.files[this.files.length - 1]);
                         this.files[this.files.length - 1].loading = true;
                     }
 
@@ -158,13 +196,35 @@
             loadFiles: function(){
                 this.files.forEach((loadingFile: LoadingFile) => {
                     if(loadingFile.loading) return;
-                    this.$emit('loadHandler', loadingFile);
+                    this.$emit('load-handler', loadingFile);
                     loadingFile.loading = true;
                 });
             },
 
             removeFile: function(removingFile: LoadingFile): void{
                 this.files = this.files.filter((file: LoadingFile) => file.index != removingFile.index);
+            },
+
+            checkFileType: function(file: File){
+                
+                let flag: boolean = false;
+
+                this.types.forEach((type: string) => {
+                    console.log(file.type.includes(type));
+                    if(file.type.includes(type)){flag = true}
+                });
+
+                if(!flag){
+                    this.$emit('type-error-handler', file, `File's type not belongs types: ${this.types}`);
+                    throw new Error(`Unnecessary type of file ${file.name}`);
+                }
+            },
+
+            checkFileSize: function(file: File){
+                if(file.size > this.maxFileSize) { 
+                    this.$emit('size-error-handler', file, `File's size more then ${this.normalMaxFileSize}!`);
+                    throw new Error(`File ${file.name} has so big size!`);
+                }
             }
         }
     });
