@@ -2,7 +2,10 @@
 
     <div class="file">
         <img width="50" v-if="loadingFile.image" :src="loadingFile.image" alt="">
-        <span>{{loadingFile.file.name}}</span>
+        <div class="filename">
+            <span>{{loadingFile.shortName}}</span>
+            <span>({{loadingFile.normalType}})</span>
+        </div>
         <progress :value="progress" max="100"></progress>
         <div class="remove-file" @click="removeFile">&#10006;</div>
     </div>

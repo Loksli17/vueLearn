@@ -29,6 +29,7 @@
                 :maxFileSize="1024 * 1024 * 2"
                 v-on:type-error-handler="fileTypeError"
                 v-on:size-error-handler="fileSizeError"
+                v-on:not-drag-and-drop-capable-error="dragAndDropCapableError"
             />
         </div>
 
@@ -91,6 +92,10 @@
 
             fileTypeError: function(file: LoadingFile, msg: string){
                 this.$flashMessage.show(FlashMessageData.warningMessage('File loading', msg))
+            },
+
+            dragAndDropCapableError: function(msg: string){
+                this.$flashMessage.show(FlashMessageData.errorMessage('File loading', msg));
             },
             
             getTypes: async function(){

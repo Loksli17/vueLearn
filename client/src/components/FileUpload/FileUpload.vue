@@ -22,15 +22,17 @@
 
 
 <script lang="ts">
-    import {defineComponent, PropType} from 'vue';
-    import FileComponent               from './File.vue';
+    import {defineComponent} from 'vue';
+    import FileComponent     from './File.vue';
 
     export interface LoadingFile{
-        file: File,
-        index: number,
-        progress: number,
-        loading: boolean,
-        image: string,
+        file: File;
+        index: number;
+        progress: number;
+        loading: boolean;
+        image: string;
+        shortName: string;
+        normalType: string;
     }
 
 
@@ -113,6 +115,14 @@
             }
         },
 
+        created: function(){
+            if(!this.determineDragAndDropCapable()) {
+                const msg: string = `Browser doesn't has supporting of DRAG and DROP API`;
+                this.$emit('not-drag-and-drop-capable-error', msg);
+                throw new Error(msg);
+            }
+        },
+
         methods: {
 
             showDialogWindow: function(): void{
@@ -131,15 +141,14 @@
                 if (newFiles) this.addFiles(newFiles);
             },
 
-            dragOver: function(e: DragEvent): void{
+            dragOver: function(): void{
                 this.dragStatus = true;
             },
 
-            dragLeave: function(e: DragEvent): void{
+            dragLeave: function(): void{
                 this.dragStatus = false;
             },
             
-            //? Can I decomposite this code?
             addFiles: function(newFiles: FileList): void{
 
                 let allowedFiles: Array<File> = [];
@@ -159,14 +168,19 @@
 
                 allowedFiles.forEach(async (file: File) => {
 
-                    const fileData: string | ArrayBuffer = await this.readFile(file);
+                    const 
+                        fileData     : string | ArrayBuffer = await this.readFile(file),
+                        typeFile     : string               = file.name.slice(file.name.indexOf('.') + 1, file.name.length),
+                        clearFileName: string               = file.name.slice(0, file.name.indexOf('.'));
 
                     const loadingFile: LoadingFile = {
-                        file    : file, 
-                        index   : this.currentIndex++, 
-                        progress: 0,
-                        image   : typeof fileData == "string" ? fileData : '',
-                        loading : false,
+                        file      : file, 
+                        index     : this.currentIndex++, 
+                        progress  : 0,
+                        image     : typeof fileData == "string" ? fileData : '',
+                        loading   : false,
+                        shortName : (clearFileName.length > 5) ? `${clearFileName.slice(0, 5)}..`: clearFileName,
+                        normalType: typeFile,
                     };
 
                     this.files.push(loadingFile);
@@ -225,6 +239,15 @@
                     this.$emit('size-error-handler', file, `File's size more then ${this.normalMaxFileSize}!`);
                     throw new Error(`File ${file.name} has so big size!`);
                 }
+            },
+
+            determineDragAndDropCapable: function(){
+
+                let div: HTMLDivElement = document.createElement('div');
+
+                return (('draggable' in div) || ( 'ondragstart' in div && 'ondrop' in div )) &&
+                    'FormData' in window && 
+                    'FileReader' in window;
             }
         }
     });
