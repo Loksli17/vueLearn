@@ -8,7 +8,7 @@
             <span>({{loadingFile.normalType}})</span>
         </div>
         
-        <progress :value="progress" max="100"></progress>
+        <progress :value="progress" max="100">{{progress}}%</progress>
         <div class="remove-file" @click="removeFile">&#10006;</div>
     </div>
     
@@ -58,15 +58,16 @@
 
 <style lang="scss" scoped>
     .file{
+        width: 100%;
         display: grid;
         column-gap: 20px;
-        grid-template-columns: 60px 1fr 2fr max-content;
+        grid-template-columns: 60px 1fr 3fr max-content;
         align-items: center;
         height: 50px;
 
         .file-img{
             height: 100%;
-            background: chartreuse;
+            background: rgb(76, 231, 231);
             background-position: center;
             background-size: cover;
         }
@@ -76,8 +77,45 @@
             cursor: pointer;
         }
 
-        progress{
+        @mixin progress{
+            display: block;
             width: 100%;
+            border-radius: 10px;
+        }
+
+        progress{
+            @include progress;
+        }
+
+        progress::-webkit-progress-value{
+            @include progress;
+            background-color: rgb(76, 231, 231);
+        }
+
+        progress::-webkit-progress-bar{
+            @include progress;
+            background-color: rgb(203, 216, 216);
+        }
+
+        progress::-moz-progress-bar{
+            @include progress;
+            background-color: rgb(203, 216, 216);
+        }
+
+        // progress:not([value]), progress:not([value])::-webkit-progress-bar, progress:not([value])::-webkit-progress-value {
+        //     @include progress(rgb(203, 216, 216));
+        // }
+
+        // progress:not([value])::-moz-progress-bar {
+        //     @include progress(rgb(203, 216, 216));
+        // }
+    }
+
+     @media screen and (max-width: 700px) {
+        .file{
+            height: 40px;
+            column-gap: 8px;
+            grid-template-columns: 40px 1fr 2fr max-content;
         }
     }
 </style>
