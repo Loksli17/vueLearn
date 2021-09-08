@@ -13,7 +13,6 @@
                 v-model:progress="file.progress"
                 v-on:remove-file="removeFile"
             />
-
             <button v-if="!autoLoad" @click="loadFiles">Send files</button>
         </div>
     </div>
@@ -258,6 +257,12 @@
     .file-upload-container{
         margin-top: 20px;
 
+        .file-container{
+            margin-top: 20px;
+            display: grid;
+            row-gap: 10px;
+        }
+        
         .file-upload-field{
             padding: 20px;
             border: 2px dashed #0cdfa0;

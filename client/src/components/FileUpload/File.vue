@@ -1,11 +1,13 @@
 <template>
 
     <div class="file">
-        <img width="50" v-if="loadingFile.image" :src="loadingFile.image" alt="">
+        <div class="file-img" v-if="loadingFile.image" :style="{backgroundImage: `url('${loadingFile.image}'`}"></div>
+
         <div class="filename">
             <span>{{loadingFile.shortName}}</span>
             <span>({{loadingFile.normalType}})</span>
         </div>
+        
         <progress :value="progress" max="100"></progress>
         <div class="remove-file" @click="removeFile">&#10006;</div>
     </div>
@@ -60,6 +62,14 @@
         column-gap: 20px;
         grid-template-columns: 60px 1fr 2fr max-content;
         align-items: center;
+        height: 50px;
+
+        .file-img{
+            height: 100%;
+            background: chartreuse;
+            background-position: center;
+            background-size: cover;
+        }
 
         .remove-file{
             font-size: 25px;
