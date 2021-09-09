@@ -195,13 +195,12 @@
 
                     const typeFile: string = regExpTypeResult[0];
 
-                    console.log('azaza:', this.typeIcons[typeFile], typeFile);
-
+                    // ! this can be mistake 
                     const loadingFile: LoadingFile = {
                         file      : file, 
                         index     : this.currentIndex++, 
                         progress  : 0,
-                        image     : imagesTypes.includes(typeFile.toLowerCase())  && typeof dataFile == "string" ? dataFile : '',
+                        image     : imagesTypes.includes(typeFile.toLowerCase()) && typeof dataFile == "string" ? dataFile : '',
                         icon      : !imagesTypes.includes(typeFile) && typeof dataFile == "string" ? this.typeIcons[typeFile] : '',
                         loading   : false,
                         shortName : (clearFileName.length > 5) ? `${clearFileName.slice(0, 5)}..`: clearFileName,
