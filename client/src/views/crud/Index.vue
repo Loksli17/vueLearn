@@ -25,7 +25,7 @@
                     :config="{ sortableByColumn: true }"
                     >
                     <template v-slot:footer>
-                        this is a footer
+                        <div> This is a footer </div>
                     </template>
                 </Table> 
             </div>

@@ -1,5 +1,5 @@
 <template>
-    <table border="1">
+    <table>
         <TableHeader 
             :columnNames="cols" 
             @selected-column="setSelectedColumn"
@@ -133,3 +133,41 @@
         }
     });
 </script>
+
+
+<style lang="scss">
+
+    table, th, td{
+        border: 2px solid rgb(190, 184, 184);
+    }
+
+    table{
+        width: 1200px;
+        margin: 20px 0px;
+        border-collapse: collapse;
+
+        th{
+            background: #d6fff3;
+            font-size: 20px;
+            padding: 10px;
+        }
+
+        tr{
+            &:nth-child(even){
+                background: aliceblue;
+            }
+        }
+
+        td{
+            font-size: 18px;
+            padding: 10px;
+        }
+
+        /* it can be baaaad */
+        tfoot > div{
+            padding: 10px;
+            font-size: 20px;
+        }
+        
+    }
+</style>
