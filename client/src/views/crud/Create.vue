@@ -25,8 +25,8 @@
                 :maxFilesAmount="5"
                 :autoLoad="true"
                 v-on:load-handler="imageLoad"
-                :types="['png', 'svg', 'jpeg', 'jpg']"
-                :maxFileSize="1024 * 1024 * 2"
+                
+                :maxFileSize="1024 * 1024 * 100"
                 v-on:type-error-handler="fileTypeError"
                 v-on:size-error-handler="fileSizeError"
                 v-on:not-drag-and-drop-capable-error="dragAndDropCapableError"
@@ -112,8 +112,6 @@
                 
                 const data: FormData = new FormData();
                 data.append('image', loadingFile.file);
-
-                console.log('loading: ', loadingFile);
                 
                 await axios.post({
                     url : `/crud/article-image`,

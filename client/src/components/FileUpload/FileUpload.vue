@@ -32,6 +32,11 @@
         image: string;
         shortName: string;
         normalType: string;
+        icon?: string;
+    }
+
+    interface TypeIcon{
+        [index: string]: string;
     }
 
 
@@ -75,6 +80,18 @@
                 images       : [] as Array<string>,
                 filesProgress: [] as Array<number>,
                 currentIndex : 0 as number,
+
+                typeIcons: {
+                    '.pdf'  : 'pdf.png',
+                    '.docx' : 'word.svg',
+                    '.doc'  : 'word.svg',
+                    '.pptx' : 'power-point.svg',
+                    '.xlsx' : 'excel.svg',
+                    '.txt'  : 'notebook.png',
+                    '.avi'  : 'avi.png',
+                    '.gif'  : 'gif.png',
+                    '.vsdx' : 'visio.svg',
+                } as TypeIcon,
             }
         },
 
@@ -167,16 +184,25 @@
 
                 allowedFiles.forEach(async (file: File) => {
 
-                    const 
-                        fileData     : string | ArrayBuffer = await this.readFile(file),
-                        typeFile     : string               = file.name.slice(file.name.indexOf('.') + 1, file.name.length),
-                        clearFileName: string               = file.name.slice(0, file.name.indexOf('.'));
+                    const
+                        imagesTypes     : Array<string>        = ['.svg', '.jpeg', '.jpg', '.png'],
+                        regExpType      : RegExp               = /\.[a-zA-Z]+$/gi,
+                        dataFile        : string | ArrayBuffer = await this.readFile(file),
+                        regExpTypeResult: Array<string> | null = file.name.match(regExpType),
+                        clearFileName   : string               = file.name.slice(0, file.name.indexOf('.'));
+
+                    if(!regExpTypeResult) throw Error('file has bad type');
+
+                    const typeFile: string = regExpTypeResult[0];
+
+                    console.log('azaza:', this.typeIcons[typeFile], typeFile);
 
                     const loadingFile: LoadingFile = {
                         file      : file, 
                         index     : this.currentIndex++, 
                         progress  : 0,
-                        image     : typeof fileData == "string" ? fileData : '',
+                        image     : imagesTypes.includes(typeFile.toLowerCase())  && typeof dataFile == "string" ? dataFile : '',
+                        icon      : !imagesTypes.includes(typeFile) && typeof dataFile == "string" ? this.typeIcons[typeFile] : '',
                         loading   : false,
                         shortName : (clearFileName.length > 5) ? `${clearFileName.slice(0, 5)}..`: clearFileName,
                         normalType: typeFile,
@@ -192,6 +218,10 @@
 
                 });
             },
+
+            // getImageForNotImageFile: function(type: string): void{
+
+            // },
 
             readFile: function(file: File): Promise<string | ArrayBuffer>{
                 return new Promise((resolve, reject) => {

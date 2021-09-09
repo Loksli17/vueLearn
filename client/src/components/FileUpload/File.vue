@@ -2,6 +2,7 @@
 
     <div class="file">
         <div class="file-img" v-if="loadingFile.image" :style="{backgroundImage: `url('${loadingFile.image}'`}"></div>
+        <img v-else :src="require(`@/assets/img/type-icons/${loadingFile.icon}`) " alt="">
 
         <div class="filename">
             <span>{{loadingFile.shortName}}</span>
@@ -38,6 +39,12 @@
             },
         },
 
+        data: function(){
+            return {
+                iconWay: ''
+            }
+        },
+
         methods: {
             removeFile: function(){
                 this.$emit('remove-file', this.loadingFile);
@@ -57,6 +64,10 @@
         align-items: center;
         height: 50px;
 
+        img{
+            width: 100%;
+        }
+
         .filename{
             display: grid;
             grid-auto-flow: column;
@@ -67,7 +78,6 @@
 
         .file-img{
             height: 100%;
-            background: rgb(76, 231, 231);
             background-position: center;
             background-size: cover;
         }
