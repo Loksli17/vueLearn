@@ -16,6 +16,7 @@ export interface Action {
      * NOTE: Handlers may require to bind their 'this' parameter
      */
     handler?: (arg: any) => void;
+    cssClassName?: string;
 }
 
 /**

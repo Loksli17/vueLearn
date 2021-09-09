@@ -19,8 +19,7 @@
 
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
-    import { SortOrder } from './types';
-    import { Column } from "./types";
+    import { SortOrder, Column } from "./types";
 
     export default defineComponent({
         name: "TableHeader",

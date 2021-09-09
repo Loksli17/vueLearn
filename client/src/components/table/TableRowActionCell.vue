@@ -4,8 +4,21 @@
         <router-link :to="`/crud/${item.id}/edit`">Edit</router-link>
         <router-link :to="`/crud/${item.id}/view`">View</router-link> -->
         <template v-for="action in actions" :key="action.id">
-            <router-link v-if="action.path !== undefined" :to="action.path(itemId)" >{{ action.name }}</router-link>
-            <a v-else-if="action.handler !== undefined" href="" @click.prevent="action.handler(itemId)">{{ action.name }}</a>
+            <router-link 
+                v-if="action.path !== undefined"
+                :class="action.cssClassName" 
+                :to="action.path(itemId)"
+            >
+                {{ action.name }}
+            </router-link>
+            <a 
+                v-else-if="action.handler !== undefined" 
+                :class="action.cssClassName"
+                href="" 
+                @click.prevent="action.handler(itemId)"
+            >
+                {{ action.name }}
+            </a>
         </template>
     </td>
 </template>
