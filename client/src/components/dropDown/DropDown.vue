@@ -71,18 +71,14 @@
             },
 
             currentOption: {
-
                 //! it must work different !!!!!!!
+                // okay chief
                 get(): ListItem {
-                    
-                    console.log('list currentOptionId', this.currentOptionId);
                     if(!this.currentOptionId) return {id: 0, value: this.disabledOption};
                     
                     let val = this.options?.find(item => item.id === this.currentOptionId);
                     
-                    if (!this.options) {
-                        val = {id: 1, value: ""}
-                    } else if (!val) {
+                    if (!this.options || !val) {
                         val = this.options[0];
                     }
                     return val;

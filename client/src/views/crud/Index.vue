@@ -21,7 +21,7 @@
                     :columnNames="columnNames" 
                     :rowData="mapArticles" 
                     :actions="tableActions"
-                    :config="{ sortableByColumn: true, hideColumn: [] }"
+                    :config="tableConfig"
                     >
                     <template v-slot:footer>
                         <div> This is a footer </div>
@@ -54,7 +54,7 @@
     import { AxiosResponse }   from 'axios';
 
     import Table from "../../components/table/Table.vue";
-    import { Column, Action } from "../../components/table/types";
+    import { Column, Action, TableConfig } from "../../components/table/types";
 
     export default defineComponent({
 
@@ -81,7 +81,8 @@
                         { name: "View", path: (id: number) => `/crud/${id}/view` }, 
                         { name: "Edit", path: (id: number) => `/crud/${id}/edit` }, 
                         { name: "Delete", handler: this.removeArticle },
-                    ] as Array<Action>,
+                ] as Array<Action>,
+                tableConfig: { sortableByColumn: true, hideColumn: [] } as TableConfig,
                 take          : 10 as number,
                 currentPage   : 1 as number,
                 amountArticles: 0 as number, 
