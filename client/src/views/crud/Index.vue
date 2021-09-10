@@ -21,7 +21,7 @@
                     :columnNames="columnNames" 
                     :rowData="mapArticles" 
                     :actions="tableActions"
-                    :config="{ sortableByColumn: true }"
+                    :config="{ sortableByColumn: true, hideColumn: [] }"
                     >
                     <template v-slot:footer>
                         <div> This is a footer </div>

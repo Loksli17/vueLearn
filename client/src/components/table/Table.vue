@@ -7,6 +7,7 @@
             :sortOrder="sortOrder"
             :table-is-sortable="config.sortableByColumn"
             :has-actions="!!actions" 
+            :columnsToHide="columnsToBeHidden"
         />
         <tbody>
             <TableRow 
@@ -14,6 +15,7 @@
                 :key="row.id" 
                 :row="row" 
                 :actions="actions"
+                :columnsToHide="columnNamesToBeHidden"
             />
         </tbody>
         <tfoot>
@@ -114,7 +116,7 @@
                 return newColumnNames;
             },
             
-            columnsToBeHidden(): Array<string> {
+            columnNamesToBeHidden(): Array<string> {
                 const columns: Array<string> = [];
                 Object.keys(this.rowData[0]).forEach((val, index) => {
                     if (this.config.hideColumn?.includes(index)) {
@@ -123,6 +125,13 @@
                 });
 
                 return columns;
+            },
+            columnsToBeHidden(): Array<number> {
+                if (this.config.hideColumn) {
+                    return this.config.hideColumn;
+                } else {
+                    return [];
+                }
             }
         },
         methods: {
