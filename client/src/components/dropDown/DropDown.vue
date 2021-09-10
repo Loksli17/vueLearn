@@ -1,5 +1,6 @@
 <template>
     <div class="drop-down-container" v-click-outside="() => {showList = false}">
+
         <div class="drop-down-current">
             <div class="arrow"></div>
             <DropDownItem :item="currentOption" :clickable="true" v-on:item-clicked="toggleList"/>
@@ -30,7 +31,7 @@
     import DropDownItem                  from "./DropDownItem.vue";
     import DropDownSearch                from "./DropDownSearch.vue";
     import { ListItem }                  from "./types";
-
+    
     export default defineComponent({
         name: "DropDown",
         

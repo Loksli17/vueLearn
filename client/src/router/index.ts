@@ -26,6 +26,11 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Crud-edit',
         component: () => import('../views/crud/Edit.vue'),
     },
+    {
+        path: '/auth/login',
+        name: 'login',
+        component: () => import('../views/Login.vue'),
+    },
 ];
 
 const router = createRouter({
