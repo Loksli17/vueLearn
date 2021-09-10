@@ -32,18 +32,9 @@
                     <DropList
                         v-else-if="item.type == 'select' && item.options.length"
                         :optionsList="item.options"
-                        v-model:current-option-id="item.currentItem"
+                        v-model:current-option-id="localDataForm[item.name]"
                     />
 
-                    <!-- <DropDown
-                        v-else-if="item.type == 'select'"
-                        :name="item.name"
-                        :optionsList="item.options"
-                        :enableSearch="item.search"
-                        :disabledOption="item.disabledOption"
-                        :required="item.required"
-                        v-model:current-option-id="localDataForm[item.name]"
-                    /> -->
 
                     <Checkbox v-else-if="item.type == 'checkbox'"
                         :name="item.name"
@@ -80,11 +71,10 @@
 
 <script lang="ts">
 
-    import Checkbox                   from '../crudComponent/Checkbox.vue';
-    // import DropDownList, { ListItem } from '../DropDownList.vue';
-    import DropList from "../dropDown/DropDown.vue";
-    import { ListItem } from "../dropDown/types";
-    import { defineComponent }        from 'vue';
+    import Checkbox            from '../crudComponent/Checkbox.vue';
+    import DropList            from "../dropDown/DropDown.vue";
+    import { ListItem }        from "../dropDown/types";
+    import { defineComponent } from 'vue';
 
 
     export interface FormHtmlItem{
