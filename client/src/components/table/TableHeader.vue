@@ -1,25 +1,29 @@
 <template>
     <thead class="table-header">
-        <th v-for="(column, index) in columnNames" 
-            :key="index"
-            @click="emitSelectedColumn(index)"
-            class="table-header-column-names"
-            :class="{ 'clickable': (tableIsSortable && index !== columnNames.length - 1) }"
-        >
-            {{ column.displayedName }}
-            <span v-if="index === columnId" :class="[
-                { 'arrow': sortOrder !== undefined },
-                { 'down': (sortOrder === 1) },
-                { 'up': (sortOrder === -1) }
-                ]">
-            </span>
-        </th>
+        <template v-for="(column, index) in columnNames" 
+                :key="index"
+            >
+            <th 
+                @click="emitSelectedColumn(index)"
+                class="table-header-column-names"
+                :class="{ 'clickable': (tableIsSortable && index !== columnNames.length - 1) }"
+                v-if="!columnsToHide.includes(index)"
+                >
+                {{ column.displayedName }}
+                <span v-show="index === columnId" :class="[
+                    { 'arrow': sortOrder !== undefined },
+                    { 'down': (sortOrder === 1) },
+                    { 'up': (sortOrder === -1) }
+                    ]">
+                </span>
+            </th>
+        </template>
     </thead>
 </template>
 
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
-    import { SortOrder, Column } from "./types";
+    import { Column } from "./types";
 
     export default defineComponent({
         name: "TableHeader",
@@ -42,7 +46,10 @@
                 required: true
             },
             sortOrder: {
-                type: Object as PropType<SortOrder>,
+                type: Number,
+            },
+            columnsToHide: {
+                type: Object as PropType<Array<number>>
             }
         },
         methods: {

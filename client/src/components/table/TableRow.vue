@@ -1,7 +1,7 @@
 <template>
     <tr>
         <template v-for="(value, name) in row" :key="name">
-            <td>{{ value }}</td>
+            <td v-if="!columnsToHide.includes(name)">{{ value }}</td>
         </template>
         <TableRowActionCell v-if="actions" :actions="actions" :itemId="row.id" />
     </tr>
@@ -25,7 +25,7 @@
             actions: {
                 type: Object as PropType<Array<Action>>
             },
-            hideColumn: {
+            columnsToHide: {
                 type: Object as PropType<Array<{ pos: number }> | undefined>
             }
         }

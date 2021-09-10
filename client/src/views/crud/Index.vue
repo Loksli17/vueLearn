@@ -1,6 +1,5 @@
 <template>
     <div class="crud-index">
-
         <h1>Index page of CRUD</h1>
 
         <div class="add-line">
@@ -22,7 +21,7 @@
                     :columnNames="columnNames" 
                     :rowData="mapArticles" 
                     :actions="tableActions"
-                    :config="{ sortableByColumn: true }"
+                    :config="{ sortableByColumn: true, hideColumn: [] }"
                     >
                     <template v-slot:footer>
                         <div> This is a footer </div>
@@ -55,7 +54,7 @@
     import { AxiosResponse }   from 'axios';
 
     import Table from "../../components/table/Table.vue";
-    import { Column, columnType, Action } from "../../components/table/types";
+    import { Column, Action } from "../../components/table/types";
 
     export default defineComponent({
 
@@ -78,10 +77,6 @@
                         { displayedName: 'Views',   fieldName: "views" },
                         { displayedName: "Actions", fieldName: "actions" },
                 ] as Array<Column>,
-                // rowData       : [
-                //         { id: 0, title: "kek", type: "fuck", ready: true, time: new Date(), date: new Date() },
-                //         { id: 1, title: "kek2", type: "not fuck", ready: false, time: new Date(), date: new Date() }
-                // ] as Array<Record<string, columnType>>,
                 tableActions: [
                         { name: "View", path: (id: number) => `/crud/${id}/view` }, 
                         { name: "Edit", path: (id: number) => `/crud/${id}/edit` }, 
