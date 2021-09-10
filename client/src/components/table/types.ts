@@ -6,8 +6,8 @@ export interface Column {
 export interface Action {
     /** Name of the action, which will be displayed in the table */
     name: string;
-    /** If action is a route, it requires a specified route, which must
-     * be generated for each row of the table, and must include the id
+    /** If action is a route, it requires a specified path, which must
+     * be generated for each row of the table, and must include the id of the row
      */
     path?: (id: number | string) => string;
     /** A handler functon for the action. Will be called upon clicking on the

@@ -10,10 +10,12 @@
                 v-if="!columnsToHide.includes(index)"
                 >
                 {{ column.displayedName }}
-                <span v-show="index === columnId" :class="[
-                    { 'arrow': sortOrder !== undefined },
-                    { 'down': (sortOrder === 1) },
-                    { 'up': (sortOrder === -1) }
+                <span v-show="index === columnId"
+                    v-if="tableIsSortable"
+                    :class="[
+                        { 'arrow': sortOrder !== undefined },
+                        { 'down': (sortOrder === 1) },
+                        { 'up': (sortOrder === -1) }
                     ]">
                 </span>
             </th>
