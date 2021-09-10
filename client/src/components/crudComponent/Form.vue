@@ -15,11 +15,13 @@
                     >
                     </textarea>
 
-                    <DropDownList
+                    <!-- <DropDownList
                         v-else-if="item.type == 'select'"
                         :listItems="item.options"
-                        
-                    />
+                    /> -->
+
+                    <span>AAAAAAAAAAA</span>
+                    
 
                     <Checkbox 
                         v-else-if="item.type == 'checkbox'"
@@ -56,6 +58,7 @@
     import {defineComponent}        from "vue";
     import DropDownList, {ListItem} from '../DropDownList.vue';
     import Checkbox                 from '../crudComponent/Checkbox.vue';
+    import DropList                 from '../dropDown/DropDown.vue';
 
     interface Prop{
         name: string;
@@ -305,6 +308,7 @@
         components: {
             DropDownList,
             Checkbox,
+            DropList,
         }
     });
 </script>

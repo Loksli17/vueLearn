@@ -91,7 +91,7 @@ export default class CrudController{
         }
 
         mysql.query(
-            'select `article`.id, `article`.views, `article`.`date`, `article`.`time`, `article`.isReady, `articleType`.`title` as `t_title`, `article`.title, `article`.`text` from `article` left join `articleType` on `articleType`.`id` = `article`.`articleTypeId` where `article`.`id` = ?',
+            'select `article`.id, `article`.views, `article`.`date`, `article`.`time`, `article`.isReady, `articleType`.`title` as `t_title`, `articleType`.`id` as `articleTypeId`, `article`.title, `article`.`text` from `article` left join `articleType` on `articleType`.`id` = `article`.`articleTypeId` where `article`.`id` = ?',
             [Number(QueryData.id)]
         )
         .then(value => {
@@ -238,6 +238,8 @@ export default class CrudController{
             res.status(400).send({error: ErrorMessage.db()});
             return;
         }
+
+        console.log(QueryData);
 
         mysql.query(
             'update `article` set title = ?,text = ?, isReady = ?, date = ?, time = ?, articleTypeId = ? where id = ?',

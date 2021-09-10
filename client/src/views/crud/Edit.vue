@@ -23,11 +23,11 @@
 
         <div>
             <!-- now it's correct -->
-            <DropList
+            <!-- <DropList
                 v-if="optionsTypes.length"
                 :optionsList="optionsTypes"
                 v-model:current-option-id="curID"
-            />
+            /> -->
         </div>
 
     </div>    
@@ -53,7 +53,7 @@
         
         components: {
             Form,
-            DropList
+            // DropList
         },
 
         data: function(){
@@ -100,6 +100,7 @@
                     url: `/crud/${this.$route.params.id}`,
                     handler: (res: AxiosResponse) => {
                         this.article = res.data.article;
+                        console.log(this.article);
                     }
                 });
             },

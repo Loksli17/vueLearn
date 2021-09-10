@@ -19,7 +19,7 @@
                     >
                     </textarea>
 
-                    <DropDownList v-else-if="item.type == 'select'"
+                    <!-- <DropDownList v-else-if="item.type == 'select'"
                         :name="item.name"
                         :listItems="item.options"
                         :search="item.search"
@@ -27,6 +27,12 @@
                         :required="item.required"
                         :currentItem="item.currentItem"
                         v-on:emitValue="setItemValue"
+                    /> -->
+
+                    <DropList
+                        v-else-if="item.type == 'select' && item.options.length"
+                        :optionsList="item.options"
+                        v-model:current-option-id="item.currentItem"
                     />
 
                     <!-- <DropDown
@@ -75,9 +81,9 @@
 <script lang="ts">
 
     import Checkbox                   from '../crudComponent/Checkbox.vue';
-    import DropDownList, { ListItem } from '../DropDownList.vue';
-    // import DropDown from "../dropDown/DropDown.vue";
-    // import { ListItem } from "../dropDown/types";
+    // import DropDownList, { ListItem } from '../DropDownList.vue';
+    import DropList from "../dropDown/DropDown.vue";
+    import { ListItem } from "../dropDown/types";
     import { defineComponent }        from 'vue';
 
 
@@ -124,8 +130,7 @@
 
         components: {
             Checkbox,
-            DropDownList,
-            // DropDown
+            DropList
         },
 
         data: function(){
