@@ -1,5 +1,5 @@
 <template>
-    <div class="drop-down-container" v-click-outside="showList = false">
+    <div class="drop-down-container" v-click-outside="() => {showList = false}">
         <div class="drop-down-current">
             <div class="arrow"></div>
             <DropDownItem :item="currentOption" :clickable="true" v-on:item-clicked="toggleList"/>
@@ -46,11 +46,15 @@
             },
             currentOptionId: {
                 type    : Number,
-                required: true
+                // required: true
             },
             enableSearch: {
                 type   : Boolean,
                 default: false
+            },
+            disabledOption: {
+                type: String,
+                default: 'Please'
             }
         },
 
@@ -67,21 +71,20 @@
             },
 
             currentOption: {
+
+                //! it must work different !!!!!!!
                 get(): ListItem {
+                    
+                    console.log('list currentOptionId', this.currentOptionId);
+                    if(!this.currentOptionId) return {id: 0, value: this.disabledOption};
+                    
                     let val = this.options?.find(item => item.id === this.currentOptionId);
+                    
                     if (!this.options) {
                         val = {id: 1, value: ""}
                     } else if (!val) {
                         val = this.options[0];
                     }
-
-                    // if (!val || !this.options) {
-                    //     this.$emit("update:current-option-id", 0);
-                    //     val = this.options[0];
-                    // } else {
-                    //     val = {id: 0, value: ""}
-                    // }
-
                     return val;
                 },
 

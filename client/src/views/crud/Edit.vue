@@ -129,7 +129,7 @@
                 await axios.put({
                     url: `crud/${this.$route.params.id}/edit`,
                     handler: (res: AxiosResponse) => {
-                        console.log(res); // ! think about unconnect handler
+                        console.log(res); // ! think about unnessasery handler
                     },
                     data: {
                         article: formData

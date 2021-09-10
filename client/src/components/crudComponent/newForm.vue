@@ -33,6 +33,7 @@
                         v-else-if="item.type == 'select' && item.options.length"
                         :optionsList="item.options"
                         v-model:current-option-id="localDataForm[item.name]"
+                        :disabledOption="item.disabledOption"
                     />
 
 

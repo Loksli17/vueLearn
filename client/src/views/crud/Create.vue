@@ -122,7 +122,6 @@
                     config: {
                         onUploadProgress: (e) => {
                             loadingFile.progress = Math.floor(e.loaded * 100 / e.total);
-                            console.log(loadingFile.progress);
                         }
                     }
                 });
@@ -133,18 +132,15 @@
                     [{type: 'text', name: 'title', label: 'Title of article'}, {type: 'checkbox', name: 'isReady', label: 'Readiness of the article'}],
                     [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
                     [{type: 'textarea', name: 'text'}],
-                    [{type: 'select', name: 'articleTypeId', label: 'Article`s type', search: true, options: this.optionsTypes}],
+                    [{type: 'select', name: 'articleTypeId', label: 'Article`s type', search: true, options: this.optionsTypes, disabledOption: 'Please, choose a item'}],
                     [{type: 'submit', name: 'sendArticle'}]
                 ]
             },
 
             initDataForm: function(){
                 this.dataForm = {
-                    title        : "",
                     date         : this.$filters.dateToDb(new Date()),
                     time         : this.$filters.timeToDb(new Date()),
-                    articleTypeId: /*this.types*/ 1,
-                    text         : "",
                     isReady      : false,
                 } as FD;
             },
