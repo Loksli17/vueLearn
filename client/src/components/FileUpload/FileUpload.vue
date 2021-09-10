@@ -195,17 +195,18 @@
 
                     const typeFile: string = regExpTypeResult[0];
 
-                    // ! this can be mistake 
                     const loadingFile: LoadingFile = {
                         file      : file, 
                         index     : this.currentIndex++, 
                         progress  : 0,
                         image     : imagesTypes.includes(typeFile.toLowerCase()) && typeof dataFile == "string" ? dataFile : '',
-                        icon      : !imagesTypes.includes(typeFile) && typeof dataFile == "string" ? this.typeIcons[typeFile] : '',
+                        icon      : !imagesTypes.includes(typeFile) && typeof dataFile == "string" ? (this.typeIcons[typeFile] || 'default.png') : 'default.png',
                         loading   : false,
                         shortName : (clearFileName.length > 5) ? `${clearFileName.slice(0, 5)}..`: clearFileName,
                         normalType: typeFile,
                     };
+
+                    console.log('this:', loadingFile);
 
                     this.files.push(loadingFile);
                     
@@ -217,10 +218,6 @@
 
                 });
             },
-
-            // getImageForNotImageFile: function(type: string): void{
-
-            // },
 
             readFile: function(file: File): Promise<string | ArrayBuffer>{
                 return new Promise((resolve, reject) => {
@@ -252,7 +249,6 @@
                 let flag: boolean = false;
 
                 this.types.forEach((type: string) => {
-                    console.log(file.type.includes(type));
                     if(file.type.includes(type)){flag = true}
                 });
 
