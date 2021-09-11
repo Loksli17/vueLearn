@@ -44,6 +44,7 @@
             },
 
             sendForm: async function(formData: FD){
+                
                 await axios.post({
                     url                    : '/auth/authentification',
                     data                   : formData,

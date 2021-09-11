@@ -5,6 +5,7 @@ import Router                           from './routes';
 import cors                             from 'cors';
 import fileUpload                       from 'express-fileupload';
 import {createServer, Server}           from 'http';
+import cookieParser                     from 'cookie-parser';
 // import db                               from './models';
 
 
@@ -28,6 +29,7 @@ export class App{
 
         this.app.use(this.logErrors);
         this.app.use(this.errorHandler);
+        this.app.use(cookieParser(config.secret.session));
     }
 
     public static get Instance(): App{

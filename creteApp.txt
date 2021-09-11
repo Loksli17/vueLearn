@@ -2,7 +2,8 @@
 1.  vue-cli: write command create vue (vue cli save standart settings)
 2.  npm i axios @types/axios
 3.  npm i moment @types/moment
-4.  in eslintrc.js
+4.  npm i vuex
+5.  in eslintrc.js
     rules: {
         "@typescript-eslint/no-inferrable-types": "off",                      //this important
         'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
