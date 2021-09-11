@@ -4,7 +4,7 @@
         <div class="form-row" v-for="row in rows" :key='row'>
 
             <div v-for="item in row" :key='item.name'>
-                <label v-if="item.type != 'hidden'" :class="{'error': item.error}" class="form-col">
+                <label v-if="item.type != 'hidden'" :class="{'error': errors && errors[item.name]}" class="form-col">
                     
                     <span v-if="item.type != 'submit'">{{item.label ?? $filters.upperFirst(item.name)}}</span>
 
@@ -61,7 +61,8 @@
                         :autofocus=item.autofocus
                     />
 
-                    <div v-if="item.error" class="error-msg">{{item.error}}</div>
+                    <!-- <em>{{errors[item.name]}} {{errors}} {{item.name}}</em> -->
+                    <div v-if="errors && errors[item.name]" class="error-msg">{{errors[item.name]}}</div>
                 </label>
             </div>
 
@@ -116,6 +117,10 @@
         [index: string]: Array<Record<string, unknown>> | string | Date | number | boolean;
     }
 
+    export interface FormErrors{
+        [index: string]: string,
+    }
+
 
     export default defineComponent({
 
@@ -147,8 +152,12 @@
                 required: true,
             },
             data: {
-                type   : FormData,
-                default: null,
+                type   : Object as () => FormData,
+                default: () => null,
+            },
+            errors: {
+                type   : Object as () => FormErrors,
+                default: () => null,
             }
         },
 

@@ -69,7 +69,7 @@ class FacadeAxios{
             err => {
 
                 this.showFlashMessage('server');
-                
+
                 if(this.axiosData!.errorHandler == undefined) {
                     console.error(err); 
                     return;
@@ -103,7 +103,9 @@ class FacadeAxios{
                 return;
             }
 
-            this.axiosData!.errorHandler(new Error(this.errorStatusMessage));
+            console.log('axios error ')
+
+            this.axiosData!.errorHandler(response);
         }
     }
 

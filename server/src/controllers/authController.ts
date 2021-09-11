@@ -1,9 +1,11 @@
-import e, { Router, Request, Response } from "express";
-import ErrorMessage                  from "../libs/error";
-import Query                         from "../libs/query";
-import pool                          from '../config/database';
-import { Pool }                      from "mysql2/promise";
-
+import { Router, Request, Response } from "express";
+import ErrorMessage                     from "../libs/error";
+import Query                            from "../libs/query";
+import pool                             from '../config/database';
+import { Pool }                         from "mysql2/promise";
+import crypto                           from 'crypto-js';
+import jwt                              from 'jsonwebtoken';
+import config                           from "../config";
 
 export default class AuthController{
 
@@ -31,10 +33,14 @@ export default class AuthController{
 
         mysql.query(
             'select * from `user` where email = ?', [QueryData.email]
-        ).then(value => {
-            user = value[0];
+        ).then((value: any) => {
+            user = value[0][0];
             
-            res.status(200).send({user: user});
+            if(user == undefined) { res.status(401).send({errors: {email: 'Uncorrect email'}}); return } 
+            if(user.password !== crypto.SHA512(QueryData.password).toString()) { res.status(401).send({errors: {password: 'Uncorrect password'}}); return; }
+
+            res.status(200).send({token: jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '15m'})});
+
         }).catch(error => {
             console.error(error);
             res.status(400).send({error: ErrorMessage.db()});
