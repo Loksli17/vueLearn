@@ -5,13 +5,13 @@ import filters                            from './libs/filters';
 import flashMessage, {FlashMessagePlugin} from '@smartweb/vue-flash-message';
 import axios                              from './libs/axios';
 import config                             from './config/config';
-
+import store                              from './store';
 
 declare module '@vue/runtime-core'{
     interface ComponentCustomProperties{
         $filters: typeof filters;
         $flashMessage: FlashMessagePlugin;
-        // $store: typeof store;
+        $store: typeof store;
     }
 }
 
@@ -53,4 +53,4 @@ axios.settings = {
     flashMessage           : app.config.globalProperties.$flashMessage,
 }
 
-app.use(router).mount('#app');
+app.use(store).use(router).mount('#app');

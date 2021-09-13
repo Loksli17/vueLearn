@@ -52,8 +52,12 @@
                     errorServerFlashMessage: false,
 
                     handler: (res: AxiosResponse) => {
-                        console.log(res);
                         this.formErrors = null;
+
+                        this.$store.commit('setUserIdentity', res.data.user);
+                        this.$store.commit('setJWT', res.data.accessToken);
+
+                        this.$router.push({name: 'Home'});
                     },
 
                     errorHandler: (err) => {

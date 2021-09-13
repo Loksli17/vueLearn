@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import store                                                  from '../store/';
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -29,8 +30,13 @@ const routes: Array<RouteRecordRaw> = [
     },
     {
         path: '/auth/login',
-        name: 'login',
+        name: 'Login',
         component: () => import('../views/Login.vue'),
+    },
+    {
+        path     : "/:pathMatch(.*)*",
+        name     : '404',
+        component: () => import('../views/404.vue'),
     },
 ];
 
@@ -41,4 +47,21 @@ const router = createRouter({
 });
 
 
-export default router
+router.beforeEach((to, from, next) => {
+
+    const isAuth: boolean = store.getters.isAuth;
+
+    if(to.name !== "Login" && !isAuth){
+        next({name: 'Login'});
+    }else if(to.name == "Login" && isAuth){
+        next({name: '404'})
+    }else if(to.path === '/logout'){
+        store.commit('setUserIdentity', null);
+        store.commit('setJWT', null);
+        router.push('/login');
+    }else{
+        next();
+    }
+});
+
+export default router;
