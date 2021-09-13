@@ -29,7 +29,6 @@ export class App{
 
         this.app.use(this.logErrors);
         this.app.use(this.errorHandler);
-        this.app.use(cookieParser(config.secret.session));
     }
 
     public static get Instance(): App{
@@ -54,10 +53,13 @@ export class App{
     private createMiddlewares(){
         this.app.use(cors(
             {
-                origin: config.cors.origin,
-                methods: config.cors.methods,
+                origin        : config.cors.origin,
+                methods       : config.cors.methods,
+                credentials   : true,
+                exposedHeaders: ['set-cookie']
             }
         ));
+        this.app.use(cookieParser(config.secret.session));
         this.app.use(express.json({limit: '30mb'}));
         this.app.use(express.static('public'));
         this.app.use(express.urlencoded({extended: true, limit: '30mb'}));

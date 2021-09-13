@@ -8,8 +8,9 @@ import config                             from './config/config';
 import store                              from './store';
 import axiosOrigin                        from 'axios';
 
-// ! error here !!!!!!
+// ! it is a bad way, but it is fun for now !!!!!!
 axiosOrigin.defaults.headers.common['Authorization'] = store.getters.getJWT;
+axiosOrigin.defaults.withCredentials = true;
 
 declare module '@vue/runtime-core'{
     interface ComponentCustomProperties{

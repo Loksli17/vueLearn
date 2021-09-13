@@ -59,7 +59,7 @@
                         this.$store.commit('setJWT', res.data.accessToken);
 
                         this.$router.push({name: 'Home'});
-                        axiosOrigin.defaults.headers.common['Authorization'] = this.$store.getters.getJWT
+                        axiosOrigin.defaults.headers.common['Authorization'] = this.$store.getters.getJWT;
                     },
 
                     errorHandler: (err) => {

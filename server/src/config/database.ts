@@ -4,7 +4,6 @@ import config from './../config';
 const init = () => {
     try {
         return mysql2.createPool({
-            connectionLimit: 10,
             host           : '127.0.0.1',
             user           : config.db.user,
             password       : config.db.password,

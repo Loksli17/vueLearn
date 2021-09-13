@@ -4,7 +4,7 @@ import Query                         from "../libs/query";
 import pool                          from '../config/database';
 import { Pool }                      from "mysql2/promise";
 import crypto                        from 'crypto-js';
-import jwt                           from 'jsonwebtoken';
+import jwt, { JwtPayload }                           from 'jsonwebtoken';
 import config                        from "../config";
 
 
@@ -16,7 +16,7 @@ export default class AuthController{
     public static checkAccessToken(req: Request, res: Response, next: NextFunction){
 
         const
-            authUrls: Array<string>      = ['/auth/login', '/auth/get-token'], 
+            authUrls: Array<string>      = ['/auth/login', '/auth/create-tokens'], 
             token   : string | undefined = req.headers.authorization;
 
         if(authUrls.includes(req.originalUrl)){next(); return}
@@ -24,11 +24,10 @@ export default class AuthController{
         if(!token) { res.status(401).send({msg: ErrorMessage.notFound('token')}); return; }
 
         try{
-            let kek = jwt.verify(token, config.secret.jwt);
-            console.log(kek);
+            jwt.verify(token, config.secret.jwt);
             next();
         }catch(error){
-            console.log('token error', error);
+            // console.log('token error', error);
             res.status(401).send({msg: error});
             return;
         }
@@ -37,6 +36,49 @@ export default class AuthController{
 
     private static createTokens(req: Request, res: Response){
         
+        let
+            refreshToken: string | undefined = req.cookies.refreshToken,
+            mysql       : Pool | undefined   = pool(),
+            id          : number             = 0,
+            accessToken : string             = '';
+
+        if(!refreshToken) { res.status(200).send({msg: 'token expired'}); return; }
+
+        if(!mysql) { res.status(400).send({error: ErrorMessage.db()}); return }
+
+        try {
+            id = (jwt.verify(refreshToken, config.secret.jwt) as JwtPayload).id;
+        } catch (error) {
+            // todo: relogin of user
+            //! user must relogin yet
+            res.status(400).send({msg: 'refreshToken expired'});
+            return;
+        }
+
+        mysql.query(
+            'select refreshToken from `user` where id = ?', [id]
+        ).then((value: any) => {
+
+            console.log('ref2: ', refreshToken);
+            console.log('db__:', value[0][0].refreshToken)
+
+            if(value[0][0].refreshToken === refreshToken){
+                refreshToken = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '24h'});
+                accessToken  = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '10s'});
+
+                res.cookie('refreshToken', refreshToken, {maxAge: 1000 * 60 * 60 * 25, httpOnly: true});
+                res.status(200).send({accessToken: accessToken});
+
+                // mysql!.query('update `user` set refreshToken = ? where id = ?', [refreshToken, id]);
+                return;
+            }
+
+            res.status(400).send({msg: 'refreshToken expired'});
+        }).catch(error => {
+            console.error(error);
+            res.status(400).send({msg: error});
+            return;
+        });
     }
 
 
@@ -70,13 +112,15 @@ export default class AuthController{
             if(user == undefined) { res.status(401).send({errors: {email: 'Uncorrect email'}}); return } 
             if(user.password !== crypto.SHA512(QueryData.password).toString()) { res.status(401).send({errors: {password: 'Uncorrect password'}}); return; }
             
-            refreshToken = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '24h'}), {maxAge: 1000 * 60 * 60 * 25, httpOnly: true};
-            accessToken  = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '1m'});
+            refreshToken = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '24h'});
+            accessToken  = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '10s'});
 
-            res.cookie('refreshToken', refreshToken);
+            console.log('ref1: ', refreshToken);
+
+            res.cookie('refreshToken', refreshToken, {maxAge: 1000 * 60 * 60 * 25, httpOnly: true});
             res.status(200).send({accessToken: accessToken, user: user});
 
-            return mysql!.query('update `user` set refreshToken = ?', [refreshToken]);
+            return mysql!.query('update `user` set refreshToken = ? where id = ?', [refreshToken, user.id]);
         }).catch(error => {
             console.error(error);
             res.status(400).send({error: ErrorMessage.db()});
