@@ -181,6 +181,8 @@ class FacadeAxios{
         this.axiosData = data;
         await this.query('put');
     }
+
+
     public set settings(settings: AxiosSettings){
         this.settings_ = settings;
     }

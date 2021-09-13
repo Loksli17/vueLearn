@@ -6,6 +6,10 @@ import flashMessage, {FlashMessagePlugin} from '@smartweb/vue-flash-message';
 import axios                              from './libs/axios';
 import config                             from './config/config';
 import store                              from './store';
+import axiosOrigin                        from 'axios';
+
+// ! error here !!!!!!
+axiosOrigin.defaults.headers.common['Authorization'] = store.getters.getJWT;
 
 declare module '@vue/runtime-core'{
     interface ComponentCustomProperties{

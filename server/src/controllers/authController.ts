@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import ErrorMessage                  from "../libs/error";
 import Query                         from "../libs/query";
 import pool                          from '../config/database';
@@ -13,7 +13,34 @@ export default class AuthController{
     private static router: Router = Router();
 
 
-    private static authentificateUser(req: Request, res: Response){
+    public static checkAccessToken(req: Request, res: Response, next: NextFunction){
+
+        const
+            authUrls: Array<string>      = ['/auth/login', '/auth/get-token'], 
+            token   : string | undefined = req.headers.authorization;
+
+        if(authUrls.includes(req.originalUrl)){next(); return}
+
+        if(!token) { res.status(401).send({msg: ErrorMessage.notFound('token')}); return; }
+
+        try{
+            let kek = jwt.verify(token, config.secret.jwt);
+            console.log(kek);
+            next();
+        }catch(error){
+            console.log('token error', error);
+            res.status(401).send({msg: error});
+            return;
+        }
+    }
+
+
+    private static createTokens(req: Request, res: Response){
+        
+    }
+
+
+    private static loginUser(req: Request, res: Response){
 
         interface QueryData{
             email   : string;
@@ -44,7 +71,7 @@ export default class AuthController{
             if(user.password !== crypto.SHA512(QueryData.password).toString()) { res.status(401).send({errors: {password: 'Uncorrect password'}}); return; }
             
             refreshToken = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '24h'}), {maxAge: 1000 * 60 * 60 * 25, httpOnly: true};
-            accessToken  = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '15m'});
+            accessToken  = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '1m'});
 
             res.cookie('refreshToken', refreshToken);
             res.status(200).send({accessToken: accessToken, user: user});
@@ -58,7 +85,8 @@ export default class AuthController{
 
 
     public static routes(): Router{
-        this.router.post('/authentification', this.authentificateUser);
+        this.router.post('/login', this.loginUser);
+        this.router.post('/create-tokens', this.createTokens);
         
         return this.router;
     }

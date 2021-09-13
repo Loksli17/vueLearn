@@ -8,7 +8,6 @@ const store = createStore({
     },
 
     getters: {
-
         isAuth: function(state): boolean{
             const jsonUser: string | null = localStorage.getItem('userIdentity');
             return jsonUser != 'undefined' ? true : false;
@@ -17,6 +16,11 @@ const store = createStore({
         getUser: function(state): Record<string, unknown> | null{
             const jsonUser: string | null = localStorage.getItem('userIdentity');
             return (jsonUser && jsonUser != 'undefined') ? JSON.parse(jsonUser) : null;
+        },
+
+        getJWT: function(state): string | null{
+            const jwt: string | null = localStorage.getItem('jwt');
+            return (jwt && jwt != 'undefined') ? jwt : null;
         }
     },
 

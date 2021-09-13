@@ -15,6 +15,7 @@
     import { defineComponent }                                from 'vue';
     import Form, { FormHtmlItem, FormData as FD , FormErrors} from '../components/crudComponent/newForm.vue';
     import { AxiosResponse }                                  from 'axios';
+    import axiosOrigin                                        from 'axios';
 
 
     export default defineComponent({
@@ -46,7 +47,7 @@
             sendForm: async function(formData: FD){
                 
                 await axios.post({
-                    url                    : '/auth/authentification',
+                    url                    : '/auth/login',
                     data                   : formData,
                     status                 : 200,
                     errorServerFlashMessage: false,
@@ -58,6 +59,7 @@
                         this.$store.commit('setJWT', res.data.accessToken);
 
                         this.$router.push({name: 'Home'});
+                        axiosOrigin.defaults.headers.common['Authorization'] = this.$store.getters.getJWT
                     },
 
                     errorHandler: (err) => {
