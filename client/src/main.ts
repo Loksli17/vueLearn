@@ -13,6 +13,10 @@ import axiosOrigin, {AxiosError, AxiosResponse}                        from 'axi
 axiosOrigin.defaults.headers.common['Authorization'] = store.getters.getJWT;
 axiosOrigin.defaults.withCredentials = true;
 
+// axiosOrigin.defaults.validateStatus = (status) => {
+//     return (status >= 200 && status < 300) || (status == 401);
+// }
+
 declare module '@vue/runtime-core'{
     interface ComponentCustomProperties{
         $filters: typeof filters;

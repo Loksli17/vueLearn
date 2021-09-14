@@ -237,3 +237,45 @@
         },
     });
 </script>
+
+<style lang="scss" scoped>
+    
+    .pages{
+
+        margin-top: 30px;
+
+        .pages-wrap{
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: max-content;
+
+            div{
+                .page{
+                    display: block;
+                    padding: 10px 15px;
+                    font-size: 20px;
+                    color: #000;
+                    text-decoration: none;
+                    border-top: 2px #85e7ca solid;
+                    border-bottom: 2px #85e7ca solid;
+                    border-right: 2px #85e7ca solid;
+
+                    &:hover{
+                        background: paleturquoise;
+                        transition: 0.4s;
+                    }
+                }
+
+                .active-page{
+                    background: #85e7ca;
+                }
+
+                &:first-child .page{
+                    border-left: 2px #48d8ad solid;
+                }
+            } 
+        }
+    }
+    
+
+</style>

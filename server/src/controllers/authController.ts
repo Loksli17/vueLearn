@@ -57,7 +57,7 @@ export default class AuthController{
         ).then((value: any) => {
 
             if(value[0][0].refreshToken === refreshToken){
-                accessToken  = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '1m'});
+                accessToken  = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '30m'});
                 res.status(200).send({accessToken: accessToken});
                 return;
             }
@@ -102,7 +102,7 @@ export default class AuthController{
             if(user.password !== crypto.SHA512(QueryData.password).toString()) { res.status(401).send({errors: {password: 'Uncorrect password'}}); return; }
             
             refreshToken = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '24h'});
-            accessToken  = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '1m'});
+            accessToken  = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '30m'});
 
             res.cookie('refreshToken', refreshToken, {maxAge: 1000 * 60 * 60 * 24, httpOnly: true});
             res.status(200).send({accessToken: accessToken, user: user});
