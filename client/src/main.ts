@@ -75,14 +75,19 @@ axiosOrigin.interceptors.response.use(
             const res = await axiosOrigin.post('/auth/create-tokens');
 
             if(res.status === 200){
-                store.commit('setJWT', res.data.accessToken);
-                axiosOrigin.defaults.headers.common['Authorization'] = res.data.accessToken;
-                request.headers.common['Authorization'] = res.data.accessToken;
-                return axiosOrigin.request(request);
+
+                if(res.data.msg !== "token expired"){
+                    store.commit('setJWT', res.data.accessToken);
+                    axiosOrigin.defaults.headers.common['Authorization'] = res.data.accessToken;
+                    request.headers.common['Authorization'] = res.data.accessToken;
+                    return axiosOrigin.request(request);
+                }else{
+                    store.commit('setUserIdentity', null);
+                    store.commit('setJWT', null);
+                    router.push({name: 'Login'});
+                    return Promise.reject(error);
+                }
             }else{
-                store.commit('setJWT', null);
-                store.commit('userIdentity', null);
-                router.push({name: 'login'});
                 return Promise.reject(error);
             }
         }

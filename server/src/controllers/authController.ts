@@ -23,7 +23,7 @@ export default class AuthController{
 
         if(!token) { res.status(401).send({msg: ErrorMessage.notFound('token')}); return; }
 
-        console.log('accessToken:', token);
+        // console.log('accessToken:', token);
 
         try{
             jwt.verify(token, config.secret.jwt);
@@ -52,9 +52,10 @@ export default class AuthController{
             id = (jwt.verify(refreshToken, config.secret.jwt) as JwtPayload).id;
             console.log(id);
         } catch (error) {
+            console.log('BAD REFRESH -------------- \n');
             // todo: relogin of user
             //! user must relogin yet
-            res.status(400).send({msg: 'refreshToken expired'});
+            res.status(200).send({msg: 'token expired'});
             return;
         }
 
@@ -67,13 +68,14 @@ export default class AuthController{
 
             if(value[0][0].refreshToken === refreshToken){
 
-                refreshToken = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '1m'});
+                // refreshToken = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '30s'});
                 accessToken  = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '10s'});
 
-                res.cookie('refreshToken', refreshToken, {maxAge: 1000 * 60 * 60 * 25, httpOnly: true});
+                // res.cookie('refreshToken', refreshToken, {maxAge: 1000 * 60 * 60 * 25, httpOnly: true});
                 res.status(200).send({accessToken: accessToken});
+                return;
 
-                return mysql!.query('update `user` set refreshToken = ? where id = ?', [refreshToken, id]);
+                // return mysql!.query('update `user` set refreshToken = ? where id = ?', [refreshToken, id]);
             }
 
             res.status(400).send({msg: 'refreshToken expired'});
@@ -115,10 +117,10 @@ export default class AuthController{
             if(user == undefined) { res.status(401).send({errors: {email: 'Uncorrect email'}}); return } 
             if(user.password !== crypto.SHA512(QueryData.password).toString()) { res.status(401).send({errors: {password: 'Uncorrect password'}}); return; }
             
-            refreshToken = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '1m'});
+            refreshToken = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '30s'});
             accessToken  = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '10s'});
 
-            console.log('ref1: ', accessToken);
+            console.log('ref1: ', refreshToken);
 
             res.cookie('refreshToken', refreshToken, {maxAge: 1000 * 60 * 60 * 25, httpOnly: true});
             res.status(200).send({accessToken: accessToken, user: user});
