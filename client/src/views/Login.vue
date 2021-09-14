@@ -36,6 +36,7 @@
         },
 
         methods: {
+            
             initFormRows: function(){
                 this.rowsForm = [
                     [{type: 'email', name: 'email', label: 'E-mail'}],
@@ -66,7 +67,7 @@
                         this.formErrors = err.response.data.errors;
                         console.log('err res:', this.formErrors);
                     }
-                })
+                });
             },
         }
     });

@@ -66,28 +66,4 @@ router.beforeEach((to, from, next) => {
 });
 
 
-axios.interceptors.response.use(
-    (res: AxiosResponse) => {
-        return res
-    },
-    async (error: AxiosError) => {
-        const request = error.config;
-        console.log('req: ', request);
-
-        if(error && error.response && error.response.status == 401){
-            console.log('!!!!!!!!!');
-            const res = await axios.post('/auth/create-tokens');
-
-            if(res.status === 200){
-                store.commit('setJWT', res.data.accessToken);
-                console.log(res.data.accessToken);
-                // return axios.request(request);
-            }else{
-                router.push({name: 'login'});
-                return Promise.reject(error);
-            }
-        }
-    }
-)
-
 export default router;

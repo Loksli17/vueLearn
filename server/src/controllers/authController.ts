@@ -23,6 +23,8 @@ export default class AuthController{
 
         if(!token) { res.status(401).send({msg: ErrorMessage.notFound('token')}); return; }
 
+        console.log('accessToken:', token);
+
         try{
             jwt.verify(token, config.secret.jwt);
             next();
@@ -38,7 +40,7 @@ export default class AuthController{
         
         let
             refreshToken: string | undefined = req.cookies.refreshToken,
-            mysql       : Pool | undefined   = pool(),
+            mysql       : Pool | undefined   = pool,
             id          : number             = 0,
             accessToken : string             = '';
 
@@ -48,6 +50,7 @@ export default class AuthController{
 
         try {
             id = (jwt.verify(refreshToken, config.secret.jwt) as JwtPayload).id;
+            console.log(id);
         } catch (error) {
             // todo: relogin of user
             //! user must relogin yet
@@ -63,14 +66,14 @@ export default class AuthController{
             console.log('db__:', value[0][0].refreshToken)
 
             if(value[0][0].refreshToken === refreshToken){
-                refreshToken = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '24h'});
+
+                refreshToken = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '1m'});
                 accessToken  = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '10s'});
 
                 res.cookie('refreshToken', refreshToken, {maxAge: 1000 * 60 * 60 * 25, httpOnly: true});
                 res.status(200).send({accessToken: accessToken});
 
-                // mysql!.query('update `user` set refreshToken = ? where id = ?', [refreshToken, id]);
-                return;
+                return mysql!.query('update `user` set refreshToken = ? where id = ?', [refreshToken, id]);
             }
 
             res.status(400).send({msg: 'refreshToken expired'});
@@ -90,7 +93,7 @@ export default class AuthController{
         }
 
         let
-            mysql       : Pool | undefined       = pool(),
+            mysql       : Pool | undefined       = pool,
             dataErrors  : Array<keyof QueryData> = [],
             refreshToken: string                 = '',
             accessToken : string                 = '',
@@ -112,10 +115,10 @@ export default class AuthController{
             if(user == undefined) { res.status(401).send({errors: {email: 'Uncorrect email'}}); return } 
             if(user.password !== crypto.SHA512(QueryData.password).toString()) { res.status(401).send({errors: {password: 'Uncorrect password'}}); return; }
             
-            refreshToken = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '24h'});
+            refreshToken = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '1m'});
             accessToken  = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '10s'});
 
-            console.log('ref1: ', refreshToken);
+            console.log('ref1: ', accessToken);
 
             res.cookie('refreshToken', refreshToken, {maxAge: 1000 * 60 * 60 * 25, httpOnly: true});
             res.status(200).send({accessToken: accessToken, user: user});

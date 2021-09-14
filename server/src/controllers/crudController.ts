@@ -16,7 +16,7 @@ export default class CrudController{
         }
 
         let
-            mysql = pool(),
+            mysql = pool,
             QueryData : QueryData              = req.body,
             dataErrors: Array<keyof QueryData> = [];
 
@@ -36,10 +36,10 @@ export default class CrudController{
             'select `article`.id, `article`.views, `article`.`date`, `article`.`time`, `article`.isReady, `articleType`.`title` as `t_title`, `article`.title from `article` left join `articleType` on `articleType`.`id` = `article`.`articleTypeId` order by `article`.`id` desc limit ?, ? ', 
             [Number(QueryData.skip), Number(QueryData.take)]
         )
-        .then(value => {
+        .then((value: any) => {
             res.status(200).send({articles: value[0]});
         })
-        .catch(error => {
+        .catch((error: any) => {
             console.error(error);
             res.status(400).send({error: ErrorMessage.db()});
         });
@@ -49,7 +49,7 @@ export default class CrudController{
 
     private static async getAmountArticles(req: Request, res: Response){
 
-        let mysql = pool();
+        let mysql = pool;
 
         if(mysql == undefined){
             res.status(400).send({error: ErrorMessage.db()});
@@ -57,10 +57,10 @@ export default class CrudController{
         }
         
         mysql.query('select count(*) from `article`')
-        .then(value => {
+        .then((value: any) => {
             res.status(200).send({amount: (value[0] as any)[0]['count(*)']});
         })
-        .catch(error => {
+        .catch((error: any) => {
             console.error(error);
             res.status(400).send({error: ErrorMessage.db()});
         });
@@ -74,7 +74,7 @@ export default class CrudController{
         }
 
         let
-            mysql = pool(),
+            mysql = pool,
             QueryData : QueryData              = req.params as any,
             dataErrors: Array<keyof QueryData> = [];
 
@@ -94,7 +94,7 @@ export default class CrudController{
             'select `article`.id, `article`.views, `article`.`date`, `article`.`time`, `article`.isReady, `articleType`.`title` as `t_title`, `articleType`.`id` as `articleTypeId`, `article`.title, `article`.`text` from `article` left join `articleType` on `articleType`.`id` = `article`.`articleTypeId` where `article`.`id` = ?',
             [Number(QueryData.id)]
         )
-        .then(value => {
+        .then((value: any) => {
             res.status(200).send({article: (value[0] as Array<object>)[0]});
         })
         .catch((reason: any) => {
@@ -112,7 +112,7 @@ export default class CrudController{
         }
 
         let
-            mysql = pool(),
+            mysql = pool,
             QueryData : QueryData              = req.params as any,
             dataErrors: Array<keyof QueryData> = [];
 
@@ -129,10 +129,10 @@ export default class CrudController{
         }
 
         mysql.query('delete from `article` where id = ?', [Number(QueryData.id)])
-        .then(value => {
+        .then((value: any) => {
             res.status(200).send({msg: `Article with id: ${QueryData.id} was deleted successfully`});
         })
-        .catch(error => {
+        .catch((error: any) => {
             console.error(error);
             res.status(400).send({error: ErrorMessage.db()})
         }); 
@@ -141,7 +141,7 @@ export default class CrudController{
 
     private static getTypes(req: Request, res: Response){
         
-        let mysql = pool();
+        let mysql = pool;
 
         if(mysql == undefined){
             res.status(400).send({error: ErrorMessage.db()});
@@ -149,10 +149,10 @@ export default class CrudController{
         }
 
         mysql.query('select * from articleType')
-        .then(value => {
+        .then((value: any) => {
             res.status(200).send({types: value[0]});
         })
-        .catch(error => {
+        .catch((error: any) => {
             console.error(error);
             res.status(400).send({error: ErrorMessage.db()});
         });
@@ -174,7 +174,7 @@ export default class CrudController{
         }
 
         let
-            mysql = pool(),
+            mysql = pool,
             QueryData : QueryData               = req.body as any,
             dataErrors: Array<keyof QueryData>  = [];
 
@@ -197,9 +197,9 @@ export default class CrudController{
                 QueryData.article.title, 0, QueryData.article.text, QueryData.article.isReady, 'default.jpg', QueryData.article.date,
                 QueryData.article.time, QueryData.article.articleTypeId, 
             ]
-        ).then(value => {
+        ).then((value: any) => {
             res.status(200).send({types: value[0]});
-        }).catch(error => {
+        }).catch((error: any) => {
             console.error(error);
             res.status(400).send({error: ErrorMessage.db()});
         });
@@ -223,7 +223,7 @@ export default class CrudController{
         }
 
         let
-            mysql = pool(),
+            mysql = pool,
             QueryData : QueryData               = req.body as any,
             dataErrors: Array<keyof QueryData>  = [];
 
@@ -247,9 +247,9 @@ export default class CrudController{
                 QueryData.article.title, QueryData.article.text, QueryData.article.isReady, QueryData.article.date,
                 QueryData.article.time, QueryData.article.articleTypeId, QueryData.article.id,
             ]
-        ).then(value => {
+        ).then((value: any) => {
             res.status(200).send({types: value[0]});
-        }).catch(error => {
+        }).catch((error: any) => {
             console.error(error);
             res.status(400).send({error: ErrorMessage.db()});
         });

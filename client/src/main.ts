@@ -6,7 +6,8 @@ import flashMessage, {FlashMessagePlugin} from '@smartweb/vue-flash-message';
 import axios                              from './libs/axios';
 import config                             from './config/config';
 import store                              from './store';
-import axiosOrigin                        from 'axios';
+import axiosOrigin, {AxiosError, AxiosResponse}                        from 'axios';
+
 
 // ! it is a bad way, but it is fun for now !!!!!!
 axiosOrigin.defaults.headers.common['Authorization'] = store.getters.getJWT;
@@ -57,5 +58,36 @@ axios.settings = {
     errorStatusFlashMessage: {title: 'Error', text: 'bad request'},
     flashMessage           : app.config.globalProperties.$flashMessage,
 }
+
+axiosOrigin.interceptors.response.use(
+    
+    (res: AxiosResponse) => {
+        return res
+    },
+
+    async (error: AxiosError) => {
+        const request = error.config;
+        console.log('req: ', request);
+
+        if(error && error.response && error.response.status == 401){
+            console.log('!!!!!!!!!');
+
+            const res = await axiosOrigin.post('/auth/create-tokens');
+
+            if(res.status === 200){
+                store.commit('setJWT', res.data.accessToken);
+                axiosOrigin.defaults.headers.common['Authorization'] = res.data.accessToken;
+                request.headers.common['Authorization'] = res.data.accessToken;
+                return axiosOrigin.request(request);
+            }else{
+                store.commit('setJWT', null);
+                store.commit('userIdentity', null);
+                router.push({name: 'login'});
+                return Promise.reject(error);
+            }
+        }
+    }
+)
+
 
 app.use(store).use(router).mount('#app');
