@@ -1,8 +1,5 @@
 <template>
-    <td>
-        <!-- <a href="" @click.prevent="removeArticle(item.id)">Delete</a>
-        <router-link :to="`/crud/${item.id}/edit`">Edit</router-link>
-        <router-link :to="`/crud/${item.id}/view`">View</router-link> -->
+    <td v-if="!actionsAsDropDownList">
         <template v-for="action in actions" :key="action.id">
             <router-link 
                 v-if="action.path !== undefined"
@@ -21,13 +18,23 @@
             </a>
         </template>
     </td>
+    <td v-else>
+        <a href="" v-click-outside="() => {showDropDown = false}" @click.prevent="showDropDown = !showDropDown">click</a>
+        <div v-show="showDropDown">
+            <TableRowDropDownActionMenu :actions="actions" :itemId="itemId" />
+        </div>
+    </td>
 </template>
 
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
     import { Action } from "./types";
+    import TableRowDropDownActionMenu from "./TableRowDropDownActionMenu.vue";
 
     export default defineComponent({
+        components: {
+            TableRowDropDownActionMenu
+        },
         props: {
             itemId: {
                 type: Number,
@@ -36,6 +43,14 @@
             actions: {
                 type: Object as PropType<Array<Action>>,
                 required: true
+            },
+            actionsAsDropDownList: {
+                type: Boolean
+            }
+        },
+        data() {
+            return {
+                showDropDown: false
             }
         }
     });

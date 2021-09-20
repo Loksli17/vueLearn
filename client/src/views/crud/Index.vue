@@ -81,7 +81,7 @@
                         { name: "Edit", path: (id: number) => `/crud/${id}/edit` }, 
                         { name: "Delete", handler: this.removeArticle },
                 ] as Array<Action>,
-                tableConfig: { sortableByColumn: true, hideColumn: [] } as TableConfig,
+                tableConfig: { sortableByColumn: true, hideColumn: [], dropDownActions: true } as TableConfig,
                 take          : 10 as number,
                 currentPage   : 1 as number,
                 amountArticles: 0 as number, 

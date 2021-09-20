@@ -5,7 +5,12 @@
                 {{ value }}
             </td>
         </template>
-        <TableRowActionCell v-if="actions" :actions="actions" :itemId="row.id" />
+        <TableRowActionCell 
+            v-if="actions" 
+            :actions="actions" 
+            :itemId="row.id" 
+            :actionsAsDropDownList="actionsAsDropDownList"
+        />
     </tr>
 </template>
 
@@ -29,6 +34,9 @@
             },
             columnsToHide: {
                 type: Object as PropType<Array<{ pos: number }> | undefined>
+            },
+            actionsAsDropDownList: {
+                type: Boolean
             }
         }
     })

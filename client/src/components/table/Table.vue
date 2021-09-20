@@ -16,6 +16,7 @@
                 :row="row" 
                 :actions="actions"
                 :columnsToHide="columnNamesToBeHidden"
+                :actionsAsDropDownList="config.dropDownActions"
             />
         </tbody>
         <tfoot>
@@ -53,6 +54,7 @@
                 default: () => ({
                     hideColumn:       undefined,
                     sortableByColumn: false,
+                    dropDownActions:  false
                     // comparator:       undefined
                 })
             }
@@ -85,11 +87,12 @@
                 let arr: Array<Record<string, columnType>> = [];
 
                 if (this.config.sortableByColumn) {
+                    
                     const comparator = /*this.config.comparator ?? */((row1: Record<string, columnType>, row2: Record<string, columnType>): number => {
                         const
                             columnName = Object.keys(this.reorderedRows[0])[this.columnId],
-                            val1       = row1[columnName].toString().toLowerCase(),
-                            val2       = row2[columnName].toString().toLowerCase();
+                            val1 = row1[columnName].toString().toLowerCase(),
+                            val2 = row2[columnName].toString().toLowerCase();
 
                         let res = 0;
                         if (val1 < val2) {

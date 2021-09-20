@@ -36,6 +36,13 @@ export interface TableConfig {
     hideColumn?: Array<number>;
     /** Enables sorting of the table be the means of clicking on the column header */
     sortableByColumn: boolean;
+    /** Determines how actions are displayer:
+     * 
+     * true - as dropdown list
+     * 
+     * false - in a cell
+     */
+    dropDownActions?: boolean;
     /** Function for sorting the table. If undefined, a default comparator is used
      * ! I have suddenly realised, that this couldn't possibly work
      */
