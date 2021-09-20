@@ -60,17 +60,16 @@
 
         components: {
             Pagination,
-            Table
+            Table,
         },
 
         data: function(){
             return {
                 articles      : [] as Array<Record<string, unknown>>,
                 columnNames   : [ 
-                        // ? can we create new structure such as : { fieldName: 't_type', viewName: 'Type' } ?
                         { displayedName: "Id",      fieldName: "id" },
                         { displayedName: "Title",   fieldName: "title" },
-                        { displayedName: "Type",    fieldName: "t_title" },
+                        { displayedName: "Type",    fieldName: "t_title", columnHandler: (val: string) => val.toUpperCase() },
                         { displayedName: "Ready",   fieldName: "isReady" },
                         { displayedName: "Time",    fieldName: "time" },
                         { displayedName: "Date",    fieldName: "date" },

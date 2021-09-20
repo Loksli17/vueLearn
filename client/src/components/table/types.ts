@@ -1,6 +1,14 @@
 export interface Column {
     fieldName: string;
     displayedName: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    columnHandler?: (value: any) => string;
+}
+
+export interface CustomCell {
+    fieldName: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    component: any;
 }
 
 export interface Action {
@@ -15,6 +23,7 @@ export interface Action {
      * 
      * NOTE: Handlers may require to bind their 'this' parameter
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     handler?: (arg: any) => void;
     cssClassName?: string;
 }
