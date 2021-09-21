@@ -14,9 +14,9 @@ import axiosOrigin, {AxiosError, AxiosResponse} from 'axios';
 axiosOrigin.defaults.headers.common['Authorization'] = store.getters.getJWT;
 axiosOrigin.defaults.withCredentials = true;
 
-// axiosOrigin.defaults.validateStatus = (status) => {
-//     return (status >= 200 && status < 300) || (status == 401);
-// }
+axiosOrigin.defaults.validateStatus = (status) => {
+    return status !== 401;
+}
 
 declare module '@vue/runtime-core'{
     interface ComponentCustomProperties{
