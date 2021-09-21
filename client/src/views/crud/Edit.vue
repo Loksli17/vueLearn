@@ -42,12 +42,16 @@
     import { AxiosResponse }                from 'axios';
     import DropDownList, { ListItem }       from '../../components/DropDownList.vue';
     import DropList                         from '../../components/dropDown/DropDown.vue';
+    import ArticleTypeService               from '../../services/ArticleTypeService';
+    import ArticleService                   from '../../services/ArticleService';
+    import FlashMessageData                 from '../../libs/flashMessage';
 
-    interface ArticleType{
-        id   : number;
-        title: string;
-        img  : string;
-    }
+
+    // interface ArticleType{
+    //     id   : number;
+    //     title: string;
+    //     img  : string;
+    // }
 
     export default defineComponent({
         
@@ -58,7 +62,7 @@
 
         data: function(){
             return {
-                types   : [] as Array<ArticleType>,
+                types   : [] as Array<Record<string, any>>,
                 article : {} as Record<string, unknown>,
                 curID   : 1,
                 rowsForm: null as Array<Array<FormHtmlItem>> | null,
@@ -85,24 +89,14 @@
         methods: {
             
             getTypes: async function(){
-
-                await axios.get({
-                    url: '/crud/article-types',
-                    handler: (res: AxiosResponse) => {
-                        this.types = res.data.types;
-                    },
-                });
+                this.types = await ArticleTypeService.getAll() || [];
             },
 
             getArticle: async function(){
+                const article = await ArticleService.getOneDb({id: this.$route.params.id});
 
-                await axios.get({
-                    url: `/crud/${this.$route.params.id}`,
-                    handler: (res: AxiosResponse) => {
-                        this.article = res.data.article;
-                        console.log(this.article);
-                    }
-                });
+                if(article == null) return;
+                this.article = article;
             },
 
             initRowsForm: function(){
@@ -116,26 +110,16 @@
             },
 
             initDataForm: function(){
-
                 this.dataForm = this.article as FormData;
                 this.dataForm.date = this.$filters.dateToDb(this.article.date as string);
-
             },
 
-            sendForm: async function(formData: FormData){                
-                await axios.put({
-                    url: `crud/${this.$route.params.id}/edit`,
-                    handler: (res: AxiosResponse) => {
-                        console.log(res); // ! think about unnessasery handler
-                    },
-                    data: {
-                        article: formData
-                    },
-                    successFlashMessage: {
-                        title: 'Inserting of artcile', 
-                        text : 'New article was created successfully',
-                    }
-                });
+            sendForm: async function(formData: FormData){ 
+
+                //! important
+                // TODO: fix FORMDATA form form
+                await ArticleService.editOne({article: formData});                
+                this.$flashMessage.show(FlashMessageData.successMessage('Edit article', `Article with id = ${formData.id} was edit`));
             },
         }
     });

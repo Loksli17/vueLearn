@@ -50,7 +50,7 @@
 
         mounted: async function(){
             this.id      = Number(this.$route.params.id);
-            this.article = await ArticleService.getOne({id: this.id});
+            this.article = await ArticleService.getOneView({id: this.id});
         },
     });
 

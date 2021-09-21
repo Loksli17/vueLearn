@@ -25,14 +25,14 @@ const decorators = {
         }
     },
 
-    normalArticle: () => {
+    normalArticle: (param: string) => {
         return (target: Record<string, any>, propertyKey: string, descriptor: PropertyDescriptor) => {
 
             const method = descriptor.value;
 
             descriptor.value = async function(...args: any[]){
                 const article = await method.apply(this, args);
-                article.date = Filters.dateToView(article.date as Date);
+                article.date = param == "db" ? Filters.dateToDb(article.date as Date) : Filters.dateToView(article.date as Date);
                 return article;
             }
 
@@ -71,9 +71,8 @@ export default class ArticleService{
         return response.data.amount;
     }
 
-    
-    @decorators.normalArticle()
-    public static async getOne(data: Record<string, any>): Promise<Record<string, any> | null>{
+
+    private static async getOne(data: Record<string, any>): Promise<Record<string, any> | null>{
 
         const response: AxiosResponse | void = await axios.get(`/crud/${data.id}`, data)
         .catch((reason) => {
@@ -84,11 +83,36 @@ export default class ArticleService{
 
         return response.data.article;
     }
+    
+    @decorators.normalArticle("view")
+    public static async getOneView(data: Record<string, any>): Promise<Record<string, any> | null>{
+        return await ArticleService.getOne(data);
+    }
+
+    @decorators.normalArticle("db")
+    public static async getOneDb(data: Record<string, any>): Promise<Record<string, any> | null>{
+        return await ArticleService.getOne(data);
+    }
 
     
     public static async removeOne(data: Record<string, any>): Promise<void | null>{
 
         const response: AxiosResponse | void = await axios.delete(`/crud/${data.id}/remove`, data)
+        .catch((reason) => {
+            console.error(reason);
+        });
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        return;
+    }
+
+    
+    public static async editOne(data: Record<string, any>): Promise<void | null>{
+
+        console.log(data);
+
+        const response: AxiosResponse | void = await axios.put(`/crud/${data.id}/edit`, data)
         .catch((reason) => {
             console.error(reason);
         });
