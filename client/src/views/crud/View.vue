@@ -26,11 +26,13 @@
     </div>    
 </template>
 
+
 <script lang="ts">
     import {defineComponent} from 'vue';
     import axios             from '../../libs/axios';
     import { AxiosResponse } from 'axios';
     import GridView          from '../../components/crudComponent/GridView.vue';
+    import ArticleService    from '../../services/ArticleService';
 
     export default defineComponent({
 
@@ -41,22 +43,14 @@
         data: function(){
             return {
                 id     : 0 as number,
-                article: {} as Record<string, unknown>,
+                article: {} as Record<string, any> | null,
                 fields : {'t_title': 'Type of article'},
             }
         },
 
         mounted: async function(){
-            this.id = Number(this.$route.params.id);
-            
-            await axios.get({
-                url: `/crud/${this.id}`,
-                data: {id: this.id},
-                handler: (res: AxiosResponse) => {
-                    this.article = res.data.article;
-                    this.article.date = this.$filters.dateToView(this.article.date as Date);
-                }
-            });
+            this.id      = Number(this.$route.params.id);
+            this.article = await ArticleService.getOne({id: this.id});
         },
     });
 

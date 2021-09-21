@@ -4,6 +4,7 @@ import Query                         from "../libs/query";
 import pool                          from '../config/database';
 import { FileArray }                 from "express-fileupload";
 
+
 export default class CrudController{
 
     private static router: Router = Router();

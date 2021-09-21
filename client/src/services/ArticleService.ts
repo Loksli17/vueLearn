@@ -24,6 +24,21 @@ const decorators = {
             return descriptor;
         }
     },
+
+    normalArticle: () => {
+        return (target: Record<string, any>, propertyKey: string, descriptor: PropertyDescriptor) => {
+
+            const method = descriptor.value;
+
+            descriptor.value = async function(...args: any[]){
+                const article = await method.apply(this, args);
+                article.date = Filters.dateToView(article.date as Date);
+                return article;
+            }
+
+            return descriptor;
+        }
+    }
 }
 
 
@@ -56,7 +71,21 @@ export default class ArticleService{
         return response.data.amount;
     }
 
+    
+    @decorators.normalArticle()
+    public static async getOne(data: Record<string, any>): Promise<Record<string, any> | null>{
 
+        const response: AxiosResponse | void = await axios.get(`/crud/${data.id}`, data)
+        .catch((reason) => {
+            console.error(reason);
+        })
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        return response.data.article;
+    }
+
+    
     public static async removeOne(data: Record<string, any>): Promise<void | null>{
 
         const response: AxiosResponse | void = await axios.delete(`/crud/${data.id}/remove`, data)
