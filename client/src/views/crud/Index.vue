@@ -17,9 +17,9 @@
 
             <div class="table-wrap">
                 <Table
-                    v-if="mapArticles"
+                    v-if="articles"
                     :columnNames="columnNames" 
-                    :rowData="mapArticles" 
+                    :rowData="articles" 
                     :actions="tableActions"
                     :config="tableConfig"
                     >
@@ -50,8 +50,9 @@
     import { defineComponent } from 'vue';
     import Pagination          from '../../components/crudComponent/Pagination.vue';
     import FlashMessageData    from '../../libs/flashMessage';
-    import axios               from '../../libs/axios';
-    import { AxiosResponse }   from 'axios';
+    // import axios               from '../../libs/axios';
+    // import { AxiosResponse }   from 'axios';
+    import ArticleService      from '../../services/ArticleService';
 
     import Table from "../../components/table/Table.vue";
     import { Column, Action, TableConfig } from "../../components/table/types";
@@ -88,16 +89,6 @@
             }
         },
 
-        computed: {
-            mapArticles: function(): Array<Record<string, unknown>>{
-                return this.articles.map((item) => {
-                    item.isReady = item.isReady ? 'Ready' : 'Not Ready';
-                    item.time    = this.$filters.timeToView('0000-01-01 ' + item.time as string);
-                    item.date    = this.$filters.dateToView(item.date as string);
-                    return item;
-                });
-            },
-        },
 
         mounted: async function(){
             await this.getArticles({take: this.take, skip: 0});
@@ -108,26 +99,13 @@
         methods: {
             
             getArticles: async function(data: {take: number; skip: number}){
-
-                await axios.post({
-                    url: '/crud',
-                    data: {skip: data.skip, take: data.take},
-                    handler: (res: AxiosResponse) => {
-                        this.articles = res.data.articles;
-                    }
-                });
+                this.articles = await ArticleService.getAll(data) || [];
             },
 
             getArticlesAmount: async function(){
-
-                await axios.post({
-                    url: '/crud/amount',
-                    handler: (res: AxiosResponse) => {
-                        const pagination = this.$refs.pagination! as any;
-                        pagination.setAmountElements(res.data.amount);
-                        this.amountArticles = res.data.amount;
-                    }
-                });
+                this.amountArticles = await ArticleService.getAmount() || 0;
+                const pagination = this.$refs.pagination! as any;
+                pagination.setAmountElements(this.amountArticles);
             },
 
             pageChangeEvt: function(data: {take: number; skip: number}){
@@ -135,14 +113,11 @@
             },
 
             removeArticle: async function(id: number){
-                await axios.delete({
-                    url: `/crud/${id}/remove`,
-                    handler: (res: AxiosResponse) => {
-                        const pagination = this.$refs.pagination! as any;
-                        pagination.setAmountElements(this.amountArticles--);
-                        this.getArticles({take: pagination.take, skip: pagination.skip});
-                    }
-                });
+                await ArticleService.removeOne({id: id});
+                
+                const pagination = this.$refs.pagination! as any;
+                pagination.setAmountElements(this.amountArticles--);
+                this.getArticles({take: pagination.take, skip: pagination.skip});
 
                 this.$flashMessage.show(FlashMessageData.successMessage('Removing of article', `Article with id = ${id} was removed`));
             }

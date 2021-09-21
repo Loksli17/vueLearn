@@ -122,10 +122,7 @@
 
             },
 
-            sendForm: async function(formData: FormData){
-
-                console.log('FD:', formData);
-                
+            sendForm: async function(formData: FormData){                
                 await axios.put({
                     url: `crud/${this.$route.params.id}/edit`,
                     handler: (res: AxiosResponse) => {
