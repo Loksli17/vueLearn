@@ -4,6 +4,11 @@ import Filters                  from '@/libs/filters';
 import { LoadingFile }          from '@/components/FileUpload/types';
 
 
+/**
+ * ? I can think about Factory of Decorators that creation of them will be more easy!!
+ * ? I should think about FlashMessage. May be create Parent class with method of FlashMessage ?
+ */
+
 const decorators = {
 
     normalArticles: () => {
@@ -39,8 +44,9 @@ const decorators = {
 
             return descriptor;
         }
-    }
+    },
 }
+
 
 
 export default class ArticleService{

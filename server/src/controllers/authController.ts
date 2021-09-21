@@ -1,10 +1,11 @@
 import { Router, Request, Response, NextFunction } from "express";
+
 import ErrorMessage                  from "../libs/error";
 import Query                         from "../libs/query";
 import pool                          from '../config/database';
 import { Pool }                      from "mysql2/promise";
 import crypto                        from 'crypto-js';
-import jwt, { JwtPayload }                           from 'jsonwebtoken';
+import jwt, { JwtPayload }           from 'jsonwebtoken';
 import config                        from "../config";
 
 
@@ -57,7 +58,7 @@ export default class AuthController{
         ).then((value: any) => {
 
             if(value[0][0].refreshToken === refreshToken){
-                accessToken  = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '30m'});
+                accessToken  = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '20s'});
                 res.status(200).send({accessToken: accessToken});
                 return;
             }
@@ -102,7 +103,7 @@ export default class AuthController{
             if(user.password !== crypto.SHA512(QueryData.password).toString()) { res.status(401).send({errors: {password: 'Uncorrect password'}}); return; }
             
             refreshToken = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '24h'});
-            accessToken  = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '30m'});
+            accessToken  = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '20s'});
 
             res.cookie('refreshToken', refreshToken, {maxAge: 1000 * 60 * 60 * 24, httpOnly: true});
             res.status(200).send({accessToken: accessToken, user: user});

@@ -72,10 +72,8 @@ axiosOrigin.interceptors.response.use(
 
     async (error: AxiosError) => {
         const request = error.config;
-        console.log('req: ', request);
 
         if(error && error.response && error.response.status == 401){
-            console.log('!!!!!!!!!');
 
             const res = await axiosOrigin.post('/auth/create-tokens');
 
@@ -84,7 +82,7 @@ axiosOrigin.interceptors.response.use(
                 if(res.data.msg !== "token expired"){
                     store.commit('setJWT', res.data.accessToken);
                     axiosOrigin.defaults.headers.common['Authorization'] = res.data.accessToken;
-                    request.headers.common['Authorization'] = res.data.accessToken;
+                    request.headers['Authorization'] = res.data.accessToken;
                     return axiosOrigin.request(request);
                 }else{
                     store.commit('setUserIdentity', null);
