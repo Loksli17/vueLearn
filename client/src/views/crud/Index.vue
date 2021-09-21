@@ -30,7 +30,7 @@
             </div>
 
             <div class="pagination">
-                <Pagination
+                <!-- <Pagination
                     ref="pagination"
                     :take=take
                     :currentPage=currentPage
@@ -38,7 +38,17 @@
                     :endButton="true"
                     :startButton="true"
                     v-on:page-change="pageChangeEvt"
-                />   
+                />   -->
+                <NewPagination
+                    v-model:take=take
+                    v-model:skip="skip"
+                    :currentPage=currentPage
+                    :pageGap="7"
+                    :endButton="true"
+                    :startButton="true"
+                    :elementAmount="amountArticles"
+                    @page-change="pageChangeEvt"
+                />
             </div> 
         </div>
     </div> 
@@ -49,6 +59,7 @@
 
     import { defineComponent } from 'vue';
     import Pagination          from '../../components/crudComponent/Pagination.vue';
+    import NewPagination       from "@/components/Pagination/Pagination.vue";
     import FlashMessageData    from '../../libs/flashMessage';
     // import axios               from '../../libs/axios';
     // import { AxiosResponse }   from 'axios';
@@ -60,7 +71,8 @@
     export default defineComponent({
 
         components: {
-            Pagination,
+            // Pagination,
+            NewPagination,
             Table,
         },
 
@@ -84,6 +96,7 @@
                 ] as Array<Action>,
                 tableConfig: { sortableByColumn: true, hideColumn: [], dropDownActions: true } as TableConfig,
                 take          : 10 as number,
+                skip          : 0 as number,
                 currentPage   : 1 as number,
                 amountArticles: 0 as number, 
             }
@@ -91,7 +104,7 @@
 
 
         mounted: async function(){
-            await this.getArticles({take: this.take, skip: 0});
+            await this.getArticles({take: this.take, skip: this.skip});
             await this.getArticlesAmount();
         },
 
@@ -104,20 +117,25 @@
 
             getArticlesAmount: async function(){
                 this.amountArticles = await ArticleService.getAmount() || 0;
-                const pagination = this.$refs.pagination! as any;
-                pagination.setAmountElements(this.amountArticles);
+                // const pagination = this.$refs.pagination! as any;
+                // pagination.setAmountElements(this.amountArticles);
             },
 
-            pageChangeEvt: function(data: {take: number; skip: number}){
-                this.getArticles(data);
+            // pageChangeEvt: function(data: {take: number; skip: number}){
+            //     this.getArticles(data);
+            // },
+
+            pageChangeEvt: function(){
+                this.getArticles({ take: this.take, skip: this.skip });
             },
 
             removeArticle: async function(id: number){
                 await ArticleService.removeOne({id: id});
                 
-                const pagination = this.$refs.pagination! as any;
-                pagination.setAmountElements(this.amountArticles--);
-                this.getArticles({take: pagination.take, skip: pagination.skip});
+                // const pagination = this.$refs.pagination! as any;
+                // pagination.setAmountElements(this.amountArticles--);
+                this.amountArticles--;
+                this.getArticles({take: this.take, skip: this.skip});
 
                 this.$flashMessage.show(FlashMessageData.successMessage('Removing of article', `Article with id = ${id} was removed`));
             }

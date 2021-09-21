@@ -43,14 +43,10 @@ export interface TableConfig {
      * false - in a cell
      */
     dropDownActions?: boolean;
-    /** Function for sorting the table. If undefined, a default comparator is used
-     * ! I have suddenly realised, that this couldn't possibly work
-     */
-    // comparator?: (row1: any, row2: any) => number;
 }
 
 export enum SortOrder {
-    ASCENDING = 1,
+    ASCENDING  =  1,
     DESCENDING = -1
 }
 
