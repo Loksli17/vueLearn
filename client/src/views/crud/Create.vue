@@ -43,14 +43,12 @@
     import Form, { FormHtmlItem, FormData as FD } from '../../components/crudComponent/newForm.vue';
     import { AxiosResponse }                      from 'axios';
     import { ListItem }                           from '../../components/DropDownList.vue';
-    import FileUpload, { LoadingFile }            from '../../components/FileUpload/FileUpload.vue';
+    import FileUpload                             from '../../components/FileUpload/FileUpload.vue';
+    import { LoadingFile }                        from '@/components/FileUpload/types';
     import FlashMessageData                       from '../../libs/flashMessage';
+    import ArticleTypeService                     from '../../services/ArticleTypeService';
+    import ArticleService                         from '../../services/ArticleService';
     
-    interface ArticleType{
-        id   : number;
-        title: string;
-        img  : string;
-    }
 
     export default defineComponent({
 
@@ -61,7 +59,7 @@
 
         data: function(){
             return {
-                types         : [] as Array<ArticleType>,
+                types         : [] as Array<Record<string, any>>,
                 currentValueId: 0 as number,
                 article       : {} as Record<string, unknown>,
                 rowsForm      : null as Array<Array<FormHtmlItem>> | null,
@@ -99,13 +97,7 @@
             },
             
             getTypes: async function(){
-
-                await axios.get({
-                    url: '/crud/article-types',
-                    handler: (res: AxiosResponse) => {
-                        this.types = res.data.types;
-                    },
-                });  
+                this.types = await ArticleTypeService.getAll() || []; 
             },
 
             imageLoad: async function(loadingFile: LoadingFile){
@@ -113,18 +105,20 @@
                 const data: FormData = new FormData();
                 data.append('image', loadingFile.file);
                 
-                await axios.post({
-                    url : `/crud/article-image`,
-                    data: data,
-                    handler: (res: AxiosResponse) => {
-                        console.log(res);
-                    },
-                    config: {
-                        onUploadProgress: (e) => {
-                            loadingFile.progress = Math.floor(e.loaded * 100 / e.total);
-                        }
-                    }
-                });
+                await ArticleService.fileUpload(data, loadingFile);
+
+                // await axios.post({
+                //     url : `/crud/article-image`,
+                //     data: data,
+                //     handler: (res: AxiosResponse) => {
+                //         console.log(res);
+                //     },
+                //     config: {
+                //         onUploadProgress: (e) => {
+                //             loadingFile.progress = Math.floor(e.loaded * 100 / e.total);
+                //         }
+                //     }
+                // });
             },
 
             initRowsForm: function(){
@@ -145,21 +139,11 @@
                 } as FD;
             },
 
-            sendForm: async function(formData: FD){
 
-                await axios.put({
-                    url: 'crud/add',
-                    handler: (res: AxiosResponse) => {
-                        console.log(res); // ! think about unconnect handler
-                    },
-                    data: {
-                        article: formData
-                    },
-                    successFlashMessage: {
-                        title: 'Inserting of artcile', 
-                        text : 'New article was created successfully',
-                    }
-                });
+            sendForm: async function(formData: FD){
+                
+                await ArticleService.addOne({article: formData});
+                this.$flashMessage.show(FlashMessageData.successMessage('Inserting of artcile', `New article was created successfully`));
             },
         },
     });

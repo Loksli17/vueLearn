@@ -17,8 +17,8 @@
 
 
 <script lang="ts">
-    import {defineComponent} from 'vue';
-    import {LoadingFile}     from './FileUpload.vue';
+    import { defineComponent } from 'vue';
+    import { LoadingFile }     from './types';
 
     export default defineComponent({
         

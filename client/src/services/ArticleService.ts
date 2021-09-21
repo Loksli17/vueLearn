@@ -1,6 +1,7 @@
 
 import axios, { AxiosResponse } from 'axios';
 import Filters                  from '@/libs/filters';
+import { LoadingFile }          from '@/components/FileUpload/types';
 
 
 const decorators = {
@@ -110,10 +111,37 @@ export default class ArticleService{
     
     public static async editOne(data: Record<string, any>): Promise<void | null>{
 
-        console.log(data);
-
         const response: AxiosResponse | void = await axios.put(`/crud/${data.id}/edit`, data)
         .catch((reason) => {
+            console.error(reason);
+        });
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        return;
+    }
+
+
+    public static async addOne(data: Record<string, any>): Promise<void | null>{
+
+        const response: AxiosResponse | void = await axios.put(`/crud/add`, data)
+        .catch((reason) => {
+            console.error(reason);
+        });
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        return;
+    }
+
+
+    public static async fileUpload(data: FormData, loadingFile: LoadingFile): Promise<void | null>{
+        
+        const response: AxiosResponse | void = await axios.post(`/crud/article-image`, data, {
+            onUploadProgress: (e) => {
+                loadingFile.progress = Math.floor(e.loaded * 100 / e.total);
+            }
+        }).catch((reason) => {
             console.error(reason);
         });
 

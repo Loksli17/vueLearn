@@ -6,7 +6,8 @@ import flashMessage, {FlashMessagePlugin} from '@smartweb/vue-flash-message';
 import axios                              from './libs/axios';
 import config                             from './config/config';
 import store                              from './store';
-import axiosOrigin, {AxiosError, AxiosResponse}                        from 'axios';
+
+import axiosOrigin, {AxiosError, AxiosResponse} from 'axios';
 
 
 // ! it is a bad way, but it is fun for now !!!!!!

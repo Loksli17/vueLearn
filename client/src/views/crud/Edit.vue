@@ -47,11 +47,6 @@
     import FlashMessageData                 from '../../libs/flashMessage';
 
 
-    // interface ArticleType{
-    //     id   : number;
-    //     title: string;
-    //     img  : string;
-    // }
 
     export default defineComponent({
         
