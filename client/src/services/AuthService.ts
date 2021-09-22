@@ -1,6 +1,6 @@
-import axios, { AxiosError } from "axios";
-import store                 from "@/store";
-import router                from "@/router";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import store                                from "@/store";
+import router                               from "@/router";
 
 
 export default class AuthService {
@@ -29,5 +29,28 @@ export default class AuthService {
                 return Promise.reject(error);
             }
         }
+    }
+
+
+    public static async login(formData: Record<string, any>){
+
+        let response: AxiosResponse | void;
+
+        try {
+            response = await axios.post(`/auth/login`, formData)
+        } catch (error: any) {
+            console.error(error);
+            return error.response;
+        }
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        store.commit('setUserIdentity', response.data.user);
+        store.commit('setJWT', response.data.accessToken);
+
+        router.push({name: 'Home'});
+        axios.defaults.headers.common['Authorization'] = store.getters.getJWT;
+
+        return response;
     }
 }
