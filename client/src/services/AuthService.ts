@@ -14,8 +14,6 @@ export default class AuthService {
 
             if(res.status === 200){
 
-                console.log(res.data.msg);
-
                 if(res.data.msg !== "refreshToken expired"){
                     store.commit('setJWT', res.data.accessToken);
                     axios.defaults.headers.common['Authorization'] = res.data.accessToken;

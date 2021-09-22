@@ -20,7 +20,11 @@ export default{
         timeLifeCookie: Date.now() + 1000 * 60 * 60 * 24,
     },
     cors: {
-        origin: "http://localhost:8080",
+        origin : "http://localhost:8080",
         methods: ["GET", "POST", "PUT", "DELETE"]
+    },
+    auth: {
+        refreshTime: "24h",
+        accessTime : "10m",
     }
 }

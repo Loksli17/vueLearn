@@ -6,8 +6,8 @@ import flashMessage, {FlashMessagePlugin} from '@smartweb/vue-flash-message';
 import config                             from './config/config';
 import store                              from './store';
 import AuthService                        from './services/AuthService';
-
-import axiosOrigin, {AxiosError, AxiosResponse} from 'axios';
+import directives                         from './libs/directives';
+import axios, { AxiosResponse}            from 'axios';
 
 
 config.axiosConfig();
@@ -25,28 +25,16 @@ const app = createApp(App);
 app.use(flashMessage, config.flashMessage);
 
 
-// ! think about code it in another file
-app.directive('click-outside', {
-
-    mounted(el: any, binding: any) {
-        el.clickOutsideEvent = function (e: any) {
-            if (!(el == e.target || el.contains(e.target))){
-                binding.value(e);
-            }
-        };
-        document.body.addEventListener('click', el.clickOutsideEvent)
-    },   
-
-    unmounted(el: any) {
-        document.body.removeEventListener('click', el.clickOutsideEvent)
-    },
+app.directive(directives.clickOutside.name, {
+    mounted: directives.clickOutside.mounted,
+    unmounted: directives.clickOutside.unmounted,
 });
 
 
 app.config.globalProperties.$filters = filters;
 
 
-axiosOrigin.interceptors.response.use(
+axios.interceptors.response.use(
     
     (res: AxiosResponse) => {
         return res

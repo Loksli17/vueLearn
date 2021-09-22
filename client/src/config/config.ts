@@ -21,7 +21,4 @@ export default {
         strategy: 'single',
     },
     
-    headers  : {
-        'Content-Type': 'application/json',
-    },
 }
