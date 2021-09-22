@@ -4,52 +4,69 @@ import Filters                  from '@/libs/filters';
 import { LoadingFile }          from '@/components/FileUpload/types';
 
 
-/**
- * ? I can think about Factory of Decorators that creation of them will be more easy!!
- * ? I should think about FlashMessage. May be create Parent class with method of FlashMessage ?
- */
 
-const decorators = {
+class DecoratorFactory { 
 
-    normalArticles: () => {
+    public static createDecoratorAfter(handler: (data: any) => any){
+
         return (target: Record<string, any>, propertyKey: string, descriptor: PropertyDescriptor) => {
 
             const method = descriptor.value;
 
             descriptor.value = async function(...args: any[]){
-                let articles = await method.apply(this, args);
-                
-                return articles = articles.map((item: Record<string, any>) => {
-                    item.isReady = item.isReady ? 'Ready' : 'Not Ready';
-                    item.time    = Filters.timeToView('0000-01-01 ' + item.time as string);
-                    item.date    = Filters.dateToView(item.date as string);
-                    return item;
-                });
+                const data = await method.apply(this, args);
+                return handler(data);
             }
 
             return descriptor;
         }
-    },
+    }
 
-    normalArticle: (param: string) => {
+
+    public static createDecoratorBefore(handler: () => void){
+
         return (target: Record<string, any>, propertyKey: string, descriptor: PropertyDescriptor) => {
 
             const method = descriptor.value;
 
             descriptor.value = async function(...args: any[]){
-                const article = await method.apply(this, args);
-                article.date = param == "db" ? Filters.dateToDb(article.date as Date) : Filters.dateToView(article.date as Date);
-                return article;
+                handler();
+                const data = await method.apply(this, args);
+                return data;
             }
 
             return descriptor;
         }
-    },
+    }
 }
 
 
 
-export default class ArticleService{
+const decorators = {
+
+    normalArticles: () => {
+        return DecoratorFactory.createDecoratorAfter((articles: Array<Record<string, any>>): Array<Record<string, any>> => {
+            return articles.map((item: Record<string, any>) => {
+                item.isReady = item.isReady ? 'Ready' : 'Not Ready';
+                item.time    = Filters.timeToView('0000-01-01 ' + item.time as string);
+                item.date    = Filters.dateToView(item.date as string);
+                return item;
+            });
+        });
+    },
+
+    normalArticle: (param: string) => {
+        return DecoratorFactory.createDecoratorAfter((article: Record<string, any>) => {
+            article.date = param == "db" ? Filters.dateToDb(article.date as Date) : Filters.dateToView(article.date as Date);
+                return article;
+        })
+    },
+
+}
+
+
+
+export default class ArticleService {
 
 
     @decorators.normalArticles()
