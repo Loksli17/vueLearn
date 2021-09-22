@@ -44,14 +44,16 @@
 
 
 <script lang="ts">
-    import {defineComponent} from 'vue';
+    import {defineComponent}        from 'vue';
     import PaginationPage, { Page } from "./PaginationPage.vue";
     
 
     export default defineComponent({
+        
         components: {
             PaginationPage
         },
+
         props: {
             take: {
                 type    : Number,
@@ -85,7 +87,7 @@
                 type: String,
             },
             elementAmount: {
-                type: Number,
+                type    : Number,
                 required: true
             }
         },
@@ -94,7 +96,9 @@
         //     this.init();
         //     this.render();
         // },
+        
         emits: ["update:take", "update:skip", "page-change"],
+        
         data: function(){
             return {
                 // skip               : 0 as number,
@@ -160,6 +164,7 @@
                 }
             },
             
+
             init: function(): void{
                 this.maxPage = Math.ceil(this.elementAmount / this.take);
                 
@@ -173,6 +178,7 @@
                     this.currentPageData = this.currentPage;
                 }
             },
+
 
             countEndPoints: function(): {first: number; last: number} {
 
@@ -222,7 +228,9 @@
                 return pages;
             },
 
+
             createStepPages: function(): {next: Page | undefined; prev: Page | undefined}{
+                
                 if(this.elementAmount <= this.take){return {next: undefined, prev: undefined};}
                 
                 const
@@ -235,15 +243,18 @@
                 };
             },
             
+
             createEndPointsPages: function(): {last: Page | undefined; first: Page | undefined}{
+                
                 if(this.elementAmount <= this.take){return {last: undefined, first: undefined};}
                
-               return {
+                return {
                     first: {link: 1,            content: 'First', class: this.itemClassData},
                     last : {link: this.maxPage, content: 'Last',  class: this.itemClassData},
                 };
                 
             },
+
 
             setCurrentPageEvt: function(newPage: number){
                 this.currentPageData = newPage;
@@ -252,10 +263,12 @@
                 this.$emit('page-change');
             },
 
+
             getCurrentPage: function(){
                 return this.currentPageData;
             },
             
+
             getSkip: function(){
                 return this.skip;
             }
