@@ -188,7 +188,7 @@ class FacadeAxios{
     }
 
     private constructor() {
-        axios.defaults.baseURL  = config.server.path;
+        // axios.defaults.baseURL  = config.server.path;
         this.settings_          = {defaultStatus: 200}; // * TS demands it
         this.errorServerMessage = 'Error with server. Please, reload your page.';
         this.errorStatusMessage = 'Server sended wrong status.';

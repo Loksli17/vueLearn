@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
 
-export default class ArticleTypeService{
+export default class ArticleTypeService {
 
     public static async getAll(): Promise<Array<Record<string, any>> | null>{
 

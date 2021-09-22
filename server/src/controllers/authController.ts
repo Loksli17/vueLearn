@@ -1,12 +1,12 @@
 import { Router, Request, Response, NextFunction } from "express";
 
-import ErrorMessage                  from "../libs/error";
-import Query                         from "../libs/query";
-import pool                          from '../config/database';
-import { Pool }                      from "mysql2/promise";
-import crypto                        from 'crypto-js';
-import jwt, { JwtPayload }           from 'jsonwebtoken';
-import config                        from "../config";
+import ErrorMessage        from "../libs/error";
+import Query               from "../libs/query";
+import pool                from '../config/database';
+import { Pool }            from "mysql2/promise";
+import crypto              from 'crypto-js';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import config              from "../config";
 
 
 export default class AuthController{
@@ -40,16 +40,17 @@ export default class AuthController{
             refreshToken: string | undefined = req.cookies.refreshToken,
             mysql       : Pool | undefined   = pool,
             id          : number             = 0,
+            msgOldtoken : string             = 'refreshToken expired',
             accessToken : string             = '';
 
-        if(!refreshToken) { res.status(200).send({msg: 'token expired'}); return; }
+        if(!refreshToken) { res.status(200).send({msg: msgOldtoken}); return; }
 
         if(!mysql) { res.status(400).send({error: ErrorMessage.db()}); return }
 
         try {
             id = (jwt.verify(refreshToken, config.secret.jwt) as JwtPayload).id;
         } catch (error) {
-            res.status(200).send({msg: 'token expired'});
+            res.status(200).send({msg: msgOldtoken});
             return;
         }
 
@@ -58,12 +59,12 @@ export default class AuthController{
         ).then((value: any) => {
 
             if(value[0][0].refreshToken === refreshToken){
-                accessToken  = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '15m'});
+                accessToken  = jwt.sign({id: id}, config.secret.jwt, {expiresIn: '10s'});
                 res.status(200).send({accessToken: accessToken});
                 return;
             }
 
-            res.status(400).send({msg: 'refreshToken expired'});
+            res.status(200).send({msg: msgOldtoken});
         }).catch(error => {
             console.error(error);
             res.status(400).send({msg: error});
@@ -102,8 +103,8 @@ export default class AuthController{
             if(user == undefined) { res.status(401).send({errors: {email: 'Uncorrect email'}}); return } 
             if(user.password !== crypto.SHA512(QueryData.password).toString()) { res.status(401).send({errors: {password: 'Uncorrect password'}}); return; }
             
-            refreshToken = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '24h'});
-            accessToken  = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '15m'});
+            refreshToken = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '1m'});
+            accessToken  = jwt.sign({id: user.id}, config.secret.jwt, {expiresIn: '10s'});
 
             res.cookie('refreshToken', refreshToken, {maxAge: 1000 * 60 * 60 * 24, httpOnly: true});
             res.status(200).send({accessToken: accessToken, user: user});

@@ -1,9 +1,26 @@
-// import Vue from 'vue';
+import axios from 'axios';
+import store from '../store';
+
+
 export default {
-    server: {
-        path        : 'http://localhost:3000/',
-        errorMessage: 'Error with server. Please try to reload page. (You can press F5)',
+
+    axiosConfig: () => {
+        axios.defaults.baseURL                         = 'http://localhost:3000/',
+        axios.defaults.headers.common['Authorization'] = store.getters.getJWT;
+        axios.defaults.withCredentials                 = true;
+
+        axios.defaults.validateStatus = (status) => {
+            return status !== 401;
+        }
     },
+
+    flashMessage:  {
+        name    : 'flashMessage',
+        tag     : 'FlashMessage',
+        time    : 6000,
+        strategy: 'single',
+    },
+    
     headers  : {
         'Content-Type': 'application/json',
     },
