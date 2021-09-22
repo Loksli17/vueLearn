@@ -12,6 +12,7 @@ export interface CustomCell {
 }
 
 export interface Action {
+    iconPath?: string;
     /** Name of the action, which will be displayed in the table */
     name: string;
     /** If action is a route, it requires a specified path, which must

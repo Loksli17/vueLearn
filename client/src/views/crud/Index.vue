@@ -12,18 +12,27 @@
 
         <div class="section">
             <div>
-                
+                <button @click="showPopup = true">popup</button>
+                <PopupWrapper v-model:show-popup="showPopup">
+                    <div>
+                        <h1>header</h1>
+                        <div>
+                            content
+                        </div>
+                        <button @click="showPopup = false">close</button>
+                    </div>
+                </PopupWrapper>
             </div>
 
             <div class="table-wrap">
                 <Table
                     v-if="articles"
-                    :columnNames="columnNames" 
-                    :rowData="articles" 
+                    :column-names="columnNames" 
+                    :row-data="articles" 
                     :actions="tableActions"
                     :config="tableConfig"
                     >
-                    <template v-slot:footer>
+                    <template #footer>
                         <div> This is a footer </div>
                     </template>
                 </Table> 
@@ -39,14 +48,15 @@
                     :startButton="true"
                     v-on:page-change="pageChangeEvt"
                 />   -->
+                <!-- ! The general rule is to write attributes in kebab-case, just like in vanilla HTML -->
                 <NewPagination
                     v-model:take=take
                     v-model:skip="skip"
-                    :currentPage=currentPage
-                    :pageGap="7"
-                    :endButton="true"
-                    :startButton="true"
-                    :elementAmount="amountArticles"
+                    :current-page=currentPage
+                    :page-gap="7"
+                    :end-button="true"
+                    :start-button="true"
+                    :element-amount="amountArticles"
                     @page-change="pageChangeEvt"
                 />
             </div> 
@@ -60,6 +70,7 @@
     import { defineComponent } from 'vue';
     import Pagination          from '../../components/crudComponent/Pagination.vue';
     import NewPagination       from "@/components/Pagination/Pagination.vue";
+    import PopupWrapper        from "@/components/Popup/PopupWrapper.vue";
     import FlashMessageData    from '../../libs/flashMessage';
     // import axios               from '../../libs/axios';
     // import { AxiosResponse }   from 'axios';
@@ -73,6 +84,7 @@
         components: {
             // Pagination,
             NewPagination,
+            PopupWrapper,
             Table,
         },
 
@@ -99,6 +111,7 @@
                 skip          : 0 as number,
                 currentPage   : 1 as number,
                 amountArticles: 0 as number, 
+                showPopup     : false as boolean,
             }
         },
 

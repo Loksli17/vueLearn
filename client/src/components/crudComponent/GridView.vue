@@ -61,7 +61,7 @@
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
     table, th, td{
         border: 2px solid;

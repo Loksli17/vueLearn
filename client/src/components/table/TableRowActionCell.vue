@@ -19,7 +19,12 @@
         </template>
     </td>
     <td v-else>
-        <a href="" v-click-outside="() => {showDropDown = false}" @click.prevent="showDropDown = !showDropDown">click</a>
+        <div 
+            class="table-row-action-dropdown-button"
+            href="" 
+            v-click-outside="() => {showDropDown = false}" 
+            @click.prevent="showDropDown = !showDropDown"
+        ></div>
         <div v-show="showDropDown">
             <TableRowDropDownActionMenu :actions="actions" :itemId="itemId" />
         </div>
@@ -55,3 +60,15 @@
         }
     });
 </script>
+
+<style lang="scss" scoped>
+    .table-row-action-dropdown-button {
+        cursor: pointer;
+        text-align: right;
+
+        &:after {
+            content: '\2807';
+            font-size: 20px;
+        }
+    }
+</style>

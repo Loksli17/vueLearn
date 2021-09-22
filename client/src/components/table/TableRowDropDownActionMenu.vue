@@ -48,8 +48,8 @@
         background-color: #FFF;
         padding: 15px 20px 15px 30px;
         border-radius: 10px;
-        box-shadow: 6px 6px 8px #ccc;
-        margin-left: 5%;
+        box-shadow: 3px 3px 8px #000;
+        margin-left: 1%;
 
         ul {
             list-style: none;
