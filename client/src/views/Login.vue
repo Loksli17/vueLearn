@@ -11,7 +11,6 @@
 
 <script lang="ts">
 
-    import axios                                              from '../libs/axios';
     import { defineComponent }                                from 'vue';
     import Form, { FormHtmlItem, FormData as FD , FormErrors} from '../components/crudComponent/newForm.vue';
     import { AxiosResponse }                                  from 'axios';

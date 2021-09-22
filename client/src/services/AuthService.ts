@@ -5,6 +5,7 @@ import router                               from "@/router";
 
 export default class AuthService {
 
+    
     public static async interceptorsError(error: AxiosError){
         const request = error.config;
 
