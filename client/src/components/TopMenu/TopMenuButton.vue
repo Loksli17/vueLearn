@@ -1,5 +1,5 @@
 <template>
-    <li>
+    <li class="top-menu-list-button">
         <router-link :to="button.path">{{ button.name }}</router-link>
     </li>
 </template>
@@ -19,3 +19,19 @@
         }
     })
 </script>
+
+<style lang="scss" scoped>
+    .top-menu-list-button {
+        box-sizing: border-box;
+
+        a {
+            text-decoration: none;
+            color: #000;
+
+        }
+
+        &:hover {
+            border-bottom: 2px solid #000;
+        }
+    }
+</style>

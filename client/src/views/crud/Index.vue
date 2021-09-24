@@ -4,7 +4,8 @@
 
         <TopMenu :buttons="topMenuButtons">
             <template #left>
-                ahah
+                <!-- 👀 -->
+                <img width="30" src="./../../assets/img/logo.png" alt="">
             </template>
             <template #right>
                 <input type="search" name="" id="">
@@ -101,8 +102,8 @@
             return {
                 articles      : [] as Array<Record<string, unknown>>,
                 topMenuButtons: [
-                    { name: "Test", path: "/kek" },
-                    { name: "Lol",  path: "/lol" }
+                    { name: "crud", path: "/crud" },
+                    { name: "seq-crud",  path: "/seq-crud" }
                 ] as Array<LinkButton>,
                 columnNames   : [ 
                         { displayedName: "Id",      fieldName: "id" },

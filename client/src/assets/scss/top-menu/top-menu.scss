@@ -2,22 +2,30 @@
     position: fixed;
     display: grid;
     gap: 20px;
-    padding: 20px;
+    padding: 20px 30px;
     grid-template-columns: max-content max-content auto max-content;
     top: 0;
     left: 0;
     width: 100%;
     box-sizing: border-box;
-    background-color: #FFF;
+    background-color: #e6e6e6;
     box-shadow: 4px 4px 8px #000;
     z-index: 2000;
     // transition: all .3s;
+
+    .top-menu-left-section,
+    .top-menu-right-section,
+    .top-menu-button-list  {
+        display: flex;
+        align-items: center;
+    }
 
     .top-menu-button-list {
         ul {
             display: grid;
             list-style: none;
             grid-auto-flow: column;
+            align-items: center;
             gap: 20px;
             padding: 0;
             margin: 0;
