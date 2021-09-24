@@ -1,4 +1,3 @@
-
 import axios, { AxiosResponse } from 'axios';
 import Filters                  from '@/libs/filters';
 import { LoadingFile }          from '@/components/FileUpload/types';
@@ -21,7 +20,7 @@ const decorators = {
     normalArticle: (param: string) => {
         return Service.createDecoratorAfter((article: Record<string, any>) => {
             article.date = param == "db" ? Filters.dateToDb(article.date as Date) : Filters.dateToView(article.date as Date);
-                return article;
+            return article;
         })
     },
 

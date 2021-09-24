@@ -17,7 +17,7 @@ export default class SequelizeCrudController{
         }
 
         let
-            QueryData : QueryData              = req.body,
+            QueryData : QueryData              = req.body as any,
             users     : Array<User>            = [],
             dataErrors: Array<keyof QueryData> = [];
 
@@ -35,21 +35,56 @@ export default class SequelizeCrudController{
 
 
     public static async getAmountUsers(req: Request, res: Response){
-
-        res.status(200).send({amount: 10});
+        let amount: number = await User.count();
+        res.status(200).send({amount: amount});
     }
 
 
     public static async getUser(req: Request, res: Response){
 
+        let 
+            id  : number = Number(req.params.id),
+            user: User | null;
+
+        if(id == undefined) {
+            res.status(400).send({error: ErrorMessage.dataNotSended('id')});
+            return;
+        }
+
+        user = await User.findOne({where: {id: id}});
+
+        if(user == null){
+            res.status(404).send({error: ErrorMessage.dataNotSended('user')});
+            return;
+        }
+
+        res.status(200).send({user: user});
+    }
+
+
+    public static async removeUser(req: Request, res: Response){
+
+        let 
+            id    : number = Number(req.params.id),
+            userId: number;
+
+        if(id == undefined) {
+            res.status(400).send({error: ErrorMessage.dataNotSended('id')});
+            return;
+        }
+
+        userId = await User.destroy({where: {id: id}});
+
+        res.status(200).send({id: userId});
     }
 
 
     public static routes(){
 
-        this.router.get('/',       this.getUsers);
-        this.router.get('/amount', this.getAmountUsers);
-        this.router.get('/:id',    this.getUser);
+        this.router.post(  '/',           this.getUsers);
+        this.router.post(  '/amount',     this.getAmountUsers);
+        this.router.post(  '/:id',        this.getUser);
+        this.router.delete('/:id/remove', this.removeUser);
 
         return this.router;
     }

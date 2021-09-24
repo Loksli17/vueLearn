@@ -1,0 +1,53 @@
+<template>
+    
+    <div class="seq-view">
+        <h1>View item page</h1>
+
+        <div class="add-line">
+            <router-link :to="'/'">Go home</router-link>
+            <router-link :to="'/seq-crud'">Go index-crud</router-link>
+        </div>
+
+        <div class="buttons-wrap">
+            <router-link :to="'/seq-crud/create'">Create item</router-link>
+        </div>
+
+        <div class="table-wrap">
+            <GridView
+                v-if="user"
+                :data="user"
+                :fields="fields"
+                :keysHandler="this.$filters.upperFirst"
+            />
+        </div>
+    </div>
+</template>
+
+
+<script lang="ts">
+    import {defineComponent} from 'vue';
+    import GridView          from '../../components/crudComponent/GridView.vue';
+    import UserService       from '../../services/UserService';
+
+
+    export default defineComponent({
+
+        components: {
+            GridView,
+        },
+
+        data: function(){
+            return {
+                id    : 0 as number,
+                user  : {} as Record<string, any> | null,
+                fields: {'email': 'E-mail'},
+            }
+        },
+
+        mounted: async function(){
+            this.id   = Number(this.$route.params.id);
+            this.user = await UserService.getOne({id: this.id});
+        },
+    });
+
+</script>

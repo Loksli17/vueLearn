@@ -9,16 +9,16 @@
         </div>
 
         <div class="buttons-wrap">
-            <router-link :to="'/crud/create'">Create item</router-link>
+            <router-link :to="'/seq-crud/create'">Create item</router-link>
         </div>
 
         <div class="section">
 
             <div class="table-wrap">
                 <Table
-                    v-if="articles"
+                    v-if="users"
                     :column-names="columnNames" 
-                    :row-data="articles" 
+                    :row-data="users" 
                     :actions="tableActions"
                     :config="tableConfig"
                     >
@@ -50,6 +50,8 @@
     import Table               from '../../components/table/Table.vue';
     import Pagination          from '../../components/Pagination/Pagination.vue';
     import { Action, Column }  from '../../components/table/types';
+    import UserService         from '../../services/UserService';
+    import FlashMessageData    from '../../libs/flashMessage';
 
 
     export default defineComponent({
@@ -66,16 +68,16 @@
 
                 columnNames: [
                     { displayedName: 'Id',      fieldName: 'id' },
-                    { displayedName: 'E-mail',  fieldName: 'name' },
+                    { displayedName: 'E-mail',  fieldName: 'email' },
                     { displayedName: 'Login',   fieldName: 'login'},
                     { displayedName: 'Avatar',  fieldName: 'avatar'},
                     { displayedName: "Actions", fieldName: "actions" },
                 ] as Array<Column>,
-
+                tableConfig: {dropDownActions: true},
                 tableActions: [
-                        { name: "View",   path: (id: number) => `/crud/${id}/view`, iconPath: require("./../../assets/img/table-icons/view.svg") }, 
-                        { name: "Edit",   path: (id: number) => `/crud/${id}/edit`, iconPath: require("./../../assets/img/table-icons/edit.svg") }, 
-                        { name: "Delete", handler: this.removeArticle,              iconPath: require("./../../assets/img/table-icons/delete.svg") },
+                        { name: "View",   path: (id: number) => `/seq-crud/${id}/view`, iconPath: require("./../../assets/img/table-icons/view.svg") }, 
+                        { name: "Edit",   path: (id: number) => `/seq-crud/${id}/edit`, iconPath: require("./../../assets/img/table-icons/edit.svg") }, 
+                        { name: "Delete", handler: this.removeUser,                     iconPath: require("./../../assets/img/table-icons/delete.svg") },
                 ] as Array<Action>,
 
                 take       : 10 as number,
@@ -85,7 +87,34 @@
             }
         },
 
-        
+        mounted: async function(){
+            await this.getUsers({ take: this.take, skip: this.skip });
+            await this.getUsersAmount();
+        },
+
+        methods: {
+            
+            getUsers: async function(data: {take: number; skip: number}){
+                this.users = await UserService.getAll(data) || [];
+            },
+
+            getUsersAmount: async function(){
+                this.amountUsers = await UserService.getAmount() || 0;
+            },
+
+            pageChangeEvt: function(){
+                this.getUsers({ take: this.take, skip: this.skip });
+            },
+
+            removeUser: async function(id: number){
+                await UserService.removeOne({id: id});
+
+                this.amountUsers--;
+                this.getUsers({take: this.take, skip: this.skip});
+
+                this.$flashMessage.show(FlashMessageData.successMessage('Removing of user', `User with id = ${id} was removed`));
+            }
+        }
 
     });
 
