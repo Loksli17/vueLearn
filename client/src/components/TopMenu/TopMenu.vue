@@ -1,8 +1,11 @@
 <template>
     <teleport to="body">
         <header ref="root" class="top-menu-wrapper">
-            <div class="top-menu-burger">
-                <span>dasgkjahbdkg</span>
+            <div 
+                class="top-menu-burger" 
+                :class="{ 'top-menu-burger-active': showMenu }" 
+                @click.prevent="toggleMenu">
+                <span></span>
             </div>
             <div class="top-menu-left-section">
                 <slot name="left"></slot>
@@ -19,11 +22,27 @@
                 <slot name="right"></slot>
             </div>
         </header>
+        <template v-if="renderMobileMenu">
+            <transition name="top-menu-mobile-slide">
+                <div v-show="showMenu" class="top-menu-mobile-wrapper" :style="{ top: menuHeight }">
+                    <div class="top-menu-button-list">
+                        <ul>
+                            <template v-for="button in buttons" :key="button.name">
+                                <TopMenuButton :button="button" />
+                            </template>
+                        </ul>
+                    </div>
+                    <div class="top-menu-right-section">
+                        <slot name="right"></slot>
+                    </div>
+                </div>
+            </transition>
+        </template>
     </teleport>
 </template>
 
 <script lang="ts">
-    import { defineComponent, onMounted, PropType, ref } from 'vue'
+    import { defineComponent, onMounted, PropType, Ref, ref } from 'vue'
     import TopMenuButton from './TopMenuButton.vue'
     import { LinkButton } from './types'
 
@@ -34,21 +53,58 @@
             buttons: {
                 type: Object as PropType<Array<LinkButton>>,
                 required: true
+            },
+            selectedButton: {
+                type: Object as PropType<LinkButton>,
+                required: false
             }
         },
-        setup(props) {
+
+        setup() {
             const root = ref(null);
+            let 
+                renderMobileMenu: Ref<boolean> = ref(false),
+                showMenu:         Ref<boolean> = ref(false),
+                menuHeight:       Ref<number>  = ref(0);
+
+            const setShowMobileMenu = (): void => {
+                const width = parseInt(getComputedStyle(document.body).width);
+                renderMobileMenu.value = width < 860;
+            }
+
+            const setMobileMenuHeight = (el: HTMLElement): void => {
+                menuHeight.value = parseInt(getComputedStyle(el).height);
+            }
 
             onMounted(() => {
                 const 
                     headerVal = root.value as unknown as HTMLElement,
                     headerHeight = parseInt(getComputedStyle(headerVal).height);
 
-                document.body.style.paddingTop = `${headerHeight}px`
-            })  
+                document.body.style.paddingTop = `${headerHeight}px`;
+
+
+
+                setShowMobileMenu();
+                setMobileMenuHeight(headerVal);
+
+                window.addEventListener("resize", () => {
+                    setShowMobileMenu(); 
+                    setMobileMenuHeight(headerVal);
+                });
+            });
+
+
+            const toggleMenu = () => {
+                showMenu.value = !showMenu.value;
+            }
 
             return {
-                root
+                root,
+                menuHeight,
+                toggleMenu,
+                showMenu,
+                renderMobileMenu
             }
         },
     })
@@ -56,29 +112,45 @@
 
 <style lang="scss" scoped>
     @import "../../assets/scss/top-menu/burger.scss";
+    @import "../../assets/scss/top-menu/top-menu.scss";
+    @import "../../assets/scss/top-menu/top-menu-mobile.scss";
 
-    .top-menu-wrapper {
-        position: fixed;
-        display: grid;
-        gap: 20px;
-        padding: 20px;
-        grid-template-columns: max-content max-content max-content auto max-content;
-        top: 0;
-        left: 0;
-        width: 100%;
-        box-sizing: border-box;
-        background-color: #FFF;
-        box-shadow: 4px 4px 8px #000;
+    .top-menu-mobile-slide-enter-active,
+    .top-menu-mobile-slide-leave-active {
+        transition: top .3s;
+    }
 
-        .top-menu-button-list {
-            ul {
-                display: grid;
-                list-style: none;
-                grid-auto-flow: column;
-                gap: 20px;
-                padding: 0;
-                margin: 0;
+    .top-menu-mobile-slide-enter-from,
+    .top-menu-mobile-slide-leave-to {
+        top: 100vh;
+    }
+
+    @media screen and (max-width: 860px) {
+        .top-menu-wrapper {
+            grid-template-columns: 60px auto;
+            gap: 0;
+
+            .top-menu-burger {
+                display: flex;
             }
+            
+            .top-menu-button-list {
+                display: none;
+            }
+
+            .top-menu-left-section {
+                display: flex;
+                justify-content: center;
+            }
+
+            .top-menu-right-section {
+                display: none;
+            }
+        }
+
+        .top-menu-mobile-wrapper {
+            position: fixed;
+
         }
     }
 </style>
