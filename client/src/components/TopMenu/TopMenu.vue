@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent, onMounted, PropType, Ref, ref } from 'vue'
+    import { defineComponent, onBeforeUnmount, onMounted, PropType, Ref, ref } from 'vue'
     import TopMenuButton from './TopMenuButton.vue'
     import { LinkButton } from './types'
 
@@ -83,8 +83,6 @@
 
                 document.body.style.paddingTop = `${headerHeight}px`;
 
-
-
                 setShowMobileMenu();
                 setMobileMenuHeight(headerVal);
 
@@ -94,6 +92,10 @@
                 });
             });
 
+            // cleanup
+            onBeforeUnmount(() => {
+                document.body.style.paddingTop = "";
+            });
 
             const toggleMenu = () => {
                 showMenu.value = !showMenu.value;
