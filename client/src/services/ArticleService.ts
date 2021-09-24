@@ -36,12 +36,13 @@ export default class ArticleService extends Service {
 
         const response: AxiosResponse | void = await axios.post('/crud', data)
         .catch((reason) => {
+            this.errorMessage(reason.response.status);
             console.error(reason);
         });
 
         if(response == undefined) { console.error('Bad response'); return null; }
 
-        this.checkResponse(response, [200, 201, 202]);
+        this.checkResponse(response, [200]);
 
         return response.data.articles;
     }
@@ -51,10 +52,13 @@ export default class ArticleService extends Service {
         
         const response: AxiosResponse | void = await axios.post('/crud/amount')
         .catch((reason) => {
+            this.errorMessage(reason.response.status);
             console.error(reason);
         });
 
         if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
 
         return response.data.amount;
     }
@@ -64,10 +68,13 @@ export default class ArticleService extends Service {
 
         const response: AxiosResponse | void = await axios.get(`/crud/${data.id}`, data)
         .catch((reason) => {
+            this.errorMessage(reason.response.status);
             console.error(reason);
         })
 
         if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
 
         return response.data.article;
     }
@@ -87,10 +94,13 @@ export default class ArticleService extends Service {
 
         const response: AxiosResponse | void = await axios.delete(`/crud/${data.id}/remove`, data)
         .catch((reason) => {
+            this.errorMessage(reason.response.status);
             console.error(reason);
         });
 
         if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
 
         return;
     }
@@ -100,10 +110,13 @@ export default class ArticleService extends Service {
 
         const response: AxiosResponse | void = await axios.put(`/crud/${data.id}/edit`, data)
         .catch((reason) => {
+            this.errorMessage(reason.response.status);
             console.error(reason);
         });
 
         if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
 
         return;
     }
@@ -113,10 +126,13 @@ export default class ArticleService extends Service {
 
         const response: AxiosResponse | void = await axios.put(`/crud/add`, data)
         .catch((reason) => {
+            this.errorMessage(reason.response.status);
             console.error(reason);
         });
 
         if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
 
         return;
     }
@@ -129,10 +145,13 @@ export default class ArticleService extends Service {
                 loadingFile.progress = Math.floor(e.loaded * 100 / e.total);
             }
         }).catch((reason) => {
+            this.errorMessage(reason.response.status);
             console.error(reason);
         });
 
         if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
 
         return;
     }

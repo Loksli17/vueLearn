@@ -60,4 +60,14 @@ export default abstract class Service{
             });
         }
     }
+
+    public static errorMessage(status: number){
+        
+        flashMessage.show({
+            blockClass: 'error',
+            image     : require("@/assets/img/flash/error.svg"),
+            title     : 'Server Error',
+            text      : `Query returned status ${status}. Please press f5 that update your page`,
+        })
+    }
 }
