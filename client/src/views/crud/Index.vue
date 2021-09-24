@@ -1,4 +1,6 @@
 <template>
+    <!-- Header has to be in the View that houses the router-view,
+         so that we don't have to put this shit in every single page -->
     <TopMenu :buttons="topMenuButtons">
         <template #left>
             ahah
@@ -93,6 +95,7 @@
             Pagination,
             PopupWrapper,
             Table,
+            TopMenu,
         },
 
         data: function(){
@@ -113,9 +116,9 @@
                         { displayedName: "Actions", fieldName: "actions" },
                 ] as Array<Column>,
                 tableActions: [
-                        { name: "View", path: (id: number) => `/crud/${id}/view` }, 
-                        { name: "Edit", path: (id: number) => `/crud/${id}/edit` }, 
-                        { name: "Delete", handler: this.removeArticle },
+                        { name: "View",   path: (id: number) => `/crud/${id}/view`, iconPath: require("./../../assets/img/table-icons/view.svg") }, 
+                        { name: "Edit",   path: (id: number) => `/crud/${id}/edit`, iconPath: require("./../../assets/img/table-icons/edit.svg") }, 
+                        { name: "Delete", handler: this.removeArticle,              iconPath: require("./../../assets/img/table-icons/delete.svg") },
                 ] as Array<Action>,
                 tableConfig: { sortableByColumn: true, hideColumn: [], dropDownActions: true } as TableConfig,
                 take          : 10 as number,

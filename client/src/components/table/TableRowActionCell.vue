@@ -1,27 +1,27 @@
 <template>
-    <td v-if="!actionsAsDropDownList">
+    <td v-if="!actionsAsDropDownList" class="table-row-action-cell">
         <template v-for="action in actions" :key="action.id">
             <router-link 
                 v-if="action.path !== undefined"
                 :class="action.cssClassName" 
                 :to="action.path(itemId)"
             >
-                {{ action.name }}
+                <img  v-if="action.iconPath" :src="action.iconPath">
+                <span v-else>{{ action.name }}</span>
             </router-link>
             <a 
                 v-else-if="action.handler !== undefined" 
                 :class="action.cssClassName"
-                href="" 
                 @click.prevent="action.handler(itemId)"
             >
-                {{ action.name }}
+                <img  v-if="action.iconPath" :src="action.iconPath">
+                <span v-else>{{ action.name }}</span>
             </a>
         </template>
     </td>
     <td v-else>
         <div 
             class="table-row-action-dropdown-button"
-            href="" 
             v-click-outside="() => {showDropDown = false}" 
             @click.prevent="showDropDown = !showDropDown"
         ></div>
@@ -62,6 +62,30 @@
 </script>
 
 <style lang="scss" scoped>
+    .table-row-action-cell {
+        display: grid;
+        grid-auto-flow: column;
+        gap: 5px;
+
+        a {
+            display: grid;
+            grid-template-columns: max-content auto;
+            align-items: center;
+            text-decoration: none;
+            color: #000;
+            // justify-content: center;
+
+            &:hover {
+                cursor: pointer;
+            }
+            
+            img {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    }
+
     .table-row-action-dropdown-button {
         cursor: pointer;
         text-align: right;
