@@ -1,6 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import store                                                  from '../store/';
-import axios, { AxiosError, AxiosResponse }                                                  from 'axios';
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -9,6 +8,19 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Home',
         component: () => import('../views/Home.vue')
     },
+
+    {
+        path: '/auth/login',
+        name: 'Login',
+        component: () => import('../views/Login.vue'),
+    },
+    {
+        path     : "/:pathMatch(.*)*",
+        name     : '404',
+        component: () => import('../views/404.vue'),
+    },
+
+    // ! ---crud----
     {
         path: '/crud',
         name: 'Crud-index',
@@ -29,16 +41,30 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Crud-edit',
         component: () => import('../views/crud/Edit.vue'),
     },
+
+
+    // ! ---seqCrud---
     {
-        path: '/auth/login',
-        name: 'Login',
-        component: () => import('../views/Login.vue'),
+        path: '/seq',
+        name: 'Seq-index',
+        component: () => import('../views/seq/Index.vue'),
     },
     {
-        path     : "/:pathMatch(.*)*",
-        name     : '404',
-        component: () => import('../views/404.vue'),
+        path: '/seq/create',
+        name: 'Seq-create',
+        component: () => import('../views/seq/Create.vue'),
     },
+    {
+        path: '/seq/:id/view',
+        name: 'Seq-view',
+        component: () => import('../views/seq/View.vue'),
+    },
+    {
+        path: '/seq/:id/edit',
+        name: 'Seq-edit',
+        component: () => import('../views/seq/Edit.vue'),
+    },
+
 ];
 
 

@@ -30,6 +30,6 @@ export default{
     
     auth: {
         refreshTime: "24h",
-        accessTime : "10m",
+        accessTime : "30m",
     }
 }

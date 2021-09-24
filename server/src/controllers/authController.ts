@@ -109,6 +109,8 @@ export default class AuthController{
             res.cookie('refreshToken', refreshToken, {maxAge: 1000 * 60 * 60 * 24, httpOnly: true});
             res.status(200).send({accessToken: accessToken, user: user});
 
+            console.log(accessToken);
+
             return mysql!.query('update `user` set refreshToken = ? where id = ?', [refreshToken, user.id]);
         }).catch(error => {
             console.error(error);
