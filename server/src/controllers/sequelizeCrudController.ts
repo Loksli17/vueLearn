@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import ErrorMessage                  from "../libs/error";
 import Query                         from "../libs/query";
+import User                          from "../models/User";
 
 
 export default class SequelizeCrudController{
@@ -8,7 +9,7 @@ export default class SequelizeCrudController{
     private static router: Router = Router();
 
 
-    public static getArticles(req: Request, res: Response){
+    public static async getUsers(req: Request, res: Response){
 
         interface QueryData{
             skip: number,
@@ -17,6 +18,7 @@ export default class SequelizeCrudController{
 
         let
             QueryData : QueryData              = req.body,
+            users     : Array<User>            = [],
             dataErrors: Array<keyof QueryData> = [];
 
         dataErrors = Query.checkData(QueryData, ['skip', 'take']);
@@ -26,20 +28,28 @@ export default class SequelizeCrudController{
             return;
         }
 
-        
+        users = await User.findAll({limit: Number(QueryData.take), offset: Number(QueryData.skip)});
+
+        res.status(200).send({users: users});
+    }
+
+
+    public static async getAmountUsers(req: Request, res: Response){
+
+        res.status(200).send({amount: 10});
+    }
+
+
+    public static async getUser(req: Request, res: Response){
+
     }
 
 
     public static routes(){
 
-        this.router.post(  '/',              this.getArticles);
-        // this.router.post(  '/amount',        this.getAmountArticles);
-        // this.router.get(   '/article-types', this.getTypes);
-        // this.router.get(   '/:id',           this.getArticle);
-        // this.router.delete('/:id/remove',    this.removeArticle);
-        // this.router.put(   '/add',           this.addArticle);
-        // this.router.put(   '/:id/edit',      this.editArticle);
-        // this.router.post(  '/article-image', this.imageUpload);
+        this.router.get('/',       this.getUsers);
+        this.router.get('/amount', this.getAmountUsers);
+        this.router.get('/:id',    this.getUser);
 
         return this.router;
     }

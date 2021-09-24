@@ -49,6 +49,7 @@ User.init({
 }, {
     tableName: 'user',
     sequelize,
+    timestamps: false,
 });
 
 
