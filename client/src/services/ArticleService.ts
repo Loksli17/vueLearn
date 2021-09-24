@@ -2,50 +2,13 @@
 import axios, { AxiosResponse } from 'axios';
 import Filters                  from '@/libs/filters';
 import { LoadingFile }          from '@/components/FileUpload/types';
-
-
-
-class DecoratorFactory { 
-
-    public static createDecoratorAfter(handler: (data: any) => any){
-
-        return (target: Record<string, any>, propertyKey: string, descriptor: PropertyDescriptor) => {
-
-            const method = descriptor.value;
-
-            descriptor.value = async function(...args: any[]){
-                const data = await method.apply(this, args);
-                return handler(data);
-            }
-
-            return descriptor;
-        }
-    }
-
-
-    public static createDecoratorBefore(handler: () => void){
-
-        return (target: Record<string, any>, propertyKey: string, descriptor: PropertyDescriptor) => {
-
-            const method = descriptor.value;
-
-            descriptor.value = async function(...args: any[]){
-                handler();
-                const data = await method.apply(this, args);
-                return data;
-            }
-
-            return descriptor;
-        }
-    }
-}
-
+import Service                  from '@/libs/Service';
 
 
 const decorators = {
 
     normalArticles: () => {
-        return DecoratorFactory.createDecoratorAfter((articles: Array<Record<string, any>>): Array<Record<string, any>> => {
+        return Service.createDecoratorAfter((articles: Array<Record<string, any>>): Array<Record<string, any>> => {
             return articles.map((item: Record<string, any>) => {
                 item.isReady = item.isReady ? 'Ready' : 'Not Ready';
                 item.time    = Filters.timeToView('0000-01-01 ' + item.time as string);
@@ -56,7 +19,7 @@ const decorators = {
     },
 
     normalArticle: (param: string) => {
-        return DecoratorFactory.createDecoratorAfter((article: Record<string, any>) => {
+        return Service.createDecoratorAfter((article: Record<string, any>) => {
             article.date = param == "db" ? Filters.dateToDb(article.date as Date) : Filters.dateToView(article.date as Date);
                 return article;
         })
@@ -65,8 +28,7 @@ const decorators = {
 }
 
 
-
-export default class ArticleService {
+export default class ArticleService extends Service {
 
 
     @decorators.normalArticles()
@@ -77,7 +39,9 @@ export default class ArticleService {
             console.error(reason);
         });
 
-        if(response == undefined) {console.error('Bad response'); return null;}
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200, 201, 202]);
 
         return response.data.articles;
     }
