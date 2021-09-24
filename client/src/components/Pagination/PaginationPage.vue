@@ -15,13 +15,20 @@
     }
 
     export default defineComponent({
+        
         name: "pagination-page",
+        
         emits: ["clicked"],
+        
         props: {
             page: {
                 type: Object as PropType<Page>,
                 required: true
-            }
+            },
+            src: {
+                type   : String,
+                default: undefined,
+            },
         }
     })
 </script>

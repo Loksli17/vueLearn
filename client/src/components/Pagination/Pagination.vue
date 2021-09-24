@@ -3,39 +3,24 @@
         <div :class="classNameData">
 
             <div v-if="firstPage">
-                <!-- <a :href="firstPage.link" :class="firstPage.class" @click.prevent="setCurrentPageEvt">
-                    {{firstPage.content}}
-                </a> -->
                 <PaginationPage :page="firstPage" @clicked="setCurrentPageEvt(firstPage.link)" />
             </div>
 
             <div v-if="prevPage">
-                <!-- <a :href="prevPage.link" :class="prevPage.class" @click.prevent="setCurrentPageEvt">
-                    {{prevPage.content}}
-                </a> -->
-                <PaginationPage :page="prevPage" @clicked="setCurrentPageEvt(prevPage.link)" />
+                <PaginationPage :page="prevPage"  @clicked="setCurrentPageEvt(prevPage.link)" />
             </div>
 
             <template v-for="page in pages" :key="page">
                 <div>
-                    <!-- <a :href="page.link" :class="page.class" @click.prevent="setCurrentPageEvt">
-                        {{page.content}}
-                    </a> -->
                     <PaginationPage :page="page" @clicked="setCurrentPageEvt(page.link)" />
                 </div>
             </template>
 
             <div v-if="nextPage">
-                <!-- <a :href="nextPage.link" :class="nextPage.class" @click.prevent="setCurrentPageEvt">
-                    {{nextPage.content}}
-                </a> -->
                 <PaginationPage :page="nextPage" @clicked="setCurrentPageEvt(nextPage.link)" />    
             </div>
 
             <div v-if="lastPage">
-                <!-- <a :href="lastPage.link" :class="lastPage.class" @click.prevent="setCurrentPageEvt">
-                    {{lastPage.content}}
-                </a> -->
                 <PaginationPage :page="lastPage" @clicked="setCurrentPageEvt(lastPage.link)" />    
             </div>
         </div>
@@ -89,19 +74,29 @@
             elementAmount: {
                 type    : Number,
                 required: true
-            }
+            },
+            nextPageContent: {
+                type   : String,
+                default: ">>", 
+            },
+            nextPageSrc: {
+                type   : String,
+                default: undefined,
+            },
+            prevPageContent: {
+                type   : String,
+                default: "<<", 
+            },
+            prevPageSrc: {
+                type   : String,
+                default: undefined,
+            },
         },
 
-        // mounted: function(){
-        //     this.init();
-        //     this.render();
-        // },
-        
         emits: ["update:take", "update:skip", "page-change"],
         
         data: function(){
             return {
-                // skip               : 0 as number,
                 pages              : [] as Array<Page>,
                 maxPage            : 0 as number,
                 currentPageData    : 0 as number,
@@ -113,12 +108,10 @@
                 lastPage           : undefined as Page | undefined,
                 firstPage          : undefined as Page | undefined,
                 displayStatus      : true as boolean,
-                // amountElements     : 0 as number,
             }
         },
         watch: {
             elementAmount: function(): void {
-                // this.$emit("amount-change", { take: this.take, skip: this.skip })
                 this.init();
                 this.render();
                 this.$emit("update:take", this.take);
@@ -137,11 +130,6 @@
         },
         methods: {
 
-            // setAmountElements(newVal: number){
-            //     this.amountElements = newVal;
-            //     this.init();
-            //     this.render();
-            // },
 
             render: function(): void{
                 this.localSkip = this.take * (this.currentPageData - 1);
@@ -155,13 +143,9 @@
                 
                 const endPointPages: {last: Page | undefined; first: Page | undefined} = this.createEndPointsPages();
                 
-                if(this.endButton){
-                    this.lastPage = endPointPages.last;
-                }
+                if(this.endButton) { this.lastPage = endPointPages.last }
                 
-                if(this.startButton){
-                    this.firstPage = endPointPages.first;
-                }
+                if(this.startButton) { this.firstPage = endPointPages.first }
             },
             
 
@@ -172,11 +156,7 @@
                 this.itemClassData       = this.itemClass       == undefined ? 'page' : this.itemClass;
                 this.activePageClassData = this.activePageClass == undefined ? 'active-page' : this.activePageClass;
                 
-                if(this.currentPage > this.maxPage){
-                    this.currentPageData = this.maxPage;
-                }else{
-                    this.currentPageData = this.currentPage;
-                }
+                this.currentPageData = this.currentPage > this.maxPage ? this.maxPage : this.currentPage;
             },
 
 
@@ -187,7 +167,7 @@
                     last: number = 0;
                
                 if(Number(this.currentPageData) + (this.pageGap / 2) >= this.maxPage){
-                    last = this.maxPage;
+                    last  = this.maxPage;
                     first = this.maxPage - this.pageGap + 1;
                 }else if(Number(this.currentPageData) - (this.pageGap / 2) <= 1){
                     first = 1;
@@ -197,13 +177,9 @@
                     last = first + this.pageGap - 1;
                 }
                 
-                if(last > this.maxPage){
-                    last = this.maxPage;
-                }
+                if(last > this.maxPage) { last = this.maxPage }
                 
-                if(first < 1){
-                    first = 1;
-                }
+                if(first < 1) { first = 1 }
                 
                 return{
                     first: first,
@@ -238,8 +214,8 @@
                     prevNum: number = (this.currentPageData - 1) < 1            ? 1            : this.currentPageData - 1;
                 
                 return {
-                    next: {link: nextNum, content: '>>', class: this.itemClassData},
-                    prev: {link: prevNum, content: '<<', class: this.itemClassData},
+                    next: {link: nextNum, content: this.nextPageContent, class: this.itemClassData},
+                    prev: {link: prevNum, content: this.prevPageContent, class: this.itemClassData},
                 };
             },
             
