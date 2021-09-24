@@ -33,10 +33,12 @@
 
     export default defineComponent({
         name: "Table",
+
         components: {
             TableHeader,
             TableRow
         },
+
         props: {
             columnNames: {
                 type: Object as PropType<Array<Column>>,
@@ -59,12 +61,14 @@
                 })
             }
         },
+
         data() {
             return {
                 columnId: 0 as number,
                 sortOrder: SortOrder.ASCENDING as SortOrder,
             }
         },
+
         computed: {
             reorderedRows(): Array<Record<string, columnType>> {
                 let arr: Array<Record<string, columnType>> = [];
@@ -83,11 +87,13 @@
 
                 return arr;
             },
+
             rows(): Array<Record<string, columnType>> {
                 let arr: Array<Record<string, columnType>> = [];
 
                 if (this.config.sortableByColumn) {
                     
+                    /* */
                     const comparator = /*this.config.comparator ?? */((row1: Record<string, columnType>, row2: Record<string, columnType>): number => {
                         const
                             columnName = Object.keys(this.reorderedRows[0])[this.columnId],
@@ -112,6 +118,7 @@
                 
                 return arr;
             },
+
             cols(): Array<Column> {
                 return this.columnNames;
             },
@@ -126,6 +133,7 @@
 
                 return columns;
             },
+
             columnsToBeHidden(): Array<number> {
                 if (this.config.hideColumn) {
                     return this.config.hideColumn;
@@ -134,12 +142,13 @@
                 }
             }
         },
+
         methods: {
             setSelectedColumn(id: number): void {
                 this.columnId = id;
                 this.sortOrder = (this.sortOrder === SortOrder.ASCENDING) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
             }
-        }
+        },
     });
 </script>
 

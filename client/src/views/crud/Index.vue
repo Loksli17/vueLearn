@@ -49,7 +49,7 @@
                     v-on:page-change="pageChangeEvt"
                 />   -->
                 <!-- ! The general rule is to write attributes in kebab-case, just like in vanilla HTML -->
-                <NewPagination
+                <Pagination
                     v-model:take=take
                     v-model:skip="skip"
                     :current-page=currentPage
@@ -68,12 +68,9 @@
 <script lang="ts">
 
     import { defineComponent } from 'vue';
-    import Pagination          from '../../components/crudComponent/Pagination.vue';
-    import NewPagination       from "@/components/Pagination/Pagination.vue";
+    import Pagination          from "@/components/Pagination/Pagination.vue";
     import PopupWrapper        from "@/components/Popup/PopupWrapper.vue";
     import FlashMessageData    from '../../libs/flashMessage';
-    // import axios               from '../../libs/axios';
-    // import { AxiosResponse }   from 'axios';
     import ArticleService      from '../../services/ArticleService';
 
     import Table from "../../components/table/Table.vue";
@@ -82,8 +79,7 @@
     export default defineComponent({
 
         components: {
-            // Pagination,
-            NewPagination,
+            Pagination,
             PopupWrapper,
             Table,
         },
@@ -130,13 +126,7 @@
 
             getArticlesAmount: async function(){
                 this.amountArticles = await ArticleService.getAmount() || 0;
-                // const pagination = this.$refs.pagination! as any;
-                // pagination.setAmountElements(this.amountArticles);
             },
-
-            // pageChangeEvt: function(data: {take: number; skip: number}){
-            //     this.getArticles(data);
-            // },
 
             pageChangeEvt: function(){
                 this.getArticles({ take: this.take, skip: this.skip });
