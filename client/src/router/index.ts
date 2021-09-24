@@ -45,22 +45,22 @@ const routes: Array<RouteRecordRaw> = [
 
     // ! ---seqCrud---
     {
-        path: '/seq',
+        path: '/seq-crud',
         name: 'Seq-index',
         component: () => import('../views/seq/Index.vue'),
     },
     {
-        path: '/seq/create',
+        path: '/seq-crud/create',
         name: 'Seq-create',
         component: () => import('../views/seq/Create.vue'),
     },
     {
-        path: '/seq/:id/view',
+        path: '/seq-crud/:id/view',
         name: 'Seq-view',
         component: () => import('../views/seq/View.vue'),
     },
     {
-        path: '/seq/:id/edit',
+        path: '/seq-crud/:id/edit',
         name: 'Seq-edit',
         component: () => import('../views/seq/Edit.vue'),
     },
