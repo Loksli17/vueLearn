@@ -8,15 +8,16 @@
                         :class="action.cssClassName" 
                         :to="action.path(itemId)"
                     >
-                        {{ action.name }}
+                        <img v-if="action.iconPath" :src="action.iconPath">
+                        <span>{{ action.name }}</span>
                     </router-link>
                     <a 
                         v-else-if="action.handler !== undefined" 
                         :class="action.cssClassName"
-                        href="" 
                         @click.prevent="action.handler(itemId)"
                     >
-                        {{ action.name }}
+                        <img v-if="action.iconPath" :src="action.iconPath">
+                        <span>{{ action.name }}</span>
                     </a>
                 </li>
             </template>
@@ -46,7 +47,7 @@
     .table-row-dropdown-action-menu-container {
         position: fixed;
         background-color: #FFF;
-        padding: 15px 20px 15px 30px;
+        padding: 15px 20px 15px 20px;
         border-radius: 10px;
         box-shadow: 3px 3px 8px #000;
         margin-left: 1%;
@@ -55,6 +56,29 @@
             list-style: none;
             margin: 0;
             padding: 0;
+
+            li {
+                padding: 10px 15px;
+
+                a {
+                    display: grid;
+                    grid-template-columns: max-content auto;
+                    align-items: center;
+                    gap: 10px;
+                    text-decoration: none;
+                    color: #000;
+                    // justify-content: center;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                    
+                    img {
+                        width: 20px;
+                        height: 20px;
+                    }
+                }
+            }
         }
     }
 </style>

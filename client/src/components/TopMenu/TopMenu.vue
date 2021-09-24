@@ -1,6 +1,6 @@
 <template>
     <teleport to="body">
-        <header class="top-menu-wrapper">
+        <header ref="root" class="top-menu-wrapper">
             <div class="top-menu-burger">
                 <span>dasgkjahbdkg</span>
             </div>
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent, PropType } from 'vue'
+    import { defineComponent, onMounted, PropType, ref } from 'vue'
     import TopMenuButton from './TopMenuButton.vue'
     import { LinkButton } from './types'
 
@@ -36,9 +36,21 @@
                 required: true
             }
         },
-        // setup(props) {
-            
-        // },
+        setup(props) {
+            const root = ref(null);
+
+            onMounted(() => {
+                const 
+                    headerVal = root.value as unknown as HTMLElement,
+                    headerHeight = parseInt(getComputedStyle(headerVal).height);
+
+                document.body.style.paddingTop = `${headerHeight}px`
+            })  
+
+            return {
+                root
+            }
+        },
     })
 </script>
 
