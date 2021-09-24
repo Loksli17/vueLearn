@@ -68,8 +68,13 @@
                 menuHeight:       Ref<number>  = ref(0);
 
             const setShowMobileMenu = (): void => {
-                const width = parseInt(getComputedStyle(document.body).width);
-                renderMobileMenu.value = width < 860;
+                const 
+                    bodyStyle = getComputedStyle(document.body),
+                    width     = parseInt(bodyStyle.width),
+                    // :)
+                    margin    = parseInt(bodyStyle.marginLeft) * 2;
+                
+                renderMobileMenu.value = (width + margin) < 859;
             }
 
             const setMobileMenuHeight = (el: HTMLElement): void => {
