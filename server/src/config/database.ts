@@ -8,7 +8,7 @@ class Connection{
 
     private static createPool(){
         return mysql2.createPool({
-            host           : '127.0.0.1',
+            host           : config.db.host,
             user           : config.db.user,
             password       : config.db.password,
             database       : config.db.name,
@@ -23,20 +23,3 @@ class Connection{
 
 
 export default Connection.pool.promise();
-
-
-// const init = () => {
-//     try {
-//         return mysql2.createPool({
-//             host           : '127.0.0.1',
-//             user           : config.db.user,
-//             password       : config.db.password,
-//             database       : config.db.name,
-//             port           : config.db.port,
-//         }).promise();
-//     } catch (error) {
-//         console.error(error);   
-//     }
-// }
-
-// export default init;

@@ -32,7 +32,7 @@ export default class SequelizeCrudController{
 
     public static routes(){
 
-        // this.router.post(  '/',              this.getArticles);
+        this.router.post(  '/',              this.getArticles);
         // this.router.post(  '/amount',        this.getAmountArticles);
         // this.router.get(   '/article-types', this.getTypes);
         // this.router.get(   '/:id',           this.getArticle);

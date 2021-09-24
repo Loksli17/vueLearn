@@ -1,13 +1,16 @@
 <template>
-    <TopMenu :buttons="topMenuButtons">
-        <template #left>
-            ahah
-        </template>
-        <template #right>
-            <input type="search" name="" id="">
-        </template>
-    </TopMenu>
+    
     <div class="crud-index">
+
+        <TopMenu :buttons="topMenuButtons">
+            <template #left>
+                ahah
+            </template>
+            <template #right>
+                <input type="search" name="" id="">
+            </template>
+        </TopMenu>
+
         <h1>Index page of CRUD</h1>
 
         <div class="add-line">
@@ -76,16 +79,14 @@
 <script lang="ts">
 
     import { defineComponent }             from 'vue';
-    import Pagination                   from "@/components/Pagination/Pagination.vue";
+    import Pagination                      from "@/components/Pagination/Pagination.vue";
     import TopMenu                         from "@/components/TopMenu/TopMenu.vue";
     import PopupWrapper                    from "@/components/Popup/PopupWrapper.vue";
     import FlashMessageData                from '../../libs/flashMessage';
     import Table                           from "@/components/table/Table.vue";
     import { Column, Action, TableConfig } from "@/components/table/types";
-    // import axios               from '../../libs/axios';
-    // import { AxiosResponse }   from 'axios';
-    import ArticleService      from '../../services/ArticleService';
-    import { LinkButton } from '@/components/TopMenu/types';
+    import ArticleService                  from '../../services/ArticleService';
+    import { LinkButton }                  from '@/components/TopMenu/types';
 
     export default defineComponent({
 
@@ -93,6 +94,7 @@
             Pagination,
             PopupWrapper,
             Table,
+            TopMenu,
         },
 
         data: function(){
@@ -150,8 +152,6 @@
             removeArticle: async function(id: number){
                 await ArticleService.removeOne({id: id});
                 
-                // const pagination = this.$refs.pagination! as any;
-                // pagination.setAmountElements(this.amountArticles--);
                 this.amountArticles--;
                 this.getArticles({take: this.take, skip: this.skip});
 
