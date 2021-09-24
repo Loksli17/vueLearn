@@ -10,7 +10,7 @@
             <SideMenuButton 
                 v-for="(button, index) in buttonsList" 
                 :key="index" 
-                :buttonData="button"
+                :button-data="button"
             />
         </div>
         <div class="side-menu-footer">

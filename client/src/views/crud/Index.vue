@@ -1,4 +1,12 @@
 <template>
+    <TopMenu :buttons="topMenuButtons">
+        <template #left>
+            ahah
+        </template>
+        <template #right>
+            <input type="search" name="" id="">
+        </template>
+    </TopMenu>
     <div class="crud-index">
         <h1>Index page of CRUD</h1>
 
@@ -67,22 +75,24 @@
 
 <script lang="ts">
 
-    import { defineComponent } from 'vue';
-    import Pagination          from '../../components/crudComponent/Pagination.vue';
-    import NewPagination       from "@/components/Pagination/Pagination.vue";
-    import PopupWrapper        from "@/components/Popup/PopupWrapper.vue";
-    import FlashMessageData    from '../../libs/flashMessage';
+    import { defineComponent }             from 'vue';
+    import Pagination                      from '@/components/crudComponent/Pagination.vue';
+    import NewPagination                   from "@/components/Pagination/Pagination.vue";
+    import TopMenu                         from "@/components/TopMenu/TopMenu.vue";
+    import PopupWrapper                    from "@/components/Popup/PopupWrapper.vue";
+    import FlashMessageData                from '../../libs/flashMessage';
+    import Table                           from "@/components/table/Table.vue";
+    import { Column, Action, TableConfig } from "@/components/table/types";
     // import axios               from '../../libs/axios';
     // import { AxiosResponse }   from 'axios';
     import ArticleService      from '../../services/ArticleService';
-
-    import Table from "../../components/table/Table.vue";
-    import { Column, Action, TableConfig } from "../../components/table/types";
+    import { LinkButton } from '@/components/TopMenu/types';
 
     export default defineComponent({
 
         components: {
             // Pagination,
+            TopMenu,
             NewPagination,
             PopupWrapper,
             Table,
@@ -91,6 +101,10 @@
         data: function(){
             return {
                 articles      : [] as Array<Record<string, unknown>>,
+                topMenuButtons: [
+                    { name: "Test", path: "/kek" },
+                    { name: "Lol",  path: "/lol" }
+                ] as Array<LinkButton>,
                 columnNames   : [ 
                         { displayedName: "Id",      fieldName: "id" },
                         { displayedName: "Title",   fieldName: "title" },

@@ -55,7 +55,6 @@
                     hideColumn:       undefined,
                     sortableByColumn: false,
                     dropDownActions:  false
-                    // comparator:       undefined
                 })
             }
         },
