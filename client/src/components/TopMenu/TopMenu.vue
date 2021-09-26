@@ -23,7 +23,7 @@
             </div>
         </header>
         <template v-if="renderMobileMenu">
-            <transition name="top-menu-mobile-slide">
+            <transition :name="transitionName">
                 <div v-show="showMenu" class="top-menu-mobile-wrapper" :style="{ top: menuHeight }">
                     <div class="top-menu-button-list">
                         <ul>
@@ -42,9 +42,9 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent, onBeforeUnmount, onMounted, PropType, Ref, ref } from 'vue'
-    import TopMenuButton from './TopMenuButton.vue'
-    import { LinkButton } from './types'
+    import { computed, defineComponent, onBeforeUnmount, onMounted, PropType, Ref, ref } from 'vue';
+    import TopMenuButton                                                       from './TopMenuButton.vue';
+    import { LinkButton }                                                      from './types';
 
     export default defineComponent({
         components: { TopMenuButton },
@@ -57,15 +57,22 @@
             selectedButton: {
                 type: Object as PropType<LinkButton>,
                 required: false
+            },
+            slideFrom: {
+                type: String,
+                default: "bottom"
             }
         },
 
-        setup() {
+        setup(props) {
             const root = ref(null);
             let 
                 renderMobileMenu: Ref<boolean> = ref(false),
                 showMenu:         Ref<boolean> = ref(false),
-                menuHeight:       Ref<number>  = ref(0);
+                menuHeight:       Ref<number>  = ref(0),
+                transitionName                 = computed(() => {
+                    return props.slideFrom === "bottom" ? "top-menu-mobile-slide-bottom" : "top-menu-mobile-slide-left";
+                });
 
             const setShowMobileMenu = (): void => {
                 const 
@@ -111,6 +118,7 @@
                 menuHeight,
                 toggleMenu,
                 showMenu,
+                transitionName,
                 renderMobileMenu
             }
         },
@@ -122,14 +130,24 @@
     @import "../../assets/scss/top-menu/top-menu.scss";
     @import "../../assets/scss/top-menu/top-menu-mobile.scss";
 
-    .top-menu-mobile-slide-enter-active,
-    .top-menu-mobile-slide-leave-active {
+    .top-menu-mobile-slide-bottom-enter-active,
+    .top-menu-mobile-slide-bottom-leave-active {
         transition: top .3s;
     }
 
-    .top-menu-mobile-slide-enter-from,
-    .top-menu-mobile-slide-leave-to {
+    .top-menu-mobile-slide-bottom-enter-from,
+    .top-menu-mobile-slide-bottom-leave-to {
         top: 100vh;
+    }
+
+    .top-menu-mobile-slide-left-enter-active,
+    .top-menu-mobile-slide-left-leave-active {
+        transition: left .3s;
+    }
+
+    .top-menu-mobile-slide-left-enter-from,
+    .top-menu-mobile-slide-left-leave-to {
+        left: -100vw;
     }
 
     @media screen and (max-width: 860px) {

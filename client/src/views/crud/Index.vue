@@ -2,7 +2,7 @@
     
     <div class="crud-index">
 
-        <TopMenu :buttons="topMenuButtons">
+        <TopMenu :buttons="topMenuButtons" :slide-from="'bottom'">
             <template #left>
                 <!-- 👀 -->
                 <img width="30" src="./../../assets/img/logo.png" alt="">
