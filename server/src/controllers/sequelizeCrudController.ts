@@ -4,6 +4,7 @@ import Query                         from "../libs/query";
 import User                          from "../models/User";
 
 
+//! ADD TRY CATCH STUPID ESSOL
 export default class SequelizeCrudController{
 
     private static router: Router = Router();
@@ -51,7 +52,14 @@ export default class SequelizeCrudController{
             return;
         }
 
-        user = await User.findOne({where: {id: id}});
+        try {
+            user = await User.findOne({where: {id: id}});
+        } catch (error) {
+            console.error(error);
+            res.status(400).send({error: ErrorMessage.dataNotSended('id')});
+            return;
+        }
+        
 
         if(user == null){
             res.status(404).send({error: ErrorMessage.dataNotSended('user')});
@@ -79,12 +87,69 @@ export default class SequelizeCrudController{
     }
 
 
+    public static async editUser(req: Request, res: Response){
+
+        interface QueryData{
+            user: {
+                email: string,
+                login: string,
+            }
+        }
+
+        let 
+            id        : number                 = Number(req.params.id),
+            QueryData : QueryData              = req.body as any,
+            dataErrors: Array<keyof QueryData> = [],
+            user      : User | null;
+
+        dataErrors = Query.checkData(QueryData, ['user']);
+
+        if(dataErrors.length){
+            res.status(400).send({error: ErrorMessage.dataNotSended(dataErrors[0])});
+            return;
+        }
+
+        if(id == undefined) {
+            res.status(400).send({error: ErrorMessage.dataNotSended('id')});
+            return;
+        }
+
+        try {
+            user = await User.findOne({where: {id: id}});
+        } catch (error) {
+            console.error(error);
+            res.status(400).send({error: ErrorMessage.dataNotSended('id')});
+            return;
+        }
+
+        if(user == undefined){
+            res.status(400).send({error: ErrorMessage.notFound(`user with id: ${id}`)});
+            return;
+        }
+
+        user.set('login', QueryData.user.login);
+        user.set('email', QueryData.user.email);
+
+        try {
+            await user.save();
+        } catch (error) {
+            console.error(error);
+            res.status(400).send({error: ErrorMessage.db()});
+            return;
+        }
+
+        res.status(200).send({msg: `User with id: ${id} successfully changed`});
+        
+    }
+
+
     public static routes(){
 
         this.router.post(  '/',           this.getUsers);
         this.router.post(  '/amount',     this.getAmountUsers);
         this.router.post(  '/:id',        this.getUser);
         this.router.delete('/:id/remove', this.removeUser);
+        this.router.put(   '/:id/edit',   this.editUser);
 
         return this.router;
     }

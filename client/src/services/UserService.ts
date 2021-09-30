@@ -73,4 +73,21 @@ export default class UserService extends Service{
 
         return;
     }
+
+
+    public static async editUser(data: Record<string, any>, id: number): Promise<AxiosResponse | null>{
+        
+        const response: AxiosResponse | void = await axios.put(`/seq/${id}/edit`, data)
+        .catch((reason: AxiosError) => {
+            if(reason.response == undefined) return;
+            this.errorMessage(reason.response.status);
+            console.error(reason);
+        });
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
+
+        return response;
+    }
 }
