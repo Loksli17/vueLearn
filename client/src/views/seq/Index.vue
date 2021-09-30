@@ -96,8 +96,8 @@
 
                 showMenu: false as boolean,
                 sideMenuButtons: [
-                    { text: "button text haha",                              path: "/lol/kek" },
-                    { text: "very long button text, let's see what happens", path: "/kek/lol" }
+                    { text: "crud",     path: "/crud" },
+                    { text: "seq-crud", path: "/seq-crud" }
                 ] as Array<Button>,
 
                 take       : 10 as number,

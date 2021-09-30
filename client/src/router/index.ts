@@ -1,5 +1,5 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-import store                                                  from '../store/';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import store                                              from '../store/';
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -69,7 +69,7 @@ const routes: Array<RouteRecordRaw> = [
 
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(process.env.BASE_URL),
     routes
 });
 
@@ -80,12 +80,12 @@ router.beforeEach((to, from, next) => {
 
     if(to.name !== "Login" && !isAuth){
         next({name: 'Login'});
-    }else if(to.name == "Login" && isAuth){
-        next({name: '404'})
     }else if(to.path === '/logout'){
         store.commit('setUserIdentity', null);
         store.commit('setJWT', null);
         router.push('/login');
+    }else if(to.name == "Login" && isAuth){
+        next({name: '404'});
     }else{
         next();
     }
