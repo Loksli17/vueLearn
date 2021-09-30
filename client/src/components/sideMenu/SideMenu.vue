@@ -1,24 +1,29 @@
 <template>
-    <div class="side-menu-container" v-show="showMenuLocal">
-        <div class="side-menu-header">
-            <button @click.prevent="showMenuLocal = !showMenuLocal">X</button>
-            <slot name="header">
+    <teleport to="body">
+        <div class="side-menu-background" v-show="showMenuLocal" @click="clickedOnBackground"></div>
+        <transition name="side-menu-slide">
+            <div class="side-menu-container" v-show="showMenuLocal">
+                <div class="side-menu-header">
+                    <button @click.prevent="showMenuLocal = !showMenuLocal">X</button>
+                    <slot name="header">
 
-            </slot>
-        </div>
-        <div class="side-menu-body">
-            <SideMenuButton 
-                v-for="(button, index) in buttonsList" 
-                :key="index" 
-                :button-data="button"
-            />
-        </div>
-        <div class="side-menu-footer">
-            <slot name="footer">
+                    </slot>
+                </div>
+                <div class="side-menu-body">
+                    <SideMenuButton 
+                        v-for="(button, index) in buttonsList" 
+                        :key="index" 
+                        :button-data="button"
+                    />
+                </div>
+                <div class="side-menu-footer">
+                    <slot name="footer">
 
-            </slot>
-        </div>
-    </div>
+                    </slot>
+                </div>
+            </div>
+        </transition>
+    </teleport>
 </template>
 
 <script lang="ts">
@@ -43,6 +48,9 @@
                 required: true
             }
         },
+        mounted() {
+            document.body.style.overflow = "hidden";
+        },
         computed: {
             showMenuLocal: {
                 get(): boolean {
@@ -52,32 +60,28 @@
                     this.$emit("update:show-menu", newVal);
                 }
             }
+        },
+        methods: {
+            clickedOnBackground(): void {
+                document.body.style.overflow = "initial";
+                this.$emit("update:show-menu", false);
+            }
         }
     });
 </script>
 
 <style lang="scss" scoped>
-    $side-menu-width: 200px;
+    // ! remove for production 
+    @import "../../assets/scss/side-menu/side-menu.scss";
 
-    // .side-menu-slide-enter-active, 
-    // .side-menu-slide-leave-active {
-    //     transition: all .3s;
-    // } 
-    // .side-menu-slide-enter-from,
-    // .side-menu-slide-leave-to {
-    //     left: -200px;
-    //     opacity: 0;
-    // }
-
-    .side-menu-container {
-        display: grid;
-        position: fixed;
-        left: 0;
-        top: 0;
-        opacity: 1;
-        width: $side-menu-width;
-        height: 100%;
-        z-index: 10000;
-        background-color: burlywood;
+    // it is very important that these styles are AFTER .slide-menu-container
+    .side-menu-slide-enter-active, 
+    .side-menu-slide-leave-active {
+        transition: left .3s;
+    } 
+    .side-menu-slide-enter-from,
+    .side-menu-slide-leave-to {
+        left: -200px;
     }
+
 </style>

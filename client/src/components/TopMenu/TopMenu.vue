@@ -71,6 +71,9 @@
                 showMenu:         Ref<boolean> = ref(false),
                 menuHeight:       Ref<number>  = ref(0),
                 transitionName                 = computed(() => {
+                    if (props.slideFrom !== "bottom" && props.slideFrom !== "left") 
+                        console.warn("[TopMenu warn]: Unsupported direction. Falling back to 'left'");
+                    
                     return props.slideFrom === "bottom" ? "top-menu-mobile-slide-bottom" : "top-menu-mobile-slide-left";
                 });
 

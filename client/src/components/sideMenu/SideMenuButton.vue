@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="side-menu-button">
         <router-link :to="buttonData.path">{{ buttonData.text }}</router-link>
     </div>
 </template>
@@ -18,3 +18,7 @@
         }
     })
 </script>
+
+<style lang="scss" scoped>
+    @import "../../assets/scss/side-menu/side-menu-button.scss";
+</style>

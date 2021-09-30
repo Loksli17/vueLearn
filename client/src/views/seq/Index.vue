@@ -1,5 +1,16 @@
 <template>
-    
+    <button @click="showMenu = true">open menu</button>
+    <SideMenu :buttons-list="sideMenuButtons" v-model:show-menu="showMenu">
+        <template #header>
+            <h1>Header</h1>
+            <p>content</p>
+        </template>
+        <template #footer>
+            <h4>Footer</h4>
+            <p>some text here</p>
+        </template>
+    </SideMenu>
+
     <div class="crud-seq-index">
 
         <h1>Index page of SEQUELIZE CRUD</h1>
@@ -52,6 +63,8 @@
     import { Action, Column }  from '../../components/table/types';
     import UserService         from '../../services/UserService';
     import FlashMessageData    from '../../libs/flashMessage';
+    import SideMenu            from "@/components/sideMenu/SideMenu.vue";
+    import { Button }          from "@/components/sideMenu/types";
 
 
     export default defineComponent({
@@ -59,6 +72,7 @@
         components: {
             Pagination,
             Table,
+            SideMenu
         },
 
         data: function(){
@@ -79,6 +93,12 @@
                         { name: "Edit",   path: (id: number) => `/seq-crud/${id}/edit`, iconPath: require("./../../assets/img/table-icons/edit.svg") }, 
                         { name: "Delete", handler: this.removeUser,                     iconPath: require("./../../assets/img/table-icons/delete.svg") },
                 ] as Array<Action>,
+
+                showMenu: false as boolean,
+                sideMenuButtons: [
+                    { text: "button text haha",                              path: "/lol/kek" },
+                    { text: "very long button text, let's see what happens", path: "/kek/lol" }
+                ] as Array<Button>,
 
                 take       : 10 as number,
                 skip       : 0 as number,
