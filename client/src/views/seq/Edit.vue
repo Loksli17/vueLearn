@@ -53,8 +53,6 @@
             await this.getUser();
             this.initScheme();
             this.initFormData();
-
-            console.log(this.scheme, this.dataForm);
         },
 
         methods: {
