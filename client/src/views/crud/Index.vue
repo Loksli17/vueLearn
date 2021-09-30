@@ -2,7 +2,7 @@
     
     <div class="crud-index">
 
-        <TopMenu :buttons="topMenuButtons" :slide-from="'bottom'">
+        <TopMenu :buttons="topMenuButtons" slide-from="bottom">
             <template #left>
                 <!-- 👀 -->
                 <img width="30" src="./../../assets/img/logo.png" alt="">
@@ -101,8 +101,9 @@
             return {
                 articles      : [] as Array<Record<string, unknown>>,
                 topMenuButtons: [
-                    { name: "crud", path: "/crud" },
-                    { name: "seq-crud",  path: "/seq-crud" }
+                    { name: "crud",      path: "/crud" },
+                    { name: "seq-crud",  path: "/seq-crud" },
+                    { name: "long text", path: "/long" }
                 ] as Array<LinkButton>,
                 columnNames   : [ 
                         { displayedName: "Id",      fieldName: "id" },

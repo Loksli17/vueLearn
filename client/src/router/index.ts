@@ -20,6 +20,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/404.vue'),
     },
 
+    {
+        path     : "/long",
+        name     : "Long text",
+        component: () => import('../views/LongPage.vue'),
+    },
+
     // ! ---crud----
     {
         path: '/crud',
