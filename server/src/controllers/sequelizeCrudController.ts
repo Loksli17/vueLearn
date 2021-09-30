@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import e, { Router, Request, Response } from "express";
 import ErrorMessage                  from "../libs/error";
 import Query                         from "../libs/query";
 import User                          from "../models/User";
@@ -29,14 +29,30 @@ export default class SequelizeCrudController{
             return;
         }
 
-        users = await User.findAll({limit: Number(QueryData.take), offset: Number(QueryData.skip)});
+        try {
+            users = await User.findAll({limit: Number(QueryData.take), offset: Number(QueryData.skip)});
+        } catch (error) {
+            res.status(400).send({error: ErrorMessage.db()});
+            console.error(error);
+            return;
+        }
 
         res.status(200).send({users: users});
     }
 
 
     public static async getAmountUsers(req: Request, res: Response){
-        let amount: number = await User.count();
+
+        let amount: number = 0;
+        
+        try {
+            amount = await User.count();
+        } catch (error) {
+            res.status(400).send({error: ErrorMessage.db()});
+            console.error(error);
+            return;
+        }
+        
         res.status(200).send({amount: amount});
     }
 
@@ -60,7 +76,6 @@ export default class SequelizeCrudController{
             return;
         }
         
-
         if(user == null){
             res.status(404).send({error: ErrorMessage.dataNotSended('user')});
             return;
@@ -81,7 +96,14 @@ export default class SequelizeCrudController{
             return;
         }
 
-        userId = await User.destroy({where: {id: id}});
+        try {
+            userId = await User.destroy({where: {id: id}});
+        } catch (error) {
+            res.status(400).send({error: ErrorMessage.db()});
+            console.error(error);
+            return;
+        }
+        
 
         res.status(200).send({id: userId});
     }
