@@ -43,7 +43,7 @@
         
         data: function(){
             return {
-                user    : {} as Record<string, any>,
+                user    : {} as Record<string, any> | null,
                 scheme  : [] as Array<Array<FormHtmlItem>> | null,
                 dataForm: null as FormDataView | null, 
             }
@@ -58,7 +58,7 @@
         methods: {
 
             getUser: async function(){
-                this.user = await UserService.getOne({id: this.$route.params.id});
+                this.user = await UserService.getOne({id: this.$route.params.id}) || null;
             },
 
             initScheme: function(){
@@ -73,9 +73,8 @@
             },
 
             sendForm: async function(data: FormDataView){
-                const res: AxiosResponse = await UserService.editUser({user: data}, this.$route.params.id);
+                await UserService.editUser({user: data}, Number(this.$route.params.id));
                 this.$flashMessage.show(FlashMessageData.successMessage('Edit user', `User with id = ${this.$route.params.id} was edit`));
-                
             }
         },
     });
