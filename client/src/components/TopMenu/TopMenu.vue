@@ -46,6 +46,8 @@
     import TopMenuButton                                                       from './TopMenuButton.vue';
     import { LinkButton }                                                      from './types';
 
+    export { LinkButton };
+
     export default defineComponent({
         components: { TopMenuButton },
         
