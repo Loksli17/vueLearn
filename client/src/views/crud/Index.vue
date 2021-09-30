@@ -81,13 +81,12 @@
 
     import { defineComponent }             from 'vue';
     import Pagination                      from "@/components/Pagination/Pagination.vue";
-    import TopMenu                         from "@/components/TopMenu/TopMenu.vue";
+    import TopMenu, { LinkButton }         from "@/components/TopMenu/TopMenu.vue";
     import PopupWrapper                    from "@/components/Popup/PopupWrapper.vue";
     import FlashMessageData                from '../../libs/flashMessage';
     import Table                           from "@/components/table/Table.vue";
     import { Column, Action, TableConfig } from "@/components/table/types";
     import ArticleService                  from '../../services/ArticleService';
-    import { LinkButton }                  from '@/components/TopMenu/types';
 
     export default defineComponent({
 

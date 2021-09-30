@@ -6,7 +6,7 @@
 
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
-    import { LinkButton }      from "./types";
+    import { LinkButton }                from "./types";
 
     export default defineComponent({
         name: "top-menu-button",

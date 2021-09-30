@@ -29,7 +29,9 @@
     import { defineComponent, PropType }                          from 'vue';
     import TableHeader                                            from './TableHeader.vue';
     import TableRow                                               from "./TableRow.vue";
-    import { Column, columnType, Action, TableConfig, SortOrder } from "./types";
+    import { Column, columnType, Action, TableConfig, SortOrder, CustomCell } from "./types";
+
+    export { Column, CustomCell, Action, TableConfig, SortOrder, columnType }
 
     export default defineComponent({
         name: "Table",
