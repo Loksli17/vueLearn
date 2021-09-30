@@ -1,6 +1,6 @@
 <template>
     <teleport to="body">
-        <div class="popup-wrapper" v-if="showPopup">
+        <div class="popup-wrapper">
             <div class="popup-wrapper-background" @click="clickedOnBackground"></div>
             <div class="popup-wrapper-body">
                 <slot>
@@ -15,16 +15,24 @@
     import { defineComponent } from 'vue'
     export default defineComponent({
         name: "popup-wrapper",
+
         emits: ["update:show-popup"],
+
         props: {
             showPopup: {
                 type:     Boolean,
                 required: true
             }
         },
+
         mounted() {
             document.body.style.overflow = "hidden";
         },
+
+        beforeUnmount() {
+            document.body.style.overflow = "initial";
+        },
+        
         methods: {
             clickedOnBackground() {
                 document.body.style.overflow = "initial";
@@ -37,6 +45,7 @@
 <style lang="scss" scoped>
     .popup-wrapper {
         position: fixed;
+        z-index: 3000;
         display: flex;
         align-items: center;
         justify-content: center;

@@ -18,7 +18,7 @@
                 type: String,
                 default: "auto",
                 validator: (behavior: string) => {
-                    return (behavior !== "smooth" && behavior !== "auto")
+                    return (behavior == "smooth" || behavior == "auto")
                 }
             },
             position: {

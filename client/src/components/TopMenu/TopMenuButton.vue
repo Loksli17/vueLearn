@@ -24,13 +24,16 @@
     .top-menu-list-button {
         box-sizing: border-box;
 
+        // yes this is a hack, but it works, so shut up
+        border-bottom: 2px solid transparent;
+        
         a {
             text-decoration: none;
             color: #000;
-
         }
 
         &:hover {
+            // box-sizing: content-box;
             border-bottom: 2px solid #000;
         }
     }

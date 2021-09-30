@@ -25,7 +25,7 @@
         <div class="section">
             <div>
                 <button @click="showPopup = true">popup</button>
-                <PopupWrapper v-model:show-popup="showPopup">
+                <PopupWrapper v-model:show-popup="showPopup" v-if="showPopup">
                     <div>
                         <h1>header</h1>
                         <div>
@@ -81,7 +81,8 @@
 
     import { defineComponent }             from 'vue';
     import Pagination                      from "@/components/Pagination/Pagination.vue";
-    import TopMenu, { LinkButton }         from "@/components/TopMenu/TopMenu.vue";
+    import TopMenu                         from "@/components/TopMenu/TopMenu.vue";
+    import { LinkButton }                  from "@/components/TopMenu/types";
     import PopupWrapper                    from "@/components/Popup/PopupWrapper.vue";
     import FlashMessageData                from '../../libs/flashMessage';
     import Table                           from "@/components/table/Table.vue";

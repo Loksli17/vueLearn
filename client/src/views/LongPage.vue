@@ -1,4 +1,5 @@
 <template>
+    <TopMenu :buttons="buttons" />
     <div>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi interdum vel urna gravida pellentesque. Phasellus ex nisi, molestie eu felis id, maximus vestibulum mi. Phasellus nec ex ornare, vestibulum ipsum eu, lacinia eros. Sed dictum semper consequat. Aenean varius et ligula accumsan vehicula. Aenean vehicula sodales lectus a convallis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam et risus congue lacus lobortis posuere. Aenean mollis turpis sit amet dui vestibulum, feugiat luctus enim tincidunt. Aenean vel risus aliquet, placerat lorem vel, cursus eros. Nullam fermentum fringilla erat eu rhoncus.
 
@@ -24,12 +25,23 @@ Pellentesque ullamcorper eget lectus sed pharetra. Ut venenatis est a ipsum posu
 </template>
 
 <script lang="ts">
-    import { defineComponent } from 'vue'
-    import ScrollToTop         from "@/components/ScrollToTop.vue";
+    import { defineComponent }     from 'vue'
+    import ScrollToTop             from "@/components/ScrollToTop.vue";
+    import TopMenu                 from "@/components/TopMenu/TopMenu.vue";
+    import { LinkButton }          from "@/components/TopMenu/types";
 
     export default defineComponent({
         components: {
-            ScrollToTop
+            ScrollToTop,
+            TopMenu
+        },
+        data() {
+            return {
+                buttons: [
+                    { name: "crud", path: "/crud" },
+                    { name: "seq-crud", path: "/seq-crud" }
+                ] as Array<LinkButton>
+            }
         }
     })
 </script>

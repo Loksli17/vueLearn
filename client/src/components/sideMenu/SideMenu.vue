@@ -31,7 +31,8 @@
     import SideMenuButton from "./SideMenuButton.vue";
     import { Button } from "./types";
 
-    export { Button };
+    // export { Button };
+
     export default defineComponent({
         components: {
             SideMenuButton
@@ -49,7 +50,11 @@
             }
         },
         mounted() {
-            document.body.style.overflow = "hidden";
+            // document.body.style.overflow = "hidden";
+        },
+        beforeUnmount() {
+            console.log("AAAA");
+            // document.body.style.overflow = "";
         },
         computed: {
             showMenuLocal: {
@@ -63,7 +68,7 @@
         },
         methods: {
             clickedOnBackground(): void {
-                document.body.style.overflow = "initial";
+                // document.body.style.overflow = "";
                 this.$emit("update:show-menu", false);
             }
         }
