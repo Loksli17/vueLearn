@@ -1,7 +1,7 @@
 <template>
     <form :class=className :id=id @submit.prevent="emitFormData">
 
-        <div class="form-row" v-for="row in rows" :key='row'>
+        <div class="form-row" v-for="row in scheme" :key='row'>
 
             <div v-for="item in row" :key='item.name'>
                 <label v-if="item.type != 'hidden'" :class="{'error': errors && errors[item.name]}" class="form-col">
@@ -113,7 +113,7 @@
     }
 
 
-    export interface FormData{
+    export interface FormDataView{
         [index: string]: Array<Record<string, unknown>> | string | Date | number | boolean;
     }
 
@@ -132,7 +132,7 @@
         data: function(){
             return {
                 //! this property i wanted to do computed, but it doesn't work correctly
-                localDataForm: Object.assign({}, this.data as unknown) as FormData,
+                localDataForm: Object.assign({}, this.data as unknown) as FormDataView,
             }
         },
         
@@ -146,13 +146,13 @@
             tableName: {
                 type: String,
             },
-            rows: {
+            scheme: {
                 default : () => [], 
                 type    : Array as () => Array<Array<FormHtmlItem>>,
                 required: true,
             },
             data: {
-                type   : Object as () => FormData,
+                type   : Object as () => FormDataView,
                 default: () => null,
             },
             errors: {
@@ -232,7 +232,7 @@
                     }
                 };
                 
-                this.rows.forEach((row, i) => {
+                this.scheme.forEach((row, i) => {
                     row.forEach((htmlItem, j) => {    
                         switch(htmlItem.type){
                             case 'select':

@@ -13,7 +13,7 @@
             <div class="form-wrap">
                 <Form 
                     v-if="rowsForm && dataForm"
-                    :rows="rowsForm"
+                    :scheme="rowsForm"
                     :data="dataForm"
                     :tableName="'article'"
                     v-on:send="sendForm"
@@ -36,15 +36,15 @@
 
 <script lang="ts">
     
-    import {defineComponent}                from 'vue';
-    import axios                            from '../../libs/axios';
-    import Form, { FormHtmlItem, FormData } from '../../components/crudComponent/newForm.vue';
-    import { AxiosResponse }                from 'axios';
-    import DropDownList, { ListItem }       from '../../components/DropDownList.vue';
-    import DropList                         from '../../components/dropDown/DropDown.vue';
-    import ArticleTypeService               from '../../services/ArticleTypeService';
-    import ArticleService                   from '../../services/ArticleService';
-    import FlashMessageData                 from '../../libs/flashMessage';
+    import {defineComponent}                    from 'vue';
+    import axios                                from '../../libs/axios';
+    import Form, { FormHtmlItem, FormDataView } from '../../components/crudComponent/newForm.vue';
+    import { AxiosResponse }                    from 'axios';
+    import DropDownList, { ListItem }           from '../../components/DropDownList.vue';
+    import DropList                             from '../../components/dropDown/DropDown.vue';
+    import ArticleTypeService                   from '../../services/ArticleTypeService';
+    import ArticleService                       from '../../services/ArticleService';
+    import FlashMessageData                     from '../../libs/flashMessage';
 
 
 
@@ -61,7 +61,7 @@
                 article : {} as Record<string, unknown>,
                 curID   : 1,
                 rowsForm: null as Array<Array<FormHtmlItem>> | null,
-                dataForm: null as FormData | null, 
+                dataForm: null as FormDataView | null, 
             }
         },
 
@@ -105,11 +105,11 @@
             },
 
             initDataForm: function(){
-                this.dataForm = this.article as FormData;
+                this.dataForm = this.article as FormDataView;
                 this.dataForm.date = this.$filters.dateToDb(this.article.date as string);
             },
 
-            sendForm: async function(formData: FormData){ 
+            sendForm: async function(formData: FormDataView){ 
 
                 //! important
                 // TODO: fix FORMDATA form form

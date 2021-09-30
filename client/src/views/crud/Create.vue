@@ -12,7 +12,7 @@
             <div class="form-wrap">
                 <Form 
                     v-if="rowsForm && dataForm"
-                    :rows="rowsForm"
+                    :scheme="rowsForm"
                     :data="dataForm"
                     :tableName="'article'"
                     v-on:send="sendForm"
@@ -40,11 +40,11 @@
 <script lang="ts">
     import { defineComponent }                    from 'vue';
     import axios                                  from '../../libs/axios';
-    import Form, { FormHtmlItem, FormData as FD } from '../../components/crudComponent/newForm.vue';
+    import Form, { FormHtmlItem, FormDataView}    from '../../components/crudComponent/newForm.vue';
     import { AxiosResponse }                      from 'axios';
     import { ListItem }                           from '../../components/DropDownList.vue';
     import FileUpload                             from '../../components/FileUpload/FileUpload.vue';
-    import { LoadingFile }                        from '@/components/FileUpload/types';
+    import { LoadingFile }                        from '../../components/FileUpload/types';
     import FlashMessageData                       from '../../libs/flashMessage';
     import ArticleTypeService                     from '../../services/ArticleTypeService';
     import ArticleService                         from '../../services/ArticleService';
@@ -63,7 +63,7 @@
                 currentValueId: 0 as number,
                 article       : {} as Record<string, unknown>,
                 rowsForm      : null as Array<Array<FormHtmlItem>> | null,
-                dataForm      : null as FD | null,
+                dataForm      : null as FormDataView | null,
             }
         },
 
@@ -136,11 +136,11 @@
                     date         : this.$filters.dateToDb(new Date()),
                     time         : this.$filters.timeToDb(new Date()),
                     isReady      : false,
-                } as FD;
+                } as FormDataView;
             },
 
 
-            sendForm: async function(formData: FD){
+            sendForm: async function(formData: FormDataView){
                 
                 await ArticleService.addOne({article: formData});
                 this.$flashMessage.show(FlashMessageData.successMessage('Inserting of artcile', `New article was created successfully`));

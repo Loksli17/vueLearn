@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <Form
-            :rows="rowsForm"
+            :scheme="rowsForm"
             v-on:send="sendForm"
             :errors="formErrors"
         />
@@ -11,10 +11,10 @@
 
 <script lang="ts">
 
-    import { defineComponent }                                from 'vue';
-    import Form, { FormHtmlItem, FormData as FD , FormErrors} from '../components/crudComponent/newForm.vue';
-    import { AxiosResponse }                                  from 'axios';
-    import AuthService                                        from '../services/AuthService';
+    import { defineComponent }                             from 'vue';
+    import Form, { FormHtmlItem, FormDataView, FormErrors} from '../components/crudComponent/newForm.vue';
+    import { AxiosResponse }                               from 'axios';
+    import AuthService                                     from '../services/AuthService';
 
 
     export default defineComponent({
@@ -44,7 +44,7 @@
                 ]
             },
 
-            sendForm: async function(formData: FD){
+            sendForm: async function(formData: FormDataView){
 
                 let response: AxiosResponse = await AuthService.login(formData);
                 this.formErrors = response.data.errors ? response.data.errors : null;
