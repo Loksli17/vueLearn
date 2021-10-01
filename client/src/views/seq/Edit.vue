@@ -63,7 +63,7 @@
 
             initScheme: function(){
                 this.scheme = [
-                    [{type: 'text', name: 'login', label: 'Login'}, {type: 'text', name: 'email', label: 'email'}],
+                    [{type: 'text', name: 'login', label: 'Login'}, {type: 'text', name: 'email', label: 'E-mail'}],
                     [{type: 'submit', name: 'sendUser'}]
                 ]
             },

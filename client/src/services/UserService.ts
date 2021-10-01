@@ -90,4 +90,23 @@ export default class UserService extends Service{
 
         return response;
     }
+
+
+    public static async addUser(data: Record<string, any>): Promise<AxiosResponse | null> {
+        
+        const response: AxiosResponse | void = await axios.put(`/seq/add`, data)
+        .catch((reason: AxiosError) => {
+            if(reason.response == undefined) return;
+            this.errorMessage(reason.response.status);
+            console.error(reason);
+        });
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        console.log(response);
+
+        this.checkResponse(response, [200]);
+
+        return response;
+    }
 }
