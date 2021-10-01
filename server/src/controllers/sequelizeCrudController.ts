@@ -2,6 +2,7 @@ import e, { Router, Request, Response } from "express";
 import ErrorMessage                  from "../libs/error";
 import Query                         from "../libs/query";
 import User                          from "../models/User";
+import crypto                        from "crypto-js";
 
 
 //! ADD TRY CATCH STUPID ESSOL
@@ -165,15 +166,38 @@ export default class SequelizeCrudController{
     }
 
 
-    public createUser(){
+    public static async createUser(req: Request, res: Response){
 
         interface QueryData{
             user: {
-                email: string;
-                login: string;
-                
+                email   : string;
+                login   : string;
+                password: string;
             }
         }
+
+        let
+            user      : User                   = new User(),
+            dataErrors: Array<keyof QueryData> = [],
+            QueryData : QueryData              = req.body;
+
+        dataErrors = Query.checkData(QueryData, ['user']);
+
+        if(dataErrors.length){
+            res.status(400).send(ErrorMessage.dataNotSended(dataErrors[0]));
+            return;
+        }
+
+        try {
+            user = await User.create({login: QueryData.user.login, email: QueryData.user.email, avatar: 'default.png', password: crypto.SHA512(QueryData.user.password).toString()});
+            console.log(user);
+        } catch (error) {
+            console.error(error);
+            res.status(400).send({error: ErrorMessage.db()});
+            return
+        }
+        
+        res.status(200).send({msg: `User was created successfully. Id of User = ${user.id}`});
     }
 
 
@@ -184,6 +208,7 @@ export default class SequelizeCrudController{
         this.router.post(  '/:id',        this.getUser);
         this.router.delete('/:id/remove', this.removeUser);
         this.router.put(   '/:id/edit',   this.editUser);
+        this.router.put(   '/add',        this.createUser);
 
         return this.router;
     }

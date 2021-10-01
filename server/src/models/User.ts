@@ -33,14 +33,28 @@ User.init({
     email: {
         type     : DataTypes.STRING,
         allowNull: false,
-        unique   : true,
+        validate : {
+            isEmail: {
+                msg: 'Input correct e-mail!',
+            },
+        },
+        unique: {
+            name: 'email',
+            msg: 'This e-mail has been used',
+        },
     },
     login: {
         type     : DataTypes.STRING,
         allowNull: false,
+        validate : {
+            len: {
+                msg: 'Length must has symbols amount between 6 and 20',
+                args: [6, 20],
+            },
+        }
     },
     password: {
-        type: DataTypes.STRING,
+        type     : DataTypes.STRING,
         allowNull: true,
     },
     avatar: {
