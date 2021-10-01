@@ -2,7 +2,7 @@
     <teleport to="body">
         <div 
             class="scroll-to-top" 
-            :class="parsePos()" 
+            :class="posClassName" 
             :style="buttonStyle"
             @click.prevent="scrollToTop">
         </div>
@@ -44,11 +44,10 @@
                 window.scrollTo({ top: 0, behavior: (props.behavior as ScrollBehavior) });
             }
 
-            const parsePos = (): string => {
-                const pos = props.position;
+            const posClassName = computed(() => {
                 let className = "";
 
-                switch (pos) {
+                switch (props.position) {
                     case "left":
                         className = "scroll-to-top-left";
                         break;
@@ -59,7 +58,7 @@
                 }
 
                 return className;
-            }
+            })
 
             const buttonStyle = computed(() => {
                 const style: { [k: string]: string } = {};
@@ -75,7 +74,7 @@
 
             return {
                 scrollToTop,
-                parsePos,
+                posClassName,
                 buttonStyle
             }
         }
