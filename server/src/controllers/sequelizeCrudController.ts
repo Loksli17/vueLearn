@@ -165,6 +165,18 @@ export default class SequelizeCrudController{
     }
 
 
+    public createUser(){
+
+        interface QueryData{
+            user: {
+                email: string;
+                login: string;
+                
+            }
+        }
+    }
+
+
     public static routes(){
 
         this.router.post(  '/',           this.getUsers);

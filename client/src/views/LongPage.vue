@@ -50,5 +50,7 @@ Pellentesque ullamcorper eget lectus sed pharetra. Ut venenatis est a ipsum posu
     div {
         width: 70%;
         font-size: 18pt;
+        letter-spacing: 1.3px;
+        line-height: 35px;
     }
 </style>
