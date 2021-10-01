@@ -21,7 +21,7 @@ Mauris viverra, risus ac dignissim tempor, erat eros convallis nulla, ac facilis
 
 Pellentesque ullamcorper eget lectus sed pharetra. Ut venenatis est a ipsum posuere placerat. Morbi interdum sollicitudin leo sed lacinia. Sed pharetra et magna eu iaculis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc ut libero tempus ligula accumsan commodo. Donec laoreet ut risus sed pretium. Cras quis urna eu libero cursus congue placerat vitae odio. Fusce eu malesuada urna. Proin id magna diam. Sed et tempor quam. Nunc dictum est nulla, eget iaculis massa laoreet vitae. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     </div>
-    <ScrollToTop behavior="smooth" position="right" />
+    <ScrollToTop behavior="smooth" position="right" :dist="{ bottom: 40, side: 40 }" />
 </template>
 
 <script lang="ts">

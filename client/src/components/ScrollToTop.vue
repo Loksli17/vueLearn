@@ -1,12 +1,16 @@
 <template>
     <teleport to="body">
-        <div class="scroll-to-top" :class="parsePos()" @click.prevent="scrollToTop">
+        <div 
+            class="scroll-to-top" 
+            :class="parsePos()" 
+            :style="buttonStyle"
+            @click.prevent="scrollToTop">
         </div>
     </teleport>
 </template>
 
 <script lang="ts">
-    import { defineComponent } from 'vue';
+    import { computed, defineComponent, PropType } from 'vue';
 
     type ScrollBehavior = "auto" | "smooth" | undefined;
 
@@ -24,6 +28,14 @@
             position: {
                 type: String,
                 default: "right"
+            },
+            dist: {
+                type: Object as PropType<{ bottom: number, side: number }>,
+                default: () => ({ bottom: 20, side: 20 })
+            },
+            radius: {
+                type: Number,
+                default: 30
             }
         },
 
@@ -41,8 +53,6 @@
                         className = "scroll-to-top-left";
                         break;
                     case "right":
-                        className = "scroll-to-top-right";
-                        break;
                     default:
                         className = "scroll-to-top-right";
                         break;
@@ -51,9 +61,22 @@
                 return className;
             }
 
+            const buttonStyle = computed(() => {
+                const style: { [k: string]: string } = {};
+
+                style["bottom"]       = `${props.dist.bottom}px`;
+                style[props.position] = `${props.dist.side}px`;
+
+                style.width  = `${props.radius * 2}px`;
+                style.height = `${props.radius * 2}px`;
+
+                return style;
+            });
+
             return {
                 scrollToTop,
-                parsePos
+                parsePos,
+                buttonStyle
             }
         }
     })
@@ -67,10 +90,12 @@
         background-color: aquamarine;
         position: fixed;
         bottom: 20px;
+        transition: all .5s;
         // right: 20px;
 
         &:hover {
             cursor: pointer;
+            background-color: aqua;
         }
     }
 
