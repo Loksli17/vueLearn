@@ -84,6 +84,8 @@ export default class UserService extends Service{
             console.error(reason);
         });
 
+        console.log(response);
+
         if(response == undefined) { console.error('Bad response'); return null; }
 
         this.checkResponse(response, [200]);
@@ -93,19 +95,17 @@ export default class UserService extends Service{
 
 
     public static async addUser(data: Record<string, any>): Promise<AxiosResponse | null> {
-        
+    
         const response: AxiosResponse | void = await axios.put(`/seq/add`, data)
         .catch((reason: AxiosError) => {
             if(reason.response == undefined) return;
             this.errorMessage(reason.response.status);
-            console.error(reason);
+            console.log(reason.response.data);
         });
 
         if(response == undefined) { console.error('Bad response'); return null; }
 
-        console.log(response);
-
-        this.checkResponse(response, [200]);
+        this.checkResponse(response, [200, 422]); //! name it checkStatusResponse !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         return response;
     }

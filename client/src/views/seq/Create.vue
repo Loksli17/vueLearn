@@ -18,6 +18,7 @@
                     :scheme="scheme"
                     :data="formData"
                     :tableName="'user'"
+                    :errors="formErrors"
                     v-on:send="sendForm"
                 />
             </div>
@@ -30,10 +31,12 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent }                from 'vue';
-    import Checkbox                           from "@/components/crudComponent/VueCheckbox.vue";
-    import Form, {FormDataView, FormHtmlItem} from '../../components/crudComponent/newForm.vue';
-    import UserService                        from '../../services/UserService';
+    import { defineComponent }                            from 'vue';
+    import Checkbox                                       from "@/components/crudComponent/VueCheckbox.vue";
+    import Form, {FormDataView, FormHtmlItem, FormErrors} from '../../components/crudComponent/newForm.vue';
+    import UserService                                    from '../../services/UserService';
+    import { AxiosResponse }                              from 'axios';
+    import FlashMessageData                               from '../../libs/flashMessage';
 
 
     export default defineComponent({
@@ -47,8 +50,9 @@
             return {
                 checked: false as boolean,
                 
-                scheme  : [] as Array<Array<FormHtmlItem>> | null,
-                formData: null as FormDataView | null,
+                scheme    : [] as Array<Array<FormHtmlItem>> | null,
+                formData  : null as FormDataView | null,
+                formErrors: null as FormErrors | null, 
             }
         },
 
@@ -72,7 +76,17 @@
             },
 
             sendForm: async function(data: FormDataView){
-                await UserService.addUser({user: data});
+                let response: AxiosResponse | null = await UserService.addUser({user: data});
+   
+                if(response == null) return;
+
+                if(response.status == 422) {
+                    
+                    this.formErrors = response.data.validationErrors;
+                    console.log(this.formErrors);
+                } else {
+                    this.$flashMessage.show(FlashMessageData.successMessage('Edit user', `User with id = ${this.$route.params.id} was edit`));
+                }
             }
         }
 

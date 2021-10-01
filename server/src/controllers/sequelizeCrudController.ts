@@ -1,8 +1,9 @@
 import e, { Router, Request, Response } from "express";
-import ErrorMessage                  from "../libs/error";
-import Query                         from "../libs/query";
-import User                          from "../models/User";
-import crypto                        from "crypto-js";
+import ErrorMessage                     from "../libs/error";
+import Query                            from "../libs/query";
+import User                             from "../models/User";
+import crypto                           from "crypto-js";
+import { ValidationError, ValidationErrorItem }              from 'sequelize/types';
 
 
 //! ADD TRY CATCH STUPID ESSOL
@@ -187,13 +188,17 @@ export default class SequelizeCrudController{
             res.status(400).send(ErrorMessage.dataNotSended(dataErrors[0]));
             return;
         }
-
+        
         try {
             user = await User.create({login: QueryData.user.login, email: QueryData.user.email, avatar: 'default.png', password: crypto.SHA512(QueryData.user.password).toString()});
-            console.log(user);
-        } catch (error) {
-            console.error(error);
-            res.status(400).send({error: ErrorMessage.db()});
+        } catch (validationErr: any) {
+            const errors: Record<string, string> = {};
+            
+            validationErr.errors.forEach((item: ValidationErrorItem) => {
+                if(item.path) errors[item.path] = item.message;
+            });
+
+            res.status(422).send({error: ErrorMessage.db(), validationErrors: errors});
             return
         }
         
