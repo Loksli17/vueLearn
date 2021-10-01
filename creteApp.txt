@@ -9,7 +9,6 @@
         'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
         'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
     }
-vs code the best _ ) ))000))
 
 ---------------- Node.js --------------------------
 1.  npm init
