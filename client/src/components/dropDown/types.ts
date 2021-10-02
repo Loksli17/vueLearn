@@ -1,5 +1,5 @@
 export interface ListItem{
-    id: number;
+    id   : number;
     value: string | number;
-    img?: string;
+    img? : string;
 }

@@ -75,6 +75,7 @@
 
     import Checkbox            from '../crudComponent/Checkbox.vue';
     import DropList            from "../dropDown/DropDown.vue";
+    import Props               from './props';
     import { ListItem }        from "../dropDown/types";
     import { defineComponent } from 'vue';
     import { FormHtmlItem, FormDataView, FormErrors} from './types';
@@ -131,57 +132,6 @@
 
             validateFormRows: function(){
 
-                //! check this props attentivle
-                const 
-                    selectProp: Array<string> = [
-                        'name',
-                        'type',
-                        'error',
-                        'label',
-
-                        'selected',
-                        'options',
-                        'multiple',
-                        'disabledOption',
-                        'search',
-                        'currentItem'
-                    ],
-                    inputProp: Array<string> = [
-                        'name',
-                        'type',
-                        'error',
-                        'label',
-
-                        'max',
-                        'min',
-                        'pattern',
-                        'required',
-                        'disabled',
-                        'readonly',
-                        'placeholder',
-                        'step',
-                        'autocomplete',
-                        'autofocus',
-                    ],
-                    textProp: Array<string> = [
-                        'name',
-                        'type',
-                        'error',
-                        'label',
-
-                        'cols',
-                        'maxLength',
-                        'rows',
-                        'tabIndex',
-                        'wrap',
-                    ],
-                    checkboxProp: Array<string> = [
-                        'name',
-                        'type',
-                        'error',
-                        'label',
-                    ];
-
                 const checkInclude = (htmlItem: FormHtmlItem, props: Array<string>, rowInd: number, itemInd: number) => {
                     for(const key in htmlItem){
                         if(!props.includes(key)){
@@ -194,16 +144,16 @@
                     row.forEach((htmlItem, j) => {    
                         switch(htmlItem.type){
                             case 'select':
-                                checkInclude(htmlItem, selectProp, i, j);
+                                checkInclude(htmlItem, Props.selectProp, i, j);
                                 break;
                             case 'textarea':
-                                checkInclude(htmlItem, textProp, i, j);
+                                checkInclude(htmlItem, Props.textProp, i, j);
                                 break;
                             case 'checkbox':
-                                checkInclude(htmlItem, checkboxProp, i, j);
+                                checkInclude(htmlItem, Props.checkboxProp, i, j);
                                 break;
                             default:
-                                checkInclude(htmlItem, inputProp, i, j);
+                                checkInclude(htmlItem, Props.inputProp, i, j);
                         }
                     });
                 });
@@ -214,8 +164,7 @@
             setItemValue: function(val: any, name: string | number){
                 this.localDataForm[name] = val;
             },
-
-            
+      
         }
     });
 
