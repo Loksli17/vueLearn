@@ -30,6 +30,7 @@ User.init({
         autoIncrement: true,
         primaryKey   : true,
     },
+
     email: {
         type     : DataTypes.STRING,
         allowNull: false,
@@ -40,9 +41,10 @@ User.init({
         },
         unique: {
             name: 'email',
-            msg: 'This e-mail has been used',
-        },
+            msg : 'This e-mail has been used',
+        },      
     },
+
     login: {
         type     : DataTypes.STRING,
         allowNull: false,
@@ -53,10 +55,12 @@ User.init({
             },
         }
     },
+
     password: {
         type     : DataTypes.STRING,
         allowNull: true,
     },
+
     avatar: {
         type: DataTypes.STRING,
     }
