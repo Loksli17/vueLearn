@@ -3,6 +3,7 @@ import {Router as ExpressRouter} from 'express';
 import CrudController          from '../controllers/crudController';
 import AuthController          from '../controllers/authController';
 import SequelizeCrudController from '../controllers/sequelizeCrudController';
+import BooksController         from '../controllers/booksController';
 
 
 export default class Router{
@@ -14,6 +15,7 @@ export default class Router{
         this.router.use('/crud', CrudController.routes());
         this.router.use('/auth', AuthController.routes());
         this.router.use('/seq', SequelizeCrudController.routes());
+        this.router.use('/books', BooksController.routes()); 
 
         return this.router;
     }
