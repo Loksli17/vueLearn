@@ -30,6 +30,7 @@
                 required: true
             }
         },
+        
         setup(props, { emit }) {
             let selectedItem: IDraggable | null = null;
             const containerID = IDGenerator.getID();

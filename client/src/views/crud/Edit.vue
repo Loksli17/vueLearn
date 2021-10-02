@@ -21,30 +21,19 @@
             </div>
         </div>
 
-        <div>
-            <!-- now it's correct -->
-            <!-- <DropList
-                v-if="optionsTypes.length"
-                :optionsList="optionsTypes"
-                v-model:current-option-id="curID"
-            /> -->
-        </div>
-
     </div>    
 </template>
 
 
 <script lang="ts">
     
-    import {defineComponent}                    from 'vue';
-    import axios                                from '../../libs/axios';
-    import Form, { FormHtmlItem, FormDataView } from '../../components/crudComponent/newForm.vue';
-    import { AxiosResponse }                    from 'axios';
-    import DropDownList, { ListItem }           from '../../components/DropDownList.vue';
-    import DropList                             from '../../components/dropDown/DropDown.vue';
-    import ArticleTypeService                   from '../../services/ArticleTypeService';
-    import ArticleService                       from '../../services/ArticleService';
-    import FlashMessageData                     from '../../libs/flashMessage';
+    import {defineComponent}              from 'vue';
+    import Form                           from '../../components/Form/newForm.vue';
+    import { FormHtmlItem, FormDataView } from '../../components/Form/types';
+    import { ListItem }                   from '../../components/DropDownList.vue';
+    import ArticleTypeService             from '../../services/ArticleTypeService';
+    import ArticleService                 from '../../services/ArticleService';
+    import FlashMessageData               from '../../libs/flashMessage';
 
 
 

@@ -29,11 +29,11 @@
 
 
 <script lang="ts">
-    import { AxiosResponse }                                from 'axios';
-    import { defineComponent }                              from 'vue';
-    import Form, { FormHtmlItem, FormDataView, FormErrors } from '../../components/crudComponent/newForm.vue';
-    import UserService                                      from '../../services/UserService';
-    import FlashMessageData                                 from '../../libs/flashMessage';
+    import { defineComponent }                        from 'vue';
+    import Form                                       from '../../components/Form/newForm.vue';
+    import { FormHtmlItem, FormDataView, FormErrors } from '../../components/Form/types';
+    import UserService                                from '../../services/UserService';
+    import FlashMessageData                           from '../../libs/flashMessage';
 
 
     export default defineComponent({
@@ -79,7 +79,6 @@
 
                 if(response == null) { console.error("Error with response"); return; }
 
-                console.log(response);
 
                 if(response.status == 422) {
                     this.formErrors = response.data.validationErrors;

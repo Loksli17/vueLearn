@@ -31,12 +31,13 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent }                            from 'vue';
-    import Checkbox                                       from "../../components/crudComponent/VueCheckbox.vue";
-    import Form, {FormDataView, FormHtmlItem, FormErrors} from '../../components/crudComponent/newForm.vue';
-    import UserService                                    from '../../services/UserService';
-    import { AxiosResponse }                              from 'axios';
-    import FlashMessageData                               from '../../libs/flashMessage';
+    import { defineComponent }                      from 'vue';
+    import Checkbox                                 from "../../components/crudComponent/VueCheckbox.vue";
+    import Form                                     from '../../components/Form/newForm.vue';
+    import {FormDataView, FormHtmlItem, FormErrors} from '../../components/Form/types';
+    import UserService                              from '../../services/UserService';
+    import { AxiosResponse }                        from 'axios';
+    import FlashMessageData                         from '../../libs/flashMessage';
 
 
     export default defineComponent({

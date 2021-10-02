@@ -11,10 +11,11 @@
 
 <script lang="ts">
 
-    import { defineComponent }                             from 'vue';
-    import Form, { FormHtmlItem, FormDataView, FormErrors} from '../components/crudComponent/newForm.vue';
-    import { AxiosResponse }                               from 'axios';
-    import AuthService                                     from '../services/AuthService';
+    import { defineComponent }                        from 'vue';
+    import Form                                       from '../components/Form/newForm.vue';
+    import { FormHtmlItem, FormDataView, FormErrors } from '../components/Form/types';
+    import { AxiosResponse }                          from 'axios';
+    import AuthService                                from '../services/AuthService';
 
 
     export default defineComponent({

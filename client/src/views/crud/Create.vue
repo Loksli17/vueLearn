@@ -38,16 +38,15 @@
 
 
 <script lang="ts">
-    import { defineComponent }                    from 'vue';
-    import axios                                  from '../../libs/axios';
-    import Form, { FormHtmlItem, FormDataView}    from '../../components/crudComponent/newForm.vue';
-    import { AxiosResponse }                      from 'axios';
-    import { ListItem }                           from '../../components/DropDownList.vue';
-    import FileUpload                             from '../../components/FileUpload/FileUpload.vue';
-    import { LoadingFile }                        from '../../components/FileUpload/types';
-    import FlashMessageData                       from '../../libs/flashMessage';
-    import ArticleTypeService                     from '../../services/ArticleTypeService';
-    import ArticleService                         from '../../services/ArticleService';
+    import { defineComponent }            from 'vue';
+    import Form                           from '../../components/Form/newForm.vue';
+    import { FormHtmlItem, FormDataView } from '../../components/Form/types';
+    import { ListItem }                   from '../../components/DropDownList.vue';
+    import FileUpload                     from '../../components/FileUpload/FileUpload.vue';
+    import { LoadingFile }                from '../../components/FileUpload/types';
+    import FlashMessageData               from '../../libs/flashMessage';
+    import ArticleTypeService             from '../../services/ArticleTypeService';
+    import ArticleService                 from '../../services/ArticleService';
     
 
     export default defineComponent({
@@ -101,24 +100,10 @@
             },
 
             imageLoad: async function(loadingFile: LoadingFile){
-                
                 const data: FormData = new FormData();
                 data.append('image', loadingFile.file);
-                
-                await ArticleService.fileUpload(data, loadingFile);
 
-                // await axios.post({
-                //     url : `/crud/article-image`,
-                //     data: data,
-                //     handler: (res: AxiosResponse) => {
-                //         console.log(res);
-                //     },
-                //     config: {
-                //         onUploadProgress: (e) => {
-                //             loadingFile.progress = Math.floor(e.loaded * 100 / e.total);
-                //         }
-                //     }
-                // });
+                await ArticleService.fileUpload(data, loadingFile);
             },
 
             initRowsForm: function(){
