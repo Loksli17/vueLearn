@@ -5,12 +5,14 @@ import Books                             from "../models/Books";
 import crypto                           from "crypto-js";
 import { ValidationError, ValidationErrorItem }              from 'sequelize/types';
 import { strict } from "assert/strict";
+import { get } from "http";
 
 
 export default class BooksController {
-    
+
     private static router: Router = Router();
 
+    
     public static async getBooks(req: Request, res: Response){
 
         interface QueryData{
@@ -87,7 +89,7 @@ export default class BooksController {
    
 
     public static routes(){
-        this.router.post('/ ',      this.getBooks);
+        this.router.post('/',       this.getBooks);
         this.router.post('/amount', this.getAmountBooks);
         this.router.post('/:id',    this.getBook);
 

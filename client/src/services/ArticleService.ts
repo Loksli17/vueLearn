@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import Filters                  from '@/libs/filters';
 import { LoadingFile }          from '@/components/FileUpload/types';
 import Service                  from '@/libs/Service';
+import filters from '@/libs/filters';
 
 
 const decorators = {
@@ -23,7 +24,6 @@ const decorators = {
             return article;
         })
     },
-
 }
 
 

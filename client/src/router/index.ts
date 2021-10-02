@@ -71,6 +71,13 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/seq/Edit.vue'),
     },
 
+    // ! ---Index---
+    {
+        path: '/books-crud',
+        name: 'Book-index',
+        component: () => import('../views/books/Index.vue'),
+    },
+
 ];
 
 

@@ -9,7 +9,7 @@ export default class UserService extends Service{
 
     public static async getAll(data: Record<string, any>): Promise<Array<Record<string, any>> | null>{
 
-        const response = await axios.post('/seq', data)
+        const response: AxiosResponse | void = await axios.post('/seq', data)
         .catch((reason: AxiosError) => {
             if(reason.response == undefined) return;
             this.errorMessage(reason.response.status);

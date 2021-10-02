@@ -4,11 +4,11 @@ import { LoadingFile }                      from '@/components/FileUpload/types'
 import Service                              from '@/libs/Service';
 
 
-export default class BooksService extends Service{
+export default class BooksService extends Service {
     
     public static async getAll(data: Record<string, any>): Promise<Array<Record<string, any>> | null>{
 
-        const response = await axios.post('/books', data)
+        const response: AxiosResponse | void = await axios.post('/books', data)
         .catch((reason: AxiosError) => {
             if(reason.response == undefined) return;
             this.errorMessage(reason.response.status);
@@ -19,6 +19,6 @@ export default class BooksService extends Service{
 
         this.checkResponse(response, [200]);
 
-        return response.data.users;
+        return response.data.books;
     }
 }

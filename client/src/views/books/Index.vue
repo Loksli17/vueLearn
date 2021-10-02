@@ -1,6 +1,8 @@
 <template>
     <div class="books-index">
-
+        <div>
+            {{books}}
+        </div>
     </div>
 </template>
 
@@ -29,7 +31,7 @@
 
             getBooks: async function(data: Record<string, any>){
                 this.books = await BooksService.getAll(data) || [];
-                console.log("Books", this.books);
+                console.log("Books:", this.books);
             },
         }
     })
