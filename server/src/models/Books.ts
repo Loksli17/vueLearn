@@ -21,24 +21,29 @@ export default class Books extends Model<BooksAttributes, BooksCreationAttribute
     public isCompleted!: boolean; 
 }
 
+
 Books.init({
     id:{
         type         : DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,
         primaryKey   : true,
     },
+
     title: {
-        type: new DataTypes.STRING(45),
-        allowNull : false,
-        unique: true, 
+        type     : new DataTypes.STRING(45),
+        allowNull: false,
+        unique   : true, 
     },
+
     text: {
         type: DataTypes.TEXT,
     },
+
     writingDate:{
-        type: DataTypes.DATE,
+        type     : DataTypes.DATE,
         allowNull: false,
     },
+
     isCompleted:{
         type: DataTypes.BOOLEAN, 
     },
@@ -48,10 +53,11 @@ Books.init({
     timestamps: false,
 });
 
+
 Books.belongsToMany(
     Author, 
     {
-        through: 'Author_books',
+        through   : 'Author_books',
         foreignKey: 'booksId',
     }
 );

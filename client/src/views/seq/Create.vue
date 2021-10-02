@@ -81,9 +81,7 @@
                 if(response == null) return;
 
                 if(response.status == 422) {
-                    
                     this.formErrors = response.data.validationErrors;
-                    console.log(this.formErrors);
                 } else {
                     this.$flashMessage.show(FlashMessageData.successMessage('Edit user', `User with id = ${this.$route.params.id} was edit`));
                 }

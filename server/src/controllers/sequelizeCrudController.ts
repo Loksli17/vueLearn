@@ -3,10 +3,9 @@ import ErrorMessage                     from "../libs/error";
 import Query                            from "../libs/query";
 import User                             from "../models/User";
 import crypto                           from "crypto-js";
-import { ValidationError, ValidationErrorItem }              from 'sequelize/types';
+import {  ValidationErrorItem }         from 'sequelize/types';
 
 
-//! ADD TRY CATCH STUPID ESSOL
 export default class SequelizeCrudController{
 
     private static router: Router = Router();
@@ -195,6 +194,7 @@ export default class SequelizeCrudController{
             const errors: Record<string, string> = {};
             
             validationErr.errors.forEach((item: ValidationErrorItem) => {
+                console.log(item);
                 if(item.path) errors[item.path] = item.message;
             });
 
