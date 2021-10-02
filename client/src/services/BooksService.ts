@@ -3,6 +3,7 @@ import Filters                  from '@/libs/filters';
 import { LoadingFile }          from '@/components/FileUpload/types';
 import Service                  from '@/libs/Service';
 
+
 export default class BooksService extends Service{
     
     public static async getAll(data: Record<string, any>): Promise<Array<Record<string, any>> | null>{

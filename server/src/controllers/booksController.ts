@@ -11,6 +11,7 @@ export default class BooksController {
     private static router: Router = Router();
 
     public static async getBooks(req: Request, res: Response){
+
         interface QueryData{
             skip: number,
             take: number,
@@ -29,7 +30,7 @@ export default class BooksController {
         }
 
         try {
-            books = await Books.findAll({limit:Number(QueryData.take), offset: Number(QueryData.skip)});
+            books = await Books.findAll({limit: Number(QueryData.take), offset: Number(QueryData.skip)});
         } catch (error) {
             res.status(400).send({error: ErrorMessage.db()});
             console.error(error);
@@ -38,6 +39,7 @@ export default class BooksController {
 
         res.status(200).send({books: books});
     }
+
 
     public static async getBook(req: Request, res: Response){
         
@@ -65,6 +67,7 @@ export default class BooksController {
         res.status(200).send({book: book});
     }
 
+    
     public static async getAmountBooks(req: Request, res: Response){
         
         let amount: number = 0; 

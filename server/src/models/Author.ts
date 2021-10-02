@@ -36,10 +36,10 @@ Author.init({
 });
 
 
-Author.belongsToMany(
-    Books, 
-    {
-        through: 'Author_books',
-        foreignKey: 'authorId',
-    }
-);
+// Author.belongsToMany(
+//     Books, 
+//     {
+//         through: 'Author_books',
+//         foreignKey: 'authorId',
+//     }
+// );
