@@ -49,7 +49,7 @@
         data() {
             return {
                 checked: false as boolean,
-                
+            
                 scheme    : [] as Array<Array<FormHtmlItem>> | null,
                 formData  : null as FormDataView | null,
                 formErrors: null as FormErrors | null, 
@@ -78,7 +78,7 @@
             sendForm: async function(data: FormDataView){
                 let response: AxiosResponse | null = await UserService.addUser({user: data});
    
-                if(response == null) return;
+                if(response == null) { console.error("Error with response"); return; }
 
                 if(response.status == 422) {
                     this.formErrors = response.data.validationErrors;

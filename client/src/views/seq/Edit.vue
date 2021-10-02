@@ -19,6 +19,7 @@
                     :scheme="scheme"
                     :data="dataForm"
                     :tableName="'user'"
+                    :errors="formErrors"
                     v-on:send="sendForm"
                 />
             </div>
@@ -28,11 +29,11 @@
 
 
 <script lang="ts">
-    import { AxiosResponse }                    from 'axios';
-    import { defineComponent }                  from 'vue';
-    import Form, { FormHtmlItem, FormDataView } from '../../components/crudComponent/newForm.vue';
-    import UserService                          from '../../services/UserService';
-    import FlashMessageData                     from '../../libs/flashMessage';
+    import { AxiosResponse }                                from 'axios';
+    import { defineComponent }                              from 'vue';
+    import Form, { FormHtmlItem, FormDataView, FormErrors } from '../../components/crudComponent/newForm.vue';
+    import UserService                                      from '../../services/UserService';
+    import FlashMessageData                                 from '../../libs/flashMessage';
 
 
     export default defineComponent({
@@ -43,9 +44,10 @@
         
         data: function(){
             return {
-                user    : {} as Record<string, any> | null,
-                scheme  : [] as Array<Array<FormHtmlItem>> | null,
-                dataForm: null as FormDataView | null, 
+                user      : {} as Record<string, any> | null,
+                scheme    : [] as Array<Array<FormHtmlItem>> | null,
+                dataForm  : null as FormDataView | null,
+                formErrors: null as FormErrors | null, 
             }
         },
 
@@ -73,8 +75,17 @@
             },
 
             sendForm: async function(data: FormDataView){
-                await UserService.editUser({user: data}, Number(this.$route.params.id));
-                this.$flashMessage.show(FlashMessageData.successMessage('Edit user', `User with id = ${this.$route.params.id} was edit`));
+                const response = await UserService.editUser({user: data}, Number(this.$route.params.id));
+
+                if(response == null) { console.error("Error with response"); return; }
+
+                console.log(response);
+
+                if(response.status == 422) {
+                    this.formErrors = response.data.validationErrors;
+                } else {
+                    this.$flashMessage.show(FlashMessageData.successMessage('Edit user', `User with id = ${this.$route.params.id} was edit`));
+                }
             }
         },
     });

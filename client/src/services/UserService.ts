@@ -84,11 +84,9 @@ export default class UserService extends Service{
             console.error(reason);
         });
 
-        console.log(response);
-
         if(response == undefined) { console.error('Bad response'); return null; }
 
-        this.checkResponse(response, [200]);
+        this.checkResponse(response, [200, 422]);
 
         return response;
     }

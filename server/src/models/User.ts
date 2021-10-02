@@ -1,4 +1,5 @@
 import {Optional, Model, DataTypes} from 'sequelize';
+import { threadId } from 'worker_threads';
 import sequelize                    from '../config/databaseSeq';
 
 
@@ -47,7 +48,7 @@ User.init({
             },
             isUnique: function(value: string, next: any){
                 User.findOne({where: {email: value}}).then((user: User | null) => {
-                    if(user != null){
+                    if(user != null && user.id != this.id){
                         next('This e-mail already has been used');
                     }else{
                         next();

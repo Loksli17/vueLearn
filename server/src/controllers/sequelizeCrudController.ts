@@ -154,10 +154,12 @@ export default class SequelizeCrudController{
         user.set('email', QueryData.user.email);
 
         try {
+            await user.validate();
             await user.save();
-        } catch (error) {
-            console.error(error);
-            res.status(400).send({error: ErrorMessage.db()});
+        } catch (validationErr: any) {
+            const errors: Record<string, string> = {};
+            validationErr.errors.forEach((item: ValidationErrorItem) => { if(item.path) errors[item.path] = item.message });
+            res.status(422).send({error: ErrorMessage.db(), validationErrors: errors});
             return;
         }
 
@@ -196,14 +198,7 @@ export default class SequelizeCrudController{
             await user.save();
         } catch (validationErr: any) {
             const errors: Record<string, string> = {};
-            
-            validationErr.errors.forEach((item: ValidationErrorItem) => {
-                console.log(item);
-                if(item.path) errors[item.path] = item.message;
-            });
-
-            console.log(errors);
-
+            validationErr.errors.forEach((item: ValidationErrorItem) => { if(item.path) errors[item.path] = item.message });
             res.status(422).send({error: ErrorMessage.db(), validationErrors: errors});
             return
         }
