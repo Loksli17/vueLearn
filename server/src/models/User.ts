@@ -11,7 +11,9 @@ interface UserAttributes{
     refreshToken: string;
 }
 
+
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes{
 
@@ -40,11 +42,21 @@ User.init({
             isEmail: {
                 msg: 'Input correct e-mail!',
             },
-        },
-        unique: {
-            name: 'email',
-            msg : 'This e-mail has been used',
-        },      
+            notNull: {
+                msg: 'This field must be not empty',
+            },
+            isUnique: function(value: string, next: any){
+                User.findOne({where: {email: value}}).then((user: User | null) => {
+                    if(user != null){
+                        next('This e-mail already has been used');
+                    }else{
+                        next();
+                    }
+                }).catch((error) => {
+                    next(error);
+                });
+            }
+        },   
     },
 
     login: {
@@ -55,12 +67,20 @@ User.init({
                 msg: 'Length must has symbols amount between 6 and 20',
                 args: [6, 20],
             },
+            notNull: {
+                msg: 'This field must be not empty',
+            },
         }
     },
 
     password: {
         type     : DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
+        validate : {
+            notNull: {
+                msg: 'This field must be not empty',
+            },
+        }
     },
 
     avatar: {

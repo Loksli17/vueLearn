@@ -32,7 +32,7 @@
 
 <script lang="ts">
     import { defineComponent }                            from 'vue';
-    import Checkbox                                       from "@/components/crudComponent/VueCheckbox.vue";
+    import Checkbox                                       from "../../components/crudComponent/VueCheckbox.vue";
     import Form, {FormDataView, FormHtmlItem, FormErrors} from '../../components/crudComponent/newForm.vue';
     import UserService                                    from '../../services/UserService';
     import { AxiosResponse }                              from 'axios';

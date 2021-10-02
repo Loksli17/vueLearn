@@ -187,9 +187,13 @@ export default class SequelizeCrudController{
             res.status(400).send(ErrorMessage.dataNotSended(dataErrors[0]));
             return;
         }
+
+        user = User.build({refreshToken: '', login: QueryData.user.login, email: QueryData.user.email, avatar: 'default.png', password: QueryData.user.password});
         
         try {
-            user = await User.create({refreshToken: '', login: QueryData.user.login, email: QueryData.user.email, avatar: 'default.png', password: crypto.SHA512(QueryData.user.password).toString()});
+            await user.validate();
+            user.set('password', crypto.SHA512(QueryData.user.password).toString());
+            await user.save();
         } catch (validationErr: any) {
             const errors: Record<string, string> = {};
             
@@ -197,6 +201,8 @@ export default class SequelizeCrudController{
                 console.log(item);
                 if(item.path) errors[item.path] = item.message;
             });
+
+            console.log(errors);
 
             res.status(422).send({error: ErrorMessage.db(), validationErrors: errors});
             return
