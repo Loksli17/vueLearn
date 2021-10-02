@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import Filters                  from '@/libs/filters';
-import { LoadingFile }          from '@/components/FileUpload/types';
-import Service                  from '@/libs/Service';
+import Filters                              from '@/libs/filters';
+import { LoadingFile }                      from '@/components/FileUpload/types';
+import Service                              from '@/libs/Service';
 
 
 export default class BooksService extends Service{

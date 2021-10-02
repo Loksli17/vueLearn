@@ -8,6 +8,7 @@ import { strict } from "assert/strict";
 
 
 export default class BooksController {
+    
     private static router: Router = Router();
 
     public static async getBooks(req: Request, res: Response){
@@ -19,7 +20,7 @@ export default class BooksController {
 
         let
             QueryData : QueryData              = req.body as any,
-            books     : Array<Books>            = [],
+            books     : Array<Books>           = [],
             dataErrors: Array<keyof QueryData> = [];
 
         dataErrors = Query.checkData(QueryData, ['skip', 'take']);
@@ -63,11 +64,12 @@ export default class BooksController {
         if(book == null){
             res.status(400).send({error: ErrorMessage.dataNotSended('book')});
             return;
-        } 
+        }
+
         res.status(200).send({book: book});
     }
 
-    
+
     public static async getAmountBooks(req: Request, res: Response){
         
         let amount: number = 0; 
@@ -83,12 +85,13 @@ export default class BooksController {
         res.status(200).send({amount: amount});
     } 
    
-    public static routes(){
-        this.router.post('/ ', this.getBooks);
-        this.router.post('/amount', this.getAmountBooks);
-        this.router.post('/:id', this.getBook);
 
-        return this.router   
+    public static routes(){
+        this.router.post('/ ',      this.getBooks);
+        this.router.post('/amount', this.getAmountBooks);
+        this.router.post('/:id',    this.getBook);
+
+        return this.router;   
     }
 
 }

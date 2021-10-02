@@ -189,7 +189,7 @@ export default class SequelizeCrudController{
         }
         
         try {
-            user = await User.create({login: QueryData.user.login, email: QueryData.user.email, avatar: 'default.png', password: crypto.SHA512(QueryData.user.password).toString()});
+            user = await User.create({refreshToken: '', login: QueryData.user.login, email: QueryData.user.email, avatar: 'default.png', password: crypto.SHA512(QueryData.user.password).toString()});
         } catch (validationErr: any) {
             const errors: Record<string, string> = {};
             

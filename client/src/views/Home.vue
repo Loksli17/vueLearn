@@ -35,7 +35,7 @@
                 links: [
                     {route: '/crud',     img: 'crud-img.svg',     text: 'CRUD for articles with material design from GOOGLE',                                        header: 'CRUD'},
                     {route: '/seq-crud', img: 'seq-crud-img.svg', text: 'CRUD for articles with material design from GOOGLE and SEQUENCE ORM. Sequence orm in back', header: 'Sequlize CRUD'},
-                    {route: '/long',     img: 'long-page.svg',         text: 'Page for test scrollToTop component',                                                       header: 'Scroll To Top component'},
+                    {route: '/long',     img: 'long-page.svg',    text: 'Page for test scrollToTop component',                                                       header: 'Scroll To Top component'},
                 ] as Array<linkObject>,
             }
         },

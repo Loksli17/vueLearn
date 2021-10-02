@@ -12,9 +12,10 @@ export default class Router{
 
     public static get routes(){
         this.router.use(AuthController.checkAccessToken);
-        this.router.use('/crud', CrudController.routes());
-        this.router.use('/auth', AuthController.routes());
-        this.router.use('/seq', SequelizeCrudController.routes());
+        
+        this.router.use('/crud',  CrudController.routes());
+        this.router.use('/auth',  AuthController.routes());
+        this.router.use('/seq',   SequelizeCrudController.routes());
         this.router.use('/books', BooksController.routes()); 
 
         return this.router;

@@ -3,22 +3,24 @@ import sequelize                    from '../config/databaseSeq';
 
 
 interface UserAttributes{
-    id      : number,
-    email   : string,
-    login   : string,
-    password: string,
-    avatar  : string,
+    id          : number;
+    email       : string;
+    login       : string;
+    password    : string;
+    avatar      : string;
+    refreshToken: string;
 }
 
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes{
 
-    public id!      : number;
-    public email!   : string;
-    public login!   : string;
-    public password!: string;
-    public avatar!  : string;
+    public id!         : number;
+    public email!      : string;
+    public login!      : string;
+    public password!   : string;
+    public avatar!     : string;
+    public refreshToken!: string;
 
     // public readonly createdAt!: Date;
     // public readonly updateAt! : Date;
@@ -63,7 +65,13 @@ User.init({
 
     avatar: {
         type: DataTypes.STRING,
-    }
+    },
+
+    refreshToken: {
+        type     : DataTypes.STRING, 
+        allowNull: true,
+    },
+
 }, {
     tableName: 'user',
     sequelize,

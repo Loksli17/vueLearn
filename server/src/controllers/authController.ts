@@ -120,7 +120,7 @@ export default class AuthController{
 
 
     public static routes(): Router{
-        this.router.post('/login', this.loginUser);
+        this.router.post('/login',         this.loginUser);
         this.router.post('/create-tokens', this.createTokens);
         
         return this.router;

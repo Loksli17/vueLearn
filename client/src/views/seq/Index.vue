@@ -1,17 +1,18 @@
 <template>
-    <button @click="showMenu = true">open menu</button>
-    <SideMenu :buttons-list="sideMenuButtons" v-model:show-menu="showMenu">
-        <template #header>
-            <h1>Header</h1>
-            <p>content</p>
-        </template>
-        <template #footer>
-            <h4>Footer</h4>
-            <p>some text here</p>
-        </template>
-    </SideMenu>
 
     <div class="crud-seq-index">
+
+        <button @click="showMenu = true">open menu</button>
+        <SideMenu :buttons-list="sideMenuButtons" v-model:show-menu="showMenu">
+            <template #header>
+                <h1>Header</h1>
+                <p>content</p>
+            </template>
+            <template #footer>
+                <h4>Footer</h4>
+                <p>some text here</p>
+            </template>
+        </SideMenu>
 
         <h1>Index page of SEQUELIZE CRUD</h1>
 
