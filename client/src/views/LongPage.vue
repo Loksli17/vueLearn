@@ -1,7 +1,12 @@
 <template>
     <TopMenu :buttons="buttons" />
+    
     <div class="long-page-wrapper">
-        <div class="drag-drop-wrapper">
+        <div>
+            <Toggle v-model="toggleVal" name="toggle" />
+            <span>{{ toggleVal }}</span>
+        </div>
+        <!-- <div class="drag-drop-wrapper">
             <div class="drag-drop-left">
                 <DragList :model-item-list="itemsLeft">
                     <template #default="{item}">
@@ -16,7 +21,7 @@
                     </template>
                 </DragList>
             </div>
-        </div>
+        </div> -->
         <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi interdum vel urna gravida pellentesque. 
             Phasellus ex nisi, molestie eu felis id, maximus vestibulum mi. Phasellus nec ex ornare, vestibulum ipsum eu, 
@@ -80,6 +85,8 @@
     import TopMenu                  from "@/components/TopMenu/TopMenu.vue";
     import { LinkButton }           from "@/components/TopMenu/types";
 
+    import Toggle                   from "@/components/Toggle.vue";
+
     interface Item extends IDraggable {
         id: number;
         name: string;
@@ -88,8 +95,9 @@
     export default defineComponent({
         components: {
             ScrollToTop,
-            DragList,
-            TopMenu
+            // DragList,
+            TopMenu,
+            Toggle
         },
 
         data() {
@@ -105,7 +113,8 @@
                 itemsRight: [
                     { id: 0, name: "kek" },
                     { id: 1, name: "lol" }
-                ] as Array<Item>
+                ] as Array<Item>,
+                toggleVal: false as boolean
             }
         }
     })
