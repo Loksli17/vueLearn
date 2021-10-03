@@ -53,7 +53,7 @@
 
         components: {
             Form,
-            FileUpload,
+            // FileUpload,
         },
 
         data: function(){
