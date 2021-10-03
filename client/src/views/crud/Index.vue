@@ -123,7 +123,7 @@
                         { name: "Edit",   path: (id: number) => `/crud/${id}/edit`, iconPath: require("./../../assets/img/table-icons/edit.svg") }, 
                         { name: "Delete", handler: this.removeArticle,              iconPath: require("./../../assets/img/table-icons/delete.svg") },
                 ] as Array<Action>,
-                tableConfig: { sortableByColumn: true, hideColumn: [], dropDownActions: true } as TableConfig,
+                tableConfig: { sortableByColumn: true, hideColumn: [ "id" ], dropDownActions: true } as TableConfig,
                 tableComparators: [
                     {
                         fieldName: "id",

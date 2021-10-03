@@ -7,7 +7,7 @@
             :sortOrder="sortOrder"
             :table-is-sortable="config.sortableByColumn"
             :has-actions="!!actions" 
-            :columnsToHide="columnsToBeHidden"
+            :columnsToHide="columnNamesToBeHidden"
         />
         <tbody>
             <TableRow 
@@ -59,7 +59,7 @@
             config: {
                 type: Object as PropType<TableConfig>,
                 default: () => ({
-                    hideColumn:       undefined,
+                    hideColumn:       [],
                     sortableByColumn: false,
                     dropDownActions:  false
                 })
@@ -110,6 +110,7 @@
                             return comparator.columnComparator(val1, val2) * this.sortOrder;
                         }
 
+                        // default behavior
                         const
                             val1String = val1.toString().toLowerCase(),
                             val2String = val2.toString().toLowerCase();
@@ -139,22 +140,17 @@
             
             columnNamesToBeHidden(): Array<string> {
                 const columns: Array<string> = [];
-                Object.keys(this.rowData[0]).forEach((val, index) => {
-                    if (this.config.hideColumn?.includes(index)) {
-                        columns.push(val);
+
+                if (this.config.hideColumn) {
+                    for (const col of this.cols) {
+                        if (this.config.hideColumn.includes(col.fieldName)) {
+                            columns.push(col.fieldName);
+                        }
                     }
-                });
+                }
 
                 return columns;
             },
-
-            columnsToBeHidden(): Array<number> {
-                if (this.config.hideColumn) {
-                    return this.config.hideColumn;
-                } else {
-                    return [];
-                }
-            }
         },
 
         methods: {

@@ -51,7 +51,7 @@ export interface Action {
  */
 export interface TableConfig {
     /** If defined, denotes which columns must be hidden */
-    hideColumn?: Array<number>;
+    hideColumn?: Array<string>;
     /** Enables sorting of the table be the means of clicking on the column header */
     sortableByColumn: boolean;
     /** Determines how actions are displayer:

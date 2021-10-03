@@ -81,17 +81,17 @@
 <script lang="ts">
     import { defineComponent }      from 'vue'
     import ScrollToTop              from "@/components/ScrollToTop.vue";
-    import DragList, { IDraggable } from "@/components/DragList/DragList.vue";
+    // import DragList, { IDraggable } from "@/components/DragList/DragList.vue";
     import PageProgressBar          from "@/components/PageProgressBar.vue";
     import TopMenu                  from "@/components/TopMenu/TopMenu.vue";
     import { LinkButton }           from "@/components/TopMenu/types";
 
     import Toggle                   from "@/components/Toggle.vue";
 
-    interface Item extends IDraggable {
-        id: number;
-        name: string;
-    }
+    // interface Item extends IDraggable {
+    //     id: number;
+    //     name: string;
+    // }
 
     export default defineComponent({
         components: {
@@ -108,14 +108,14 @@
                     { name: "crud", path: "/crud" },
                     { name: "seq-crud", path: "/seq-crud" }
                 ] as Array<LinkButton>,
-                itemsLeft: [
-                    { id: 0, name: "kek" },
-                    { id: 1, name: "lol" }
-                ] as Array<Item>,
-                itemsRight: [
-                    { id: 0, name: "kek" },
-                    { id: 1, name: "lol" }
-                ] as Array<Item>,
+                // itemsLeft: [
+                //     { id: 0, name: "kek" },
+                //     { id: 1, name: "lol" }
+                // ] as Array<Item>,
+                // itemsRight: [
+                //     { id: 0, name: "kek" },
+                //     { id: 1, name: "lol" }
+                // ] as Array<Item>,
                 toggleVal: false as boolean
             }
         }

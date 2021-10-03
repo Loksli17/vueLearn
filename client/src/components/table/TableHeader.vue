@@ -7,7 +7,7 @@
                 @click="emitSelectedColumn(index)"
                 class="table-header-column-names"
                 :class="{ 'clickable': (tableIsSortable && index !== columnNames.length - 1) }"
-                v-if="!columnsToHide.includes(index)"
+                v-if="!columnsToHide.includes(column.fieldName)"
                 >
                 {{ column.displayedName }}
                 <span v-show="index === columnId"
