@@ -25,7 +25,7 @@
         <div class="section">
             <div>
                 <button @click="showPopup = true">popup</button>
-                <PopupWrapper v-model:show-popup="showPopup" v-if="showPopup">
+                <ModalWrapper v-model:show-popup="showPopup" v-if="showPopup">
                     <div>
                         <h1>header</h1>
                         <div>
@@ -33,7 +33,7 @@
                         </div>
                         <button @click="showPopup = false">close</button>
                     </div>
-                </PopupWrapper>
+                </ModalWrapper>
             </div>
 
             <div class="table-wrap">
@@ -84,7 +84,7 @@
     import Pagination                      from "@/components/Pagination/Pagination.vue";
     import TopMenu                         from "@/components/TopMenu/TopMenu.vue";
     import { LinkButton }                  from "@/components/TopMenu/types";
-    import PopupWrapper                    from "@/components/Popup/PopupWrapper.vue";
+    import ModalWrapper                    from "@/components/Modal/ModalWrapper.vue";
     import FlashMessageData                from '../../libs/flashMessage';
     import Table                           from "@/components/table/Table.vue";
     import { Column, Action, TableConfig, TableColumnComparator } from "@/components/table/types";
@@ -95,7 +95,7 @@
 
         components: {
             Pagination,
-            PopupWrapper,
+            ModalWrapper,
             Table,
             TopMenu,
         },

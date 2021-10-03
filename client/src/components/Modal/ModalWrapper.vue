@@ -14,7 +14,7 @@
 <script lang="ts">
     import { defineComponent } from 'vue'
     export default defineComponent({
-        name: "popup-wrapper",
+        name: "modal-wrapper",
 
         emits: ["update:show-popup"],
 

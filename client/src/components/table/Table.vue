@@ -98,7 +98,7 @@
                 if (this.config.sortableByColumn) {
                     
                     /* */
-                    const comparator = ((row1: Record<string, columnType>, row2: Record<string, columnType>): number => {
+                    const comparator = (row1: Record<string, columnType>, row2: Record<string, columnType>): number => {
                         const
                             columnName = this.cols[this.columnId].fieldName,
                             val1       = row1[columnName],
@@ -123,7 +123,7 @@
                         }
 
                         return res * this.sortOrder;
-                    });
+                    };
 
                     arr = this.reorderedRows.slice().sort(comparator);
                 } else {
