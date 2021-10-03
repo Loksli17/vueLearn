@@ -29,7 +29,7 @@
     import { defineComponent, PropType }                          from 'vue';
     import TableHeader                                            from './TableHeader.vue';
     import TableRow                                               from "./TableRow.vue";
-    import { Column, columnType, Action, TableConfig, SortOrder } from "./types";
+    import { Column, columnType, Action, TableConfig, SortOrder, TableColumnComparator } from "./types";
 
     // export { Column, CustomCell, Action, TableConfig, SortOrder, columnType }
 
@@ -52,6 +52,9 @@
             },
             actions: {
                 type: Object as PropType<Array<Action>>
+            },
+            comparators: {
+                type: Object as PropType<Array<TableColumnComparator>>
             },
             config: {
                 type: Object as PropType<TableConfig>,
@@ -98,14 +101,24 @@
                     const comparator = /*this.config.comparator ?? */((row1: Record<string, columnType>, row2: Record<string, columnType>): number => {
                         const
                             columnName = Object.keys(this.reorderedRows[0])[this.columnId],
-                            val1 = row1[columnName].toString().toLowerCase(),
-                            val2 = row2[columnName].toString().toLowerCase();
+                            val1       = row1[columnName],
+                            val2       = row2[columnName],
+                            comparator = this.comparators?.find(comp => comp.fieldName == columnName);
+                        
+                        
+                        if (comparator) {
+                            return comparator.columnComparator(val1, val2) * this.sortOrder;
+                        }
+
+                        const
+                            val1String = val1.toString().toLowerCase(),
+                            val2String = val2.toString().toLowerCase();
 
                         let res = 0;
-                        if (val1 < val2) {
+                        if (val1String < val2String) {
                             res = -1;
                         } 
-                        if (val1 > val2) {
+                        if (val1String > val2String) {
                             res = 1;
                         }
 

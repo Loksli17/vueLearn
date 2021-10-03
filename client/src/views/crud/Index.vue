@@ -43,6 +43,7 @@
                     :row-data="articles" 
                     :actions="tableActions"
                     :config="tableConfig"
+                    :comparators="tableComparators"
                     >
                     <template #footer>
                         <div> This is a footer </div>
@@ -86,8 +87,9 @@
     import PopupWrapper                    from "@/components/Popup/PopupWrapper.vue";
     import FlashMessageData                from '../../libs/flashMessage';
     import Table                           from "@/components/table/Table.vue";
-    import { Column, Action, TableConfig } from "@/components/table/types";
+    import { Column, Action, TableConfig, TableColumnComparator } from "@/components/table/types";
     import ArticleService                  from '../../services/ArticleService';
+    import moment from 'moment';
 
     export default defineComponent({
 
@@ -122,6 +124,40 @@
                         { name: "Delete", handler: this.removeArticle,              iconPath: require("./../../assets/img/table-icons/delete.svg") },
                 ] as Array<Action>,
                 tableConfig: { sortableByColumn: true, hideColumn: [], dropDownActions: true } as TableConfig,
+                tableComparators: [
+                    {
+                        fieldName: "id",
+                        columnComparator: (val1, val2) => {
+                            if (val1 < val2) return -1;
+                            if (val1 > val2) return 1;
+                            return 0;
+                        }
+                    },
+                    { 
+                        fieldName: "time", 
+                        columnComparator: (val1, val2) => {
+                            const 
+                                t1 = moment(val1, "HH:mm A").toDate(),
+                                t2 = moment(val2, "HH:mm A").toDate();
+
+                            if (t1 < t2) return -1;
+                            if (t1 > t2) return 1;
+                            return 0;
+                        } 
+                    },
+                    {
+                        fieldName: "date",
+                        columnComparator: (val1, val2) => {
+                            const 
+                                t1 = moment(val1, "MMMM Do YYYY").toDate(),
+                                t2 = moment(val2, "MMMM Do YYYY").toDate();
+
+                            if (t1 < t2) return -1;
+                            if (t1 > t2) return 1;
+                            return 0;
+                        }
+                    }
+                ] as Array<TableColumnComparator>,
                 take          : 10 as number,
                 skip          : 0 as number,
                 currentPage   : 1 as number,

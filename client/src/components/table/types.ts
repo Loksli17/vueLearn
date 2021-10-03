@@ -5,6 +5,23 @@ export interface Column {
     columnHandler?: (value: any) => string;
 }
 
+/**
+ * Describes a comparator object for the sorting algorithm
+ * 
+ * This object has two fields: 
+ * 1. fieldName, which should have the same value
+ * as Column's fieldName;
+ * 2. columnComparator, a function that compares the two adjacent values
+ */
+export interface TableColumnComparator {
+    /**
+     * Name of the column, has to be the same as Column's fieldName
+     */
+    fieldName: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    columnComparator: (val: any, nextVal: any) => 0 | 1 | -1;
+}
+
 export interface CustomCell {
     fieldName: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
