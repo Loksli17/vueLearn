@@ -3,7 +3,7 @@
     <div class="file-upload-container">
         <div v-if="files.length < maxFilesAmount" class="file-upload-field" @click="showDialogWindow" :class="{'file-upload-field-drag': dragStatus}" @drop.prevent="dragDrop" @dragenter.prevent @dragover.prevent="dragOver" @dragleave="dragLeave">
             <span>{{message}}</span>
-            <input ref="fileInput" type="file" multiple hidden @change="addFilesDialogWindow">
+            <input ref="fileInput" :name="name" type="file" multiple hidden @change="addFilesDialogWindow">
         </div>
 
         <div v-if="files.length" class="file-container">
@@ -25,7 +25,7 @@
     import FileComponent             from './File.vue';
     import { LoadingFile, TypeIcon } from './types';
 
-
+    //? add v-model for file input ? !!!!!!!!!!!!!! 
     export default defineComponent({
 
         components: {
@@ -57,6 +57,10 @@
                 type   : Number,
                 default: null,
             },
+            name: {
+                type   : String,
+                default: 'file',
+            }
         },
         
         data: function(){
@@ -127,12 +131,12 @@
 
         methods: {
 
-            showDialogWindow: function(): void{
+            showDialogWindow: function(): void {
                 const input: HTMLInputElement = this.$refs.fileInput as HTMLInputElement;
                 input.click();
             },
 
-            addFilesDialogWindow: function(e: InputEvent): void{
+            addFilesDialogWindow: function(e: InputEvent): void {
                 const newFiles: FileList | null = (e.target as HTMLInputElement).files;
                 if (newFiles) this.addFiles(newFiles);
             },
@@ -140,7 +144,11 @@
             dragDrop: function(e: DragEvent): void {
                 if(e.dataTransfer == null) new Error('Error with dataTransfer');
                 const newFiles: FileList | null = e.dataTransfer!.files;
-                if (newFiles) this.addFiles(newFiles);
+                if (newFiles) {
+                    const input: HTMLInputElement = this.$refs.fileInput as HTMLInputElement;
+                    input.files = newFiles;
+                    this.addFiles(newFiles);
+                }
             },
 
             dragOver: function(): void{
@@ -192,7 +200,6 @@
                         normalType: typeFile,
                     };
 
-                    console.log('this:', loadingFile);
 
                     this.files.push(loadingFile);
                     
