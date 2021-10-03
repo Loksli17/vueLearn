@@ -1,0 +1,13 @@
+.page-progress-bar-wrapper {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+
+    .page-progress-bar {
+        width: 0;
+        left: 0;
+        top: 0;
+        height: 5px;
+    }
+}

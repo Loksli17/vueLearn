@@ -65,9 +65,8 @@
 
                 style["bottom"]       = `${props.dist.bottom}px`;
                 style[props.position] = `${props.dist.side}px`;
-
-                style.width  = `${props.radius * 2}px`;
-                style.height = `${props.radius * 2}px`;
+                style["width"]        = `${props.radius * 2}px`;
+                style["height"]       = `${props.radius * 2}px`;
 
                 return style;
             });
@@ -94,7 +93,7 @@
 
         &:hover {
             cursor: pointer;
-            background-color: aqua;
+            // background-color: aqua;
         }
     }
 

@@ -1,6 +1,6 @@
 <template>
     <TopMenu :buttons="buttons" />
-    
+    <PageProgressBar margin-top="60px" />
     <div class="long-page-wrapper">
         <div>
             <Toggle v-model="toggleVal" name="toggle" />
@@ -82,6 +82,7 @@
     import { defineComponent }      from 'vue'
     import ScrollToTop              from "@/components/ScrollToTop.vue";
     import DragList, { IDraggable } from "@/components/DragList/DragList.vue";
+    import PageProgressBar          from "@/components/PageProgressBar.vue";
     import TopMenu                  from "@/components/TopMenu/TopMenu.vue";
     import { LinkButton }           from "@/components/TopMenu/types";
 
@@ -95,6 +96,7 @@
     export default defineComponent({
         components: {
             ScrollToTop,
+            PageProgressBar,
             // DragList,
             TopMenu,
             Toggle
@@ -120,7 +122,13 @@
     })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+    @import "./../assets/scss/page-progress-bar/page-progress-bar.scss";
+
+    // .page-progress-bar {
+    //     margin-top: 60px;
+    // }
+
     .long-page-wrapper {
         width: 70%;
         font-size: 18pt;

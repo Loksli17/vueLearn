@@ -49,6 +49,8 @@
     // export { LinkButton };
 
     export default defineComponent({
+        name: "top-menu",
+        
         components: { TopMenuButton },
         
         props: {
@@ -95,7 +97,7 @@
 
             onMounted(() => {
                 const 
-                    headerVal = root.value as unknown as HTMLElement,
+                    headerVal    = root.value as unknown as HTMLElement,
                     headerHeight = parseInt(getComputedStyle(headerVal).height);
 
                 document.body.style.paddingTop = `${headerHeight}px`;
