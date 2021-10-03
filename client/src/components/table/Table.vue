@@ -98,13 +98,12 @@
                 if (this.config.sortableByColumn) {
                     
                     /* */
-                    const comparator = /*this.config.comparator ?? */((row1: Record<string, columnType>, row2: Record<string, columnType>): number => {
+                    const comparator = ((row1: Record<string, columnType>, row2: Record<string, columnType>): number => {
                         const
-                            columnName = Object.keys(this.reorderedRows[0])[this.columnId],
+                            columnName = this.cols[this.columnId].fieldName,
                             val1       = row1[columnName],
                             val2       = row2[columnName],
                             comparator = this.comparators?.find(comp => comp.fieldName == columnName);
-                        
                         
                         if (comparator) {
                             return comparator.columnComparator(val1, val2) * this.sortOrder;
