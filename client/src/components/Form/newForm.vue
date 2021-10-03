@@ -19,6 +19,18 @@
                     >
                     </textarea>
 
+                    <FileUpload v-else-if="item.type == 'file'"
+                        :maxFilesAmount="item.maxFilesAmount"
+                        :autoLoad="item.autoLoad"
+                        v-on:load-handler="imageLoad"
+                        
+                        :maxFileSize="item.maxFileSize"
+                        v-on:type-error-handler="fileTypeError"
+                        v-on:size-error-handler="fileSizeError"
+                        v-on:not-drag-and-drop-capable-error="dragAndDropCapableError"
+                    >
+                    </FileUpload>
+
                     <!-- <DropDownList v-else-if="item.type == 'select'"
                         :name="item.name"
                         :listItems="item.options"
@@ -35,7 +47,6 @@
                         v-model:current-option-id="localDataForm[item.name]"
                         :disabledOption="item.disabledOption"
                     />
-
 
                     <Checkbox v-else-if="item.type == 'checkbox'"
                         :name="item.name"
@@ -73,19 +84,21 @@
 
 <script lang="ts">
 
-    import Checkbox            from '../crudComponent/Checkbox.vue';
-    import DropList            from "../dropDown/DropDown.vue";
-    import Props               from './props';
-    import { ListItem }        from "../dropDown/types";
-    import { defineComponent } from 'vue';
+    import Checkbox                                  from '../crudComponent/Checkbox.vue';
+    import DropList                                  from "../dropDown/DropDown.vue";
+    import Props                                     from './props';
+    import { ListItem }                              from "../dropDown/types";
+    import { defineComponent }                       from 'vue';
     import { FormHtmlItem, FormDataView, FormErrors} from './types';
+    import FileUpload                                from '../FileUpload/FileUpload.vue';
 
 
     export default defineComponent({
 
         components: {
             Checkbox,
-            DropList
+            DropList,
+            FileUpload,
         },
 
         data: function(){
@@ -140,20 +153,24 @@
                     }
                 };
                 
+                //!!!! do it with another way
                 this.scheme.forEach((row, i) => {
                     row.forEach((htmlItem, j) => {    
                         switch(htmlItem.type){
                             case 'select':
-                                checkInclude(htmlItem, Props.selectProp, i, j);
+                                checkInclude(htmlItem, Props.selectProps, i, j);
                                 break;
                             case 'textarea':
-                                checkInclude(htmlItem, Props.textProp, i, j);
+                                checkInclude(htmlItem, Props.textProps, i, j);
                                 break;
                             case 'checkbox':
-                                checkInclude(htmlItem, Props.checkboxProp, i, j);
+                                checkInclude(htmlItem, Props.checkboxProps, i, j);
+                                break;
+                            case 'file':
+                                checkInclude(htmlItem, Props.fileProps, i, j);
                                 break;
                             default:
-                                checkInclude(htmlItem, Props.inputProp, i, j);
+                                checkInclude(htmlItem, Props.inputProps, i, j);
                         }
                     });
                 });

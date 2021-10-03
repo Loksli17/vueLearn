@@ -1,7 +1,7 @@
 //! check this props attentivle
 
 const 
-    selectProp: Array<string> = [
+    selectProps: Array<string> = [
         'name',
         'type',
         'error',
@@ -14,7 +14,8 @@ const
         'search',
         'currentItem'
     ],
-    inputProp: Array<string> = [
+
+    inputProps: Array<string> = [
         'name',
         'type',
         'error',
@@ -31,7 +32,8 @@ const
         'autocomplete',
         'autofocus',
     ],
-    textProp: Array<string> = [
+
+    textProps: Array<string> = [
         'name',
         'type',
         'error',
@@ -43,17 +45,30 @@ const
         'tabIndex',
         'wrap',
     ],
-    checkboxProp: Array<string> = [
+
+    checkboxProps: Array<string> = [
         'name',
         'type',
         'error',
         'label',
+    ],
+
+    fileProps: Array<string> = [
+        'name',
+        'type',
+        'error',
+        'label',
+
+        'maxFilesAmount',
+        'autoLoad',
+        'maxFileSize',
     ];
 
 
 export default {
-    selectProp,
-    inputProp,
-    textProp,
-    checkboxProp,
+    selectProps,
+    inputProps,
+    textProps,
+    checkboxProps,
+    fileProps,
 }

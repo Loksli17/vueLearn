@@ -31,6 +31,11 @@ export interface FormHtmlItem{
     rows?: number;
     tabindex?: number;
     wrap?: string;
+
+    //file
+    maxFilesAmount?: number,
+    autoLoad?      : boolean,
+    maxFileSize?   : number,
 }
 
 

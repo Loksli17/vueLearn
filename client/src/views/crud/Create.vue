@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <div>
+        <!-- <div>
             <FileUpload
                 :maxFilesAmount="5"
                 :autoLoad="true"
@@ -31,7 +31,7 @@
                 v-on:size-error-handler="fileSizeError"
                 v-on:not-drag-and-drop-capable-error="dragAndDropCapableError"
             />
-        </div>
+        </div> -->
 
     </div>    
 </template>
@@ -112,6 +112,7 @@
                     [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
                     [{type: 'textarea', name: 'text'}],
                     [{type: 'select', name: 'articleTypeId', label: 'Article`s type', search: true, options: this.optionsTypes, disabledOption: 'Please, choose a item'}],
+                    [{type: 'file', name: 'img', label: 'Image', maxFilesAmount: 1, maxFileSize: 1024 * 1024 * 100, autoLoad: true}],
                     [{type: 'submit', name: 'sendArticle'}]
                 ]
             },

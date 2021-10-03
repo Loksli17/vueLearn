@@ -25,21 +25,6 @@
     import FileComponent             from './File.vue';
     import { LoadingFile, TypeIcon } from './types';
 
-    // export interface LoadingFile{
-    //     file: File;
-    //     index: number;
-    //     progress: number;
-    //     loading: boolean;
-    //     image: string;
-    //     shortName: string;
-    //     normalType: string;
-    //     icon?: string;
-    // }
-
-    // interface TypeIcon{
-    //     [index: string]: string;
-    // }
-
 
     export default defineComponent({
 
