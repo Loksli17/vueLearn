@@ -28,6 +28,7 @@
                 :types="['png', 'jpg', 'jpeg']"
                 :progressBar="'different'"
                 v-model:progress="progress"
+                :files="files"
                 
                 v-on:load-handler="imagesLoad"
                 v-on:type-error-handler="fileTypeError"
@@ -68,6 +69,7 @@
                 dataForm      : null as FormDataView | null,
 
                 progress: 0 as number,
+                files   : [] as Array<LoadingFile>,
             }
         },
 
@@ -110,6 +112,8 @@
 
 
             imagesLoad: async function(files: Array<LoadingFile>){
+
+                console.log(this.files);
                 
                 // !Parralel variant. Sync variant work with classic for  
                 files.forEach(async (loadingFile: LoadingFile) => {

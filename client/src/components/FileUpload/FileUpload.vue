@@ -6,9 +6,9 @@
             <input ref="fileInput" :name="name" type="file" :multiple="maxFilesAmount > 1 ? true : false" hidden @change="addFilesDialogWindow">
         </div>
 
-        <div v-if="files.length" class="file-container">
+        <div v-if="localFiles.length" class="file-container">
             <FileComponent
-                v-for="file in files" :key="file.index"
+                v-for="file in localFiles" :key="file.index"
                 :loadingFile="file"
                 :progressBarType="progressBar"
                 v-model:progress="file.progress"
@@ -30,8 +30,7 @@
     import { typeIcons, ProgressBar } from './utils';
 
     /**
-     * todo: v-model files in this component 
-     * * I really need it for adding files before created this component and for connection with Form component
+     * todo some methods in utils file?
      */
 
     export default defineComponent({
@@ -83,12 +82,16 @@
             progress: {
                 type   : Number,
                 defailt: 0,
+            },
+            files: {
+                type   : Array as () => Array<File>,
+                default: () => [],
             }
         },
         
         data: function(){
             return {
-                files        : [] as Array<LoadingFile>,
+                localFiles   : [] as Array<LoadingFile>,
                 dragStatus   : false as boolean,
                 images       : [] as Array<string>,
                 filesProgress: [] as Array<number>,
@@ -130,10 +133,13 @@
                 }
 
                 return `${size} ${dataType}`;
-            }
+            },
+                
         },
 
         created: function(){
+            this.computedLocalFiles();
+
             if(!this.determineDragAndDropCapable()) {
                 const msg: string = `Browser doesn't has supporting of DRAG and DROP API`;
                 this.$emit('not-drag-and-drop-capable-error', msg);
@@ -148,7 +154,6 @@
         methods: {
 
             showDialogWindow: function(): void {
-                console.log('dialogWindow');
                 const input: HTMLInputElement = this.$refs.fileInput as HTMLInputElement;
                 input.click();
             },
@@ -191,37 +196,18 @@
                 this.dragStatus = false;
 
                 for (const newFile of newFiles) {
-                    if(this.files.length >= this.maxFilesAmount) return;
+                    if(this.localFiles.length >= this.maxFilesAmount) return;
                     if(this.repeatFiles) {allowedFiles.push(newFile)}
-                    if(!this.repeatFiles && !(this.files.find(loadFile => loadFile.file.name == newFile.name))) allowedFiles.push(newFile);
+                    if(!this.repeatFiles && !(this.localFiles.find(loadFile => loadFile.file.name == newFile.name))) allowedFiles.push(newFile);
                 }
 
                 for(let i = 0; i < allowedFiles.length; i++){
-                    const file: File = allowedFiles[i];
+                    const 
+                        file: File = allowedFiles[i],
+                        loadingFile: LoadingFile = await this.fromFileToLoadingFile(file);
 
-                    const
-                        imagesTypes     : Array<string>        = ['.svg', '.jpeg', '.jpg', '.png'],
-                        regExpType      : RegExp               = /\.[a-zA-Z]+$/gi,
-                        dataFile        : string | ArrayBuffer = await this.readFile(file),
-                        regExpTypeResult: Array<string> | null = file.name.match(regExpType),
-                        clearFileName   : string               = file.name.slice(0, file.name.indexOf('.'));
-
-                    if(!regExpTypeResult) throw Error('file has bad type');
-
-                    const typeFile: string = regExpTypeResult[0];
-
-                    const loadingFile: LoadingFile = {
-                        file      : file, 
-                        index     : this.currentIndex++, 
-                        progress  : 0,
-                        image     : imagesTypes.includes(typeFile.toLowerCase()) && typeof dataFile == "string" ? dataFile : '',
-                        icon      : !imagesTypes.includes(typeFile) && typeof dataFile == "string" ? (this.typeIcons[typeFile] || 'default.png') : 'default.png',
-                        shortName : (clearFileName.length > 5) ? `${clearFileName.slice(0, 5)}..`: clearFileName,
-                        normalType: typeFile,
-                    };
-
-                    this.files.push(loadingFile);
-                    sendedFiles.push(this.files[this.files.length - 1]); // ! it needs for parralel uploading of files / working with pointer.
+                    this.localFiles.push(loadingFile);
+                    sendedFiles.push(this.localFiles[this.localFiles.length - 1]); // ! it needs for parralel uploading of files / working with pointer.
                 }
 
                 if(this.autoLoad) this.$emit('load-handler', sendedFiles);
@@ -243,9 +229,9 @@
             loadFiles: function(){
                 
                 const sendedFiles: Array<LoadingFile> = [];
-                for(let i: number = 0; i < this.files.length; i++){
-                    if(!this.files[i].progress) {
-                        sendedFiles.push(this.files[i]);
+                for(let i: number = 0; i < this.localFiles.length; i++){
+                    if(!this.localFiles[i].progress) {
+                        sendedFiles.push(this.localFiles[i]);
                     }
                 }
 
@@ -253,7 +239,7 @@
             },
 
             removeFile: function(removingFile: LoadingFile): void{
-                this.files = this.files.filter((file: LoadingFile) => file.index != removingFile.index);
+                this.localFiles = this.localFiles.filter((file: LoadingFile) => file.index != removingFile.index);
             },
 
             checkFileType: function(file: File){
@@ -284,7 +270,41 @@
                 return (('draggable' in div) || ( 'ondragstart' in div && 'ondrop' in div )) &&
                     'FormData' in window && 
                     'FileReader' in window;
-            }
+            },
+
+            fromFileToLoadingFile: async function(file: File){
+
+                const
+                    imagesTypes     : Array<string>        = ['.svg', '.jpeg', '.jpg', '.png'],
+                    regExpType      : RegExp               = /\.[a-zA-Z]+$/gi,
+                    dataFile        : string | ArrayBuffer = await this.readFile(file),
+                    regExpTypeResult: Array<string> | null = file.name.match(regExpType),
+                    clearFileName   : string               = file.name.slice(0, file.name.indexOf('.'));
+
+                if(!regExpTypeResult) throw Error('file has bad type');
+
+                const typeFile: string = regExpTypeResult[0];
+
+                const loadingFile: LoadingFile = {
+                    file      : file, 
+                    index     : this.currentIndex++, 
+                    progress  : 0,
+                    image     : imagesTypes.includes(typeFile.toLowerCase()) && typeof dataFile == "string" ? dataFile : '',
+                    icon      : !imagesTypes.includes(typeFile) && typeof dataFile == "string" ? (this.typeIcons[typeFile] || 'default.png') : 'default.png',
+                    shortName : (clearFileName.length > 5) ? `${clearFileName.slice(0, 5)}..`: clearFileName,
+                    normalType: typeFile,
+                };
+
+                return loadingFile;
+            },
+
+            computedLocalFiles: function() {
+
+                this.files.forEach(async (file: File) => {
+                    const loadingFile: LoadingFile = await this.fromFileToLoadingFile(file);
+                    this.localFiles.push(loadingFile);
+                });
+            },
         }
     });
 </script>
