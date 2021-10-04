@@ -11,8 +11,8 @@
 
             <div class="form-wrap">
                 <Form 
-                    v-if="rowsForm && dataForm"
-                    :scheme="rowsForm"
+                    v-if="scheme && dataForm"
+                    :scheme="scheme"
                     :data="dataForm"
                     :tableName="'article'"
                     v-on:send="sendForm"
@@ -20,18 +20,19 @@
             </div>
         </div>
 
-        <!-- <div>
+        <div>
             <FileUpload
                 :maxFilesAmount="5"
                 :autoLoad="true"
-                v-on:load-handler="imageLoad"
-                
                 :maxFileSize="1024 * 1024 * 100"
+                :types="['png', 'jpg', 'jpeg']"
+                
+                v-on:load-handler="imagesLoad"
                 v-on:type-error-handler="fileTypeError"
                 v-on:size-error-handler="fileSizeError"
                 v-on:not-drag-and-drop-capable-error="dragAndDropCapableError"
             />
-        </div> -->
+        </div>
 
     </div>    
 </template>
@@ -53,7 +54,7 @@
 
         components: {
             Form,
-            // FileUpload,
+            FileUpload,
         },
 
         data: function(){
@@ -61,7 +62,7 @@
                 types         : [] as Array<Record<string, any>>,
                 currentValueId: 0 as number,
                 article       : {} as Record<string, unknown>,
-                rowsForm      : null as Array<Array<FormHtmlItem>> | null,
+                scheme        : null as Array<Array<FormHtmlItem>> | null,
                 dataForm      : null as FormDataView | null,
             }
         },
@@ -77,7 +78,7 @@
 
         created: async function(){
             await this.getTypes();
-            this.initRowsForm();
+            this.initScheme();
             this.initDataForm();
         },
 
@@ -99,15 +100,20 @@
                 this.types = await ArticleTypeService.getAll() || []; 
             },
 
-            imageLoad: async function(loadingFile: LoadingFile){
-                const data: FormData = new FormData();
-                data.append('image', loadingFile.file);
 
-                await ArticleService.fileUpload(data, loadingFile);
+            imagesLoad: async function(files: Array<LoadingFile>){
+                
+                files.forEach(async (loadingFile: LoadingFile) => {
+                    const data: FormData = new FormData();
+                    data.append('image', loadingFile.file);
+                    await ArticleService.fileUpload(data, loadingFile);
+                });
+
             },
 
-            initRowsForm: function(){
-                this.rowsForm = [
+
+            initScheme: function(){
+                this.scheme = [
                     [{type: 'text', name: 'title', label: 'Title of article'}, {type: 'checkbox', name: 'isReady', label: 'Readiness of the article'}],
                     [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
                     [{type: 'textarea', name: 'text'}],
@@ -127,7 +133,6 @@
 
 
             sendForm: async function(formData: FormDataView){
-                
                 await ArticleService.addOne({article: formData});
                 this.$flashMessage.show(FlashMessageData.successMessage('Inserting of artcile', `New article was created successfully`));
             },

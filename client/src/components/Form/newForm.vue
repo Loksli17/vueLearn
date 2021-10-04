@@ -22,9 +22,10 @@
                     <FileUpload v-else-if="item.type == 'file'"
                         :maxFilesAmount="item.maxFilesAmount"
                         :autoLoad="item.autoLoad"
-                        v-on:load-handler="imageLoad"
-                        
                         :maxFileSize="item.maxFileSize"
+                        :types="item.types"
+                        
+                        v-on:load-handler="imageLoad"
                         v-on:type-error-handler="fileTypeError"
                         v-on:size-error-handler="fileSizeError"
                         v-on:not-drag-and-drop-capable-error="dragAndDropCapableError"

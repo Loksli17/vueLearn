@@ -3,7 +3,7 @@
     <div class="file-upload-container">
         <div v-if="files.length < maxFilesAmount" class="file-upload-field" @click="showDialogWindow" :class="{'file-upload-field-drag': dragStatus}" @drop.prevent="dragDrop" @dragenter.prevent @dragover.prevent="dragOver" @dragleave="dragLeave">
             <span>{{message}}</span>
-            <input ref="fileInput" :name="name" type="file" multiple hidden @change="addFilesDialogWindow">
+            <input ref="fileInput" :name="name" type="file" :multiple="maxFilesAmount > 1 ? true : false" hidden @change="addFilesDialogWindow">
         </div>
 
         <div v-if="files.length" class="file-container">
@@ -31,6 +31,14 @@
         components: {
             FileComponent,
         },
+
+        emits: [
+            'not-drag-and-drop-capable-error',
+            // 'load-even-handler',
+            'load-handler',
+            'type-error-handler',
+            'size-error-handler',
+        ],
 
         props: {
             maxFilesAmount: {
@@ -136,18 +144,19 @@
                 input.click();
             },
 
-            addFilesDialogWindow: function(e: InputEvent): void {
+            addFilesDialogWindow: async function(e: InputEvent): Promise<void> {
                 const newFiles: FileList | null = (e.target as HTMLInputElement).files;
-                if (newFiles) this.addFiles(newFiles);
+                if (newFiles) await this.addFiles(newFiles);
             },
             
-            dragDrop: function(e: DragEvent): void {
+            dragDrop: async function(e: DragEvent): Promise<void> {
                 if(e.dataTransfer == null) new Error('Error with dataTransfer');
                 const newFiles: FileList | null = e.dataTransfer!.files;
+                
                 if (newFiles) {
                     const input: HTMLInputElement = this.$refs.fileInput as HTMLInputElement;
                     input.files = newFiles;
-                    this.addFiles(newFiles);
+                    await this.addFiles(newFiles);
                 }
             },
 
@@ -159,9 +168,11 @@
                 this.dragStatus = false;
             },
             
-            addFiles: function(newFiles: FileList): void{
+            addFiles: async function(newFiles: FileList): Promise<void> {
 
-                let allowedFiles: Array<File> = [];
+                let 
+                    allowedFiles: Array<File>        = [],
+                    sendedFiles : Array<LoadingFile> = [];
 
                 for (const file of newFiles) {
                     if(this.types != null)       this.checkFileType(file);
@@ -176,7 +187,8 @@
                     if(!this.repeatFiles && !(this.files.find(loadFile => loadFile.file.name == newFile.name))) allowedFiles.push(newFile);
                 }
 
-                allowedFiles.forEach(async (file: File) => {
+                for(let i = 0; i < allowedFiles.length; i++){
+                    const file: File = allowedFiles[i];
 
                     const
                         imagesTypes     : Array<string>        = ['.svg', '.jpeg', '.jpg', '.png'],
@@ -195,21 +207,16 @@
                         progress  : 0,
                         image     : imagesTypes.includes(typeFile.toLowerCase()) && typeof dataFile == "string" ? dataFile : '',
                         icon      : !imagesTypes.includes(typeFile) && typeof dataFile == "string" ? (this.typeIcons[typeFile] || 'default.png') : 'default.png',
-                        loading   : false,
+                        // loading   : false,
                         shortName : (clearFileName.length > 5) ? `${clearFileName.slice(0, 5)}..`: clearFileName,
                         normalType: typeFile,
                     };
 
-
                     this.files.push(loadingFile);
-                    
-                    // ! IT'S SO IMPORTANT do this with array item case JS has so STRANGE POINTERS. Please, DON'T EDIT IT
-                    if(this.autoLoad){
-                        this.$emit('load-handler', this.files[this.files.length - 1]);
-                        this.files[this.files.length - 1].loading = true;
-                    }
+                    sendedFiles.push(this.files[this.files.length - 1]);
+                }
 
-                });
+                if(this.autoLoad) this.$emit('load-handler', sendedFiles);
             },
 
             readFile: function(file: File): Promise<string | ArrayBuffer>{
@@ -226,11 +233,15 @@
             },
 
             loadFiles: function(){
-                this.files.forEach((loadingFile: LoadingFile) => {
-                    if(loadingFile.loading) return;
-                    this.$emit('load-handler', loadingFile);
-                    loadingFile.loading = true;
-                });
+                
+                const sendedFiles: Array<LoadingFile> = [];
+                for(let i: number = 0; i < this.files.length; i++){
+                    if(!this.files[i].progress) {
+                        sendedFiles.push(this.files[i]);
+                    }
+                }
+
+                this.$emit('load-handler', sendedFiles);
             },
 
             removeFile: function(removingFile: LoadingFile): void{

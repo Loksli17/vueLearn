@@ -137,10 +137,11 @@ export default class ArticleService extends Service {
     }
 
 
-    public static async fileUpload(data: FormData, loadingFile: LoadingFile): Promise<void | null>{
+    public static async fileUpload(data: FormData, loadingFile: LoadingFile): Promise<void | null> {
         
         const response: AxiosResponse | void = await axios.post(`/crud/article-image`, data, {
             onUploadProgress: (e) => {
+                console.log(e);
                 loadingFile.progress = Math.floor(e.loaded * 100 / e.total);
             }
         }).catch((reason) => {
