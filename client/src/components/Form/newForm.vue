@@ -4,7 +4,7 @@
         <div class="form-row" v-for="row in scheme" :key='row'>
 
             <div v-for="item in row" :key='item.name'>
-                <label v-if="item.type != 'hidden'" :class="{'error': errors && errors[item.name]}" class="form-col">
+                <div v-if="item.type != 'hidden'" :class="{'error': errors && errors[item.name]}" class="form-col">
                     
                     <span v-if="item.type != 'submit'">{{item.label ?? $filters.upperFirst(item.name)}}</span>
 
@@ -75,7 +75,7 @@
 
                     <!-- <em>{{errors[item.name]}} {{errors}} {{item.name}}</em> -->
                     <div v-if="errors && errors[item.name]" class="error-msg">{{errors[item.name]}}</div>
-                </label>
+                </div>
             </div>
 
         </div>
@@ -203,7 +203,7 @@
             column-gap: 20px;
             padding: 20px;
 
-            label{
+            .form-col{
                 display: grid;
                 row-gap: 10px;
             }

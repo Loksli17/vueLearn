@@ -21,11 +21,12 @@
 
 
 <script lang="ts">
-    import {defineComponent}         from 'vue';
-    import FileComponent             from './File.vue';
-    import { LoadingFile, TypeIcon } from './types';
+    import {defineComponent } from 'vue';
+    import FileComponent      from './File.vue';
+    import { LoadingFile }    from './types';
+    import typeIcons          from './typeIcons';
 
-    //? add v-model for file input ? !!!!!!!!!!!!!! 
+
     export default defineComponent({
 
         components: {
@@ -34,7 +35,6 @@
 
         emits: [
             'not-drag-and-drop-capable-error',
-            // 'load-even-handler',
             'load-handler',
             'type-error-handler',
             'size-error-handler',
@@ -78,18 +78,7 @@
                 images       : [] as Array<string>,
                 filesProgress: [] as Array<number>,
                 currentIndex : 0 as number,
-
-                typeIcons: {
-                    '.pdf'  : 'pdf.png',
-                    '.docx' : 'word.svg',
-                    '.doc'  : 'word.svg',
-                    '.pptx' : 'power-point.svg',
-                    '.xlsx' : 'excel.svg',
-                    '.txt'  : 'notebook.png',
-                    '.avi'  : 'avi.png',
-                    '.gif'  : 'gif.png',
-                    '.vsdx' : 'visio.svg',
-                } as TypeIcon,
+                typeIcons    : typeIcons,
             }
         },
 
@@ -140,6 +129,7 @@
         methods: {
 
             showDialogWindow: function(): void {
+                console.log('dialogWindow');
                 const input: HTMLInputElement = this.$refs.fileInput as HTMLInputElement;
                 input.click();
             },

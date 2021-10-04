@@ -8,6 +8,6 @@ export interface LoadingFile{
     icon?     : string;
 }
 
-export interface TypeIcon{
+export interface TypeIcons{
     [index: string]: string;
 }
