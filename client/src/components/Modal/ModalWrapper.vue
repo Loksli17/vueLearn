@@ -1,8 +1,8 @@
 <template>
     <teleport to="body">
-        <div class="popup-wrapper">
-            <div class="popup-wrapper-background" @click="clickedOnBackground"></div>
-            <div class="popup-wrapper-body">
+        <div class="modal-wrapper">
+            <div class="modal-wrapper-background" @click="clickedOnBackground"></div>
+            <div class="modal-wrapper-body">
                 <slot>
 
                 </slot>
@@ -16,10 +16,10 @@
     export default defineComponent({
         name: "modal-wrapper",
 
-        emits: ["update:show-popup"],
+        emits: ["update:show-modal"],
 
         props: {
-            showPopup: {
+            showModal: {
                 type:     Boolean,
                 required: true
             }
@@ -36,14 +36,14 @@
         methods: {
             clickedOnBackground() {
                 document.body.style.overflow = "initial";
-                this.$emit("update:show-popup", false);
+                this.$emit("update:show-modal", false);
             }
         }
     })
 </script>
 
 <style lang="scss" scoped>
-    .popup-wrapper {
+    .modal-wrapper {
         position: fixed;
         z-index: 3000;
         display: flex;
@@ -54,7 +54,7 @@
         top: 0;
         left: 0;
 
-        .popup-wrapper-body {
+        .modal-wrapper-body {
             position: fixed;
             align-self: center;
             width: 80%;
@@ -63,7 +63,7 @@
             background-color: #FFF;
         }
 
-        .popup-wrapper-background {
+        .modal-wrapper-background {
             width: 100%;
             height: 100%;
             background-color: #000000e1;

@@ -52,8 +52,8 @@ export interface Action {
 export interface TableConfig {
     /** If defined, denotes which columns must be hidden */
     hideColumn?: Array<string>;
-    /** Enables sorting of the table be the means of clicking on the column header */
-    sortableByColumn: boolean;
+    /** If defined sorting of the table be the means of clicking on the column header */
+    sortableByColumn?: { default: SortOrder };
     /** Determines how actions are displayer:
      * 
      * true - as dropdown list
@@ -68,4 +68,4 @@ export enum SortOrder {
     DESCENDING = -1
 }
 
-export type columnType = string | number | boolean | Date | Action | Array<Action>;
+export type ColumnType = string | number | boolean | Date | Action | Array<Action>;

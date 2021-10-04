@@ -25,7 +25,7 @@
         <div class="section">
             <div>
                 <button @click="showPopup = true">popup</button>
-                <ModalWrapper v-model:show-popup="showPopup" v-if="showPopup">
+                <ModalWrapper v-model:show-modal="showPopup" v-if="showPopup">
                     <div>
                         <h1>header</h1>
                         <div>
@@ -87,9 +87,9 @@
     import ModalWrapper                    from "@/components/Modal/ModalWrapper.vue";
     import FlashMessageData                from '../../libs/flashMessage';
     import Table                           from "@/components/table/Table.vue";
-    import { Column, Action, TableConfig, TableColumnComparator } from "@/components/table/types";
     import ArticleService                  from '../../services/ArticleService';
     import moment from 'moment';
+    import { Column, Action, TableConfig, TableColumnComparator, SortOrder } from "@/components/table/types";
 
     export default defineComponent({
 
@@ -108,6 +108,7 @@
                     { name: "seq-crud",  path: "/seq-crud" },
                     { name: "long text", path: "/long" }
                 ] as Array<LinkButton>,
+                
                 columnNames   : [ 
                         { displayedName: "Id",      fieldName: "id" },
                         { displayedName: "Title",   fieldName: "title" },
@@ -118,12 +119,19 @@
                         { displayedName: 'Views',   fieldName: "views" },
                         { displayedName: "Actions", fieldName: "actions" },
                 ] as Array<Column>,
+
                 tableActions: [
                         { name: "View",   path: (id: number) => `/crud/${id}/view`, iconPath: require("./../../assets/img/table-icons/view.svg") }, 
                         { name: "Edit",   path: (id: number) => `/crud/${id}/edit`, iconPath: require("./../../assets/img/table-icons/edit.svg") }, 
                         { name: "Delete", handler: this.removeArticle,              iconPath: require("./../../assets/img/table-icons/delete.svg") },
                 ] as Array<Action>,
-                tableConfig: { sortableByColumn: true, hideColumn: [], dropDownActions: true } as TableConfig,
+
+                tableConfig: { 
+                    sortableByColumn: { default: SortOrder.DESCENDING }, 
+                    hideColumn: [], 
+                    dropDownActions: true 
+                } as TableConfig,
+
                 tableComparators: [
                     {
                         fieldName: "id",
