@@ -29,6 +29,10 @@
     import { LoadingFile }            from './types';
     import { typeIcons, ProgressBar } from './utils';
 
+    /**
+     * todo: v-model files in this component 
+     * * I really need it for adding files before created this component and for connection with Form component
+     */
 
     export default defineComponent({
 

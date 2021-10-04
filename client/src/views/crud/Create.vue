@@ -71,6 +71,10 @@
             }
         },
 
+        provide: {
+
+        },
+
         computed: {
             optionsTypes: function(): Array<ListItem>{
                 return this.types.map((item): ListItem => {
@@ -151,6 +155,7 @@
 
 
             sendForm: async function(formData: FormDataView){
+                // todo: get files form FileUpload here
                 await ArticleService.addOne({article: formData});
                 this.$flashMessage.show(FlashMessageData.successMessage('Inserting of artcile', `New article was created successfully`));
             },
