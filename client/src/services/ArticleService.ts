@@ -154,4 +154,21 @@ export default class ArticleService extends Service {
 
         return;
     }
+
+
+    public static async filesUpload(data: FormData, progressHandler: (e: any) => void): Promise<void | null> {
+        
+        const response: AxiosResponse | void = await axios.post(`/crud/article-image`, data, {
+            onUploadProgress: progressHandler, 
+        }).catch((reason) => {
+            this.errorMessage(reason.response.status);
+            console.error(reason);
+        });
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
+
+        return;
+    }
 }

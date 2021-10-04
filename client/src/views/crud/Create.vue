@@ -26,6 +26,8 @@
                 :autoLoad="true"
                 :maxFileSize="1024 * 1024 * 100"
                 :types="['png', 'jpg', 'jpeg']"
+                :progressBar="'different'"
+                v-model:progress="progress"
                 
                 v-on:load-handler="imagesLoad"
                 v-on:type-error-handler="fileTypeError"
@@ -48,7 +50,7 @@
     import FlashMessageData               from '../../libs/flashMessage';
     import ArticleTypeService             from '../../services/ArticleTypeService';
     import ArticleService                 from '../../services/ArticleService';
-    
+
 
     export default defineComponent({
 
@@ -64,6 +66,8 @@
                 article       : {} as Record<string, unknown>,
                 scheme        : null as Array<Array<FormHtmlItem>> | null,
                 dataForm      : null as FormDataView | null,
+
+                progress: 0 as number,
             }
         },
 
@@ -103,12 +107,26 @@
 
             imagesLoad: async function(files: Array<LoadingFile>){
                 
+                // !Parralel variant. Sync variant work with classic for  
                 files.forEach(async (loadingFile: LoadingFile) => {
                     const data: FormData = new FormData();
                     data.append('image', loadingFile.file);
                     await ArticleService.fileUpload(data, loadingFile);
                 });
 
+            },
+
+            imagesLoadOverall: async function(files: Array<LoadingFile>){
+                
+                const data: FormData = new FormData();
+
+                files.forEach(async (loadingFile: LoadingFile, index: number) => {
+                    data.append(`image${index}`, loadingFile.file);
+                });
+
+                await ArticleService.filesUpload(data, (e) => {
+                    this.progress = Math.floor(e.loaded * 100 / e.total);
+                });
             },
 
 

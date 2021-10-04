@@ -10,21 +10,24 @@
             <FileComponent
                 v-for="file in files" :key="file.index"
                 :loadingFile="file"
+                :progressBarType="progressBar"
                 v-model:progress="file.progress"
                 v-on:remove-file="removeFile"
             />
             <button v-if="!autoLoad" @click="loadFiles">Send files</button>
         </div>
+
+        <progress v-if="progressBar == 'overall' && files.length" :value="progress" max="100">{{progress}}%</progress>
     </div>
 
 </template>
 
 
 <script lang="ts">
-    import {defineComponent } from 'vue';
-    import FileComponent      from './File.vue';
-    import { LoadingFile }    from './types';
-    import typeIcons          from './typeIcons';
+    import {defineComponent }         from 'vue';
+    import FileComponent              from './File.vue';
+    import { LoadingFile }            from './types';
+    import { typeIcons, ProgressBar } from './utils';
 
 
     export default defineComponent({
@@ -68,6 +71,14 @@
             name: {
                 type   : String,
                 default: 'file',
+            },
+            progressBar: {
+                type   : String,
+                default: 'different', 
+            },
+            progress: {
+                type   : Number,
+                defailt: 0,
             }
         },
         
@@ -123,6 +134,10 @@
                 const msg: string = `Browser doesn't has supporting of DRAG and DROP API`;
                 this.$emit('not-drag-and-drop-capable-error', msg);
                 throw new Error(msg);
+            }
+
+            if(!Object.values(ProgressBar).includes(this.progressBar as ProgressBar)){
+                throw new Error(`Unexpected value "${this.progressBar}" for progressBar property`);
             }
         },
 
@@ -300,6 +315,33 @@
 
         .file-upload-field-drag{
             border: 2px dashed #4678e4;
+        }
+
+        @mixin progress{
+            display: block;
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        progress{
+            margin-top: 20px;
+            @include progress;
+            appearance: none;
+        }
+
+        progress::-webkit-progress-value{
+            @include progress;
+            background-color: rgb(76, 231, 231);
+        }
+
+        progress::-webkit-progress-bar{
+            @include progress;
+            background-color: rgb(203, 216, 216);
+        }
+
+        progress::-moz-progress-bar{
+            @include progress;
+            background-color: rgb(203, 216, 216);
         }
     }
 </style>

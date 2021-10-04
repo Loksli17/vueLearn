@@ -12,4 +12,13 @@ const typeIcons: TypeIcons = {
     '.vsdx' : 'visio.svg',
 }
 
-export default typeIcons;
+enum ProgressBar {
+    Different = 'different',
+    Overall   = 'overall',
+}
+
+
+export { 
+    typeIcons,
+    ProgressBar
+}

@@ -9,7 +9,7 @@
             <span>({{loadingFile.normalType}})</span>
         </div>
         
-        <progress :value="progress" max="100">{{progress}}%</progress>
+        <progress v-if="progressBarType == 'different'" :value="progress" max="100">{{progress}}%</progress>
         <div class="remove-file" @click="removeFile">&#10006;</div>
     </div>
     
@@ -19,6 +19,7 @@
 <script lang="ts">
     import { defineComponent } from 'vue';
     import { LoadingFile }     from './types';
+    import { ProgressBar }     from './utils';
 
     export default defineComponent({
         
@@ -30,6 +31,10 @@
             progress: {
                 type   : Number,
                 default: 0, 
+            },
+            progressBarType: {
+                type   : String,
+                default: ProgressBar.Different,
             }
         },
 
