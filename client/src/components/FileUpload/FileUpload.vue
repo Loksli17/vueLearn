@@ -207,13 +207,12 @@
                         progress  : 0,
                         image     : imagesTypes.includes(typeFile.toLowerCase()) && typeof dataFile == "string" ? dataFile : '',
                         icon      : !imagesTypes.includes(typeFile) && typeof dataFile == "string" ? (this.typeIcons[typeFile] || 'default.png') : 'default.png',
-                        // loading   : false,
                         shortName : (clearFileName.length > 5) ? `${clearFileName.slice(0, 5)}..`: clearFileName,
                         normalType: typeFile,
                     };
 
                     this.files.push(loadingFile);
-                    sendedFiles.push(this.files[this.files.length - 1]);
+                    sendedFiles.push(this.files[this.files.length - 1]); // ! it needs for parralel uploading of files / working with pointer.
                 }
 
                 if(this.autoLoad) this.$emit('load-handler', sendedFiles);
