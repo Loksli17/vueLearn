@@ -5,7 +5,7 @@
             @selected-column="setSelectedColumn"
             :columnId="columnId"
             :sortOrder="sortOrder"
-            :table-is-sortable="config.sortableByColumn"
+            :table-is-sortable="(config.sortableByColumn !== undefined)"
             :has-actions="!!actions" 
             :columnsToHide="columnNamesToBeHidden"
         />
@@ -29,9 +29,9 @@
     import { defineComponent, PropType }                          from 'vue';
     import TableHeader                                            from './TableHeader.vue';
     import TableRow                                               from "./TableRow.vue";
-    import { Column, columnType, Action, TableConfig, SortOrder, TableColumnComparator } from "./types";
+    import { Column, ColumnType, Action, TableConfig, SortOrder, TableColumnComparator } from "./types";
 
-    // export { Column, CustomCell, Action, TableConfig, SortOrder, columnType }
+    // export { Column, CustomCell, Action, TableConfig, SortOrder, ColumnType }
 
     export default defineComponent({
         name: "Table",
@@ -47,7 +47,7 @@
                 required: true
             },
             rowData: {
-                type: Object as PropType<Array<Record<string, columnType>>>,
+                type: Object as PropType<Array<Record<string, ColumnType>>>,
                 required: true
             },
             actions: {
@@ -73,9 +73,15 @@
             }
         },
 
+        mounted() {
+            if (this.config.sortableByColumn) {
+                this.setSortOrder(this.config.sortableByColumn.default);
+            }
+        },
+
         computed: {
-            reorderedRows(): Array<Record<string, columnType>> {
-                let arr: Array<Record<string, columnType>> = [];
+            reorderedRows(): Array<Record<string, ColumnType>> {
+                let arr: Array<Record<string, ColumnType>> = [];
 
                 for (const row of this.rowData) {
                     const newRow = {} as typeof row;
@@ -92,13 +98,12 @@
                 return arr;
             },
 
-            rows(): Array<Record<string, columnType>> {
-                let arr: Array<Record<string, columnType>> = [];
+            rows(): Array<Record<string, ColumnType>> {
+                let arr: Array<Record<string, ColumnType>> = [];
 
                 if (this.config.sortableByColumn) {
-                    
                     /* */
-                    const comparator = (row1: Record<string, columnType>, row2: Record<string, columnType>): number => {
+                    const comparator = (row1: Record<string, ColumnType>, row2: Record<string, ColumnType>): number => {
                         const
                             columnName = this.cols[this.columnId].fieldName,
                             val1       = row1[columnName],
@@ -153,6 +158,9 @@
         },
 
         methods: {
+            setSortOrder(order: SortOrder): void {
+                this.sortOrder = order;
+            },
             setSelectedColumn(id: number): void {
                 this.columnId = id;
                 this.sortOrder = (this.sortOrder === SortOrder.ASCENDING) ? SortOrder.DESCENDING : SortOrder.ASCENDING;

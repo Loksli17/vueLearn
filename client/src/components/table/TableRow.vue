@@ -17,7 +17,7 @@
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
     import TableRowActionCell from "./TableRowActionCell.vue";
-    import { Action, columnType } from "./types";
+    import { Action, ColumnType } from "./types";
 
     export default defineComponent({
         name: "TableRow",
@@ -26,7 +26,7 @@
         },
         props: {
             row: {
-                type: Object as PropType<columnType>,
+                type: Object as PropType<ColumnType>,
                 require: true
             },
             actions: {
