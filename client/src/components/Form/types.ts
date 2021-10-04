@@ -36,6 +36,7 @@ export interface FormHtmlItem{
     maxFilesAmount?: number,
     autoLoad?      : boolean,
     maxFileSize?   : number,
+    types?         : Array<string>,
 }
 
 
