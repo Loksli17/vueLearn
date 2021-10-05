@@ -63,6 +63,7 @@ const
         'autoLoad',
         'maxFileSize',
         'types',
+        'files',
     ];
 
 

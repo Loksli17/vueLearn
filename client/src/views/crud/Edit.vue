@@ -121,13 +121,30 @@
                 this.types = await ArticleTypeService.getAll() || [];
             },
 
+
+            // ! Think about this ???
+            dataURLtoFile: function(dataurl: any, filename: string) {
+
+                console.log(dataurl);
+ 
+                var arr = dataurl.split(','),
+                    mime = arr[0].match(/:(.*?);/)[1],
+                    bstr = atob(arr[1]), 
+                    n = bstr.length, 
+                    u8arr = new Uint8Array(n);
+                    
+                while(n--){
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                
+                return new File([u8arr], filename, {type:mime});
+            },
+
             getArticle: async function(){
                 const serviceResult: Record<string, any> | null = await ArticleService.getOneDb({id: this.$route.params.id});
                 if(serviceResult == null) return;
                 this.article = serviceResult!.article;
-                
-                // const file: File = new File(serviceResult.file.data, `http://localhost:3000/crud/articles/${this.article.img}`);
-                const file: File = new File(serviceResult.file.data, this.article.img as string);
+                const file: File = this.dataURLtoFile(`'data:text/image;base64,${serviceResult.file}`, this.article.img as string);
                 this.files.push(file);
             },
 
@@ -137,6 +154,7 @@
                     [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
                     [{type: 'textarea', name: 'text'}],
                     [{type: 'select', name: 'articleTypeId', label: 'Article`s type', options: this.optionsTypes, currentItem: this.article.articleTypeId as number}],
+                    [{type: 'file', name: 'img', label: 'Image', maxFilesAmount: 1, maxFileSize: 1024 * 1024 * 100, autoLoad: true, files: this.files}],
                     [{type: 'submit', name: 'sendArticle'}]
                 ]
             },

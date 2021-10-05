@@ -103,7 +103,7 @@ export default class CrudController {
             return fs.readFile(`public/crud/articles/${article.img}`);
         })
         .then((result: any) => {
-            res.status(200).send({article: article, file: result});
+            res.status(200).send({article: article, file: Buffer.from(result).toString('base64')});
         })
         .catch((reason: any) => {
             console.error(reason);

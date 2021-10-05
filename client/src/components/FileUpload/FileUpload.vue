@@ -1,7 +1,7 @@
 <template>
     
     <div class="file-upload-container">
-        <div v-if="files.length < maxFilesAmount" class="file-upload-field" @click="showDialogWindow" :class="{'file-upload-field-drag': dragStatus}" @drop.prevent="dragDrop" @dragenter.prevent @dragover.prevent="dragOver" @dragleave="dragLeave">
+        <div v-if="localFiles.length < maxFilesAmount" class="file-upload-field" @click="showDialogWindow" :class="{'file-upload-field-drag': dragStatus}" @drop.prevent="dragDrop" @dragenter.prevent @dragover.prevent="dragOver" @dragleave="dragLeave">
             <span>{{message}}</span>
             <input ref="fileInput" :name="name" type="file" :multiple="maxFilesAmount > 1 ? true : false" hidden @change="addFilesDialogWindow">
         </div>
@@ -201,6 +201,9 @@
                     if(!this.repeatFiles && !(this.localFiles.find(loadFile => loadFile.file.name == newFile.name))) allowedFiles.push(newFile);
                 }
 
+                //todo think about message to user
+                if(allowedFiles.length > this.maxFilesAmount + this.localFiles.length) allowedFiles.length = this.maxFilesAmount + this.localFiles.length;
+
                 for(let i = 0; i < allowedFiles.length; i++){
                     const 
                         file: File = allowedFiles[i],
@@ -299,9 +302,6 @@
             },
 
             computedLocalFiles: function() {
-
-                console.log('fileUpload', this.files);
-
                 this.files.forEach(async (file: File) => {
                     const loadingFile: LoadingFile = await this.fromFileToLoadingFile(file);
                     this.localFiles.push(loadingFile);

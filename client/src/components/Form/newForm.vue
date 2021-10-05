@@ -24,6 +24,7 @@
                         :autoLoad="item.autoLoad"
                         :maxFileSize="item.maxFileSize"
                         :types="item.types"
+                        :files="item.files"
                         
                         v-on:load-handler="imageLoad"
                         v-on:type-error-handler="fileTypeError"

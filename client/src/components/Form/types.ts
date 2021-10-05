@@ -1,4 +1,7 @@
-import { ListItem } from "../dropDown/types";
+
+//! It's bad imports!!!!
+import { ListItem }    from "../dropDown/types";
+import { LoadingFile } from "../FileUpload/types";
 
 export interface FormHtmlItem{
     type: string;
@@ -22,7 +25,7 @@ export interface FormHtmlItem{
     multiple?: boolean;
     search?: boolean;
     disabledOption?: string;
-    options?: Array<ListItem>;
+    options?: Array<ListItem>; //!! bad
     currentItem?: string | number | ListItem;
 
     //textarea
@@ -37,6 +40,7 @@ export interface FormHtmlItem{
     autoLoad?      : boolean,
     maxFileSize?   : number,
     types?         : Array<string>,
+    files?         : Array<File>, //!! bad
 }
 
 
