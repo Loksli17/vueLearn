@@ -100,7 +100,7 @@ export default class CrudController {
         )
         .then((value: any) => {
             article = value[0][0];
-            return fs.readFile(`public/crud/articles/${value[0][0].img}`);
+            return fs.readFile(`public/crud/articles/${article.img}`);
         })
         .then((result: any) => {
             res.status(200).send({article: article, file: result});

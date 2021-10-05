@@ -21,6 +21,24 @@
             </div>
         </div>
 
+        <div>
+            <FileUpload
+                v-if="files.length > 0"
+                :maxFilesAmount="5"
+                :autoLoad="true"
+                :maxFileSize="1024 * 1024 * 100"
+                :types="['png', 'jpg', 'jpeg']"
+                :progressBar="'different'"
+                v-model:progress="progress"
+                :files="files"
+                
+                v-on:load-handler="imagesLoad"
+                v-on:type-error-handler="fileTypeError"
+                v-on:size-error-handler="fileSizeError"
+                v-on:not-drag-and-drop-capable-error="dragAndDropCapableError"
+            />
+        </div>
+
     </div>    
 </template>
 
@@ -34,6 +52,8 @@
     import ArticleTypeService             from '../../services/ArticleTypeService';
     import ArticleService                 from '../../services/ArticleService';
     import FlashMessageData               from '../../libs/flashMessage';
+    import FileUpload                     from '../../components/FileUpload/FileUpload.vue';
+    import { LoadingFile }                from '../../components/FileUpload/types';
 
 
 
@@ -41,12 +61,14 @@
         
         components: {
             Form,
+            FileUpload,
             // DropList
         },
 
         data: function(){
             return {
                 types   : [] as Array<Record<string, any>>,
+                files   : [] as Array<File>,
                 article : {} as Record<string, unknown>,
                 curID   : 1,
                 rowsForm: null as Array<Array<FormHtmlItem>> | null,
@@ -71,16 +93,42 @@
         },
 
         methods: {
+
+            fileSizeError: function(file: LoadingFile, msg: string){
+                this.$flashMessage.show(FlashMessageData.warningMessage('File loading', msg))
+            },
+
+            fileTypeError: function(file: LoadingFile, msg: string){
+                this.$flashMessage.show(FlashMessageData.warningMessage('File loading', msg))
+            },
+
+            dragAndDropCapableError: function(msg: string){
+                this.$flashMessage.show(FlashMessageData.errorMessage('File loading', msg));
+            },
+        
+            imagesLoad: async function(files: Array<LoadingFile>){
+                
+                // !Parralel variant. Sync variant work with classic for  
+                files.forEach(async (loadingFile: LoadingFile) => {
+                    const data: FormData = new FormData();
+                    data.append('image', loadingFile.file);
+                    await ArticleService.fileUpload(data, loadingFile);
+                });
+
+            },
             
             getTypes: async function(){
                 this.types = await ArticleTypeService.getAll() || [];
             },
 
             getArticle: async function(){
-                const article = await ArticleService.getOneDb({id: this.$route.params.id});
-
-                if(article == null) return;
-                this.article = article;
+                const serviceResult: Record<string, any> | null = await ArticleService.getOneDb({id: this.$route.params.id});
+                if(serviceResult == null) return;
+                this.article = serviceResult!.article;
+                
+                // const file: File = new File(serviceResult.file.data, `http://localhost:3000/crud/articles/${this.article.img}`);
+                const file: File = new File(serviceResult.file.data, this.article.img as string);
+                this.files.push(file);
             },
 
             initRowsForm: function(){

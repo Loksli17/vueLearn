@@ -19,9 +19,9 @@ const decorators = {
     },
 
     normalArticle: (param: string) => {
-        return Service.createDecoratorAfter((article: Record<string, any>) => {
-            article.date = param == "db" ? Filters.dateToDb(article.date as Date) : Filters.dateToView(article.date as Date);
-            return article;
+        return Service.createDecoratorAfter((data: Record<string, any>) => {
+            data.article.date = param == "db" ? Filters.dateToDb(data.article.date as Date) : Filters.dateToView(data.article.date as Date);
+            return data;
         })
     },
 }
@@ -73,11 +73,9 @@ export default class ArticleService extends Service {
 
         if(response == undefined) { console.error('Bad response'); return null; }
 
-        console.log(response);
-
         this.checkResponse(response, [200]);
 
-        return response.data.article;
+        return { article: response.data.article, file: response.data.file };
     }
     
     @decorators.normalArticle("view")

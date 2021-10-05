@@ -300,6 +300,8 @@
 
             computedLocalFiles: function() {
 
+                console.log('fileUpload', this.files);
+
                 this.files.forEach(async (file: File) => {
                     const loadingFile: LoadingFile = await this.fromFileToLoadingFile(file);
                     this.localFiles.push(loadingFile);

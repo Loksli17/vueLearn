@@ -47,8 +47,11 @@
         },
 
         mounted: async function(){
-            this.id      = Number(this.$route.params.id);
-            this.article = await ArticleService.getOneView({id: this.id});
+            this.id = Number(this.$route.params.id);
+            
+            const serviceResult: Record<string, any> | null = await ArticleService.getOneView({id: this.id});
+            if(serviceResult == null) return;
+            this.article = serviceResult!.article;
         },
     });
 
