@@ -73,6 +73,8 @@ export default class ArticleService extends Service {
 
         if(response == undefined) { console.error('Bad response'); return null; }
 
+        console.log(response);
+
         this.checkResponse(response, [200]);
 
         return response.data.article;

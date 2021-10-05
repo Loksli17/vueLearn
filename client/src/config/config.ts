@@ -7,6 +7,7 @@ export default {
     axiosConfig: () => {
         axios.defaults.baseURL                         = 'http://localhost:3000/',
         axios.defaults.headers.common['Authorization'] = store.getters.getJWT;
+        axios.defaults.headers.common['Content-Type']  = 'application/json';
         axios.defaults.withCredentials                 = true;
 
         axios.defaults.validateStatus = (status) => {
