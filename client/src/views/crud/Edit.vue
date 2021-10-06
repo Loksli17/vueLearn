@@ -137,7 +137,7 @@
                     [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
                     [{type: 'textarea', name: 'text'}],
                     [{type: 'select', name: 'articleTypeId', label: 'Article`s type', options: this.optionsTypes, currentItem: this.article.articleTypeId as number}],
-                    [{type: 'file', name: 'img', label: 'Image', maxFilesAmount: 1, maxFileSize: 1024 * 1024 * 100, autoLoad: true, files: this.files}],
+                    [{type: 'file', name: 'img', label: 'Image', maxFilesAmount: 1, maxFileSize: 1024 * 1024 * 100, autoLoad: true, files: this.files, loadHandler: this.imagesLoad}],
                     [{type: 'submit', name: 'sendArticle'}]
                 ]
             },

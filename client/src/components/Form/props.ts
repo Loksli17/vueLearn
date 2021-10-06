@@ -64,6 +64,7 @@ const
         'maxFileSize',
         'types',
         'files',
+        'loadHandler'
     ];
 
 

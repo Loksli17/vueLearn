@@ -41,6 +41,7 @@ export interface FormHtmlItem{
     maxFileSize?   : number,
     types?         : Array<string>,
     files?         : Array<File>, //!! bad
+    loadHandler?   : (files: LoadingFile[]) => Promise<void> | void, //?????
 }
 
 
