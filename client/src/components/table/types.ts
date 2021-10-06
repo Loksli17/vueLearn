@@ -22,11 +22,11 @@ export interface TableColumnComparator {
     columnComparator: (val: any, nextVal: any) => 0 | 1 | -1;
 }
 
-export interface CustomCell {
-    fieldName: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    component: any;
-}
+// export interface CustomCell {
+//     fieldName: string;
+//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//     component: any;
+// }
 
 export interface Action {
     iconPath?: string;
@@ -61,6 +61,7 @@ export interface TableConfig {
      * false - in a cell
      */
     dropDownActions?: boolean;
+    selectableRows?: boolean;
 }
 
 export enum SortOrder {

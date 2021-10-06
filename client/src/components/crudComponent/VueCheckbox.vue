@@ -46,18 +46,3 @@
         },
     })
 </script>
-
-<style lang="scss" scoped>
-    .checkbox {
-        .checkbox-content {
-            width: 20px;
-            height: 20px;
-            border: 2px solid;
-            cursor: pointer;
-        }
-
-        .checkbox-active {
-            background-color: darkturquoise;
-        }
-    }
-</style>

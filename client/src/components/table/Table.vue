@@ -5,9 +5,10 @@
             @selected-column="setSelectedColumn"
             :columnId="columnId"
             :sortOrder="sortOrder"
-            :table-is-sortable="(config.sortableByColumn !== undefined)"
+            :table-is-sortable="(config.sortableByColumn && config.sortableByColumn != {})"
             :has-actions="!!actions" 
-            :columnsToHide="columnNamesToBeHidden"
+            :columns-to-hide="columnNamesToBeHidden"
+            :selectable="config.selectableRows"
         />
         <tbody>
             <TableRow 
@@ -15,8 +16,10 @@
                 :key="row.id" 
                 :row="row" 
                 :actions="actions"
-                :columnsToHide="columnNamesToBeHidden"
-                :actionsAsDropDownList="config.dropDownActions"
+                :columns-to-hide="columnNamesToBeHidden"
+                :actions-as-drop-down-list="config.dropDownActions"
+                :selectable="config.selectableRows"
+                @is-selected="addToSelection($event, row)"
             />
         </tbody>
         <tfoot>
@@ -56,15 +59,21 @@
             comparators: {
                 type: Object as PropType<Array<TableColumnComparator>>
             },
+            selectedRows: {
+                type: Object as PropType<Array<Record<string, ColumnType>>>
+            },
             config: {
                 type: Object as PropType<TableConfig>,
                 default: () => ({
                     hideColumn:       [],
                     sortableByColumn: false,
-                    dropDownActions:  false
+                    dropDownActions:  false,
+                    selectableRows:   false
                 })
             }
         },
+
+        emits: ["update:selected-rows"],
 
         data() {
             return {
@@ -75,6 +84,7 @@
 
         mounted() {
             if (this.config.sortableByColumn) {
+                if (this.config.sortableByColumn)
                 this.setSortOrder(this.config.sortableByColumn.default);
             }
         },
@@ -101,7 +111,7 @@
             rows(): Array<Record<string, ColumnType>> {
                 let arr: Array<Record<string, ColumnType>> = [];
 
-                if (this.config.sortableByColumn) {
+                if (this.config.sortableByColumn && this.config.sortableByColumn.default) {
                     /* */
                     const comparator = (row1: Record<string, ColumnType>, row2: Record<string, ColumnType>): number => {
                         const
@@ -138,6 +148,15 @@
                 return arr;
             },
 
+            selectedRowsComputed: {
+                get(): Array<Record<string, ColumnType>> {
+                    return this.selectedRows ?? [];
+                },
+                set(newVal: Array<Record<string, ColumnType>>) {
+                    this.$emit("update:selected-rows", newVal);
+                }
+            },
+
             cols(): Array<Column> {
                 return this.columnNames;
             },
@@ -164,6 +183,16 @@
             setSelectedColumn(id: number): void {
                 this.columnId = id;
                 this.sortOrder = (this.sortOrder === SortOrder.ASCENDING) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
+            },
+            addToSelection(isSelected: boolean, row: Record<string, ColumnType>) {
+                if (isSelected) {
+                    this.selectedRowsComputed.push(row);
+                } else {
+                    // Array.filter doesn't work right, for some fucking reason,
+                    // so I resort to this
+                    const index = this.selectedRowsComputed.indexOf(row);
+                    this.selectedRowsComputed.splice(index, 1);
+                }
             }
         },
     });

@@ -1,5 +1,6 @@
 <template>
     <thead class="table-header">
+        <th v-if="selectable"></th>
         <template v-for="(column, index) in columnNames" 
                 :key="index"
             >
@@ -49,6 +50,10 @@
             },
             sortOrder: {
                 type: Number,
+            },
+            selectable: {
+                type: Boolean,
+                required: true
             },
             columnsToHide: {
                 type: Object as PropType<Array<number>>

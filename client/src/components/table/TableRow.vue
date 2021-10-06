@@ -1,5 +1,8 @@
 <template>
     <tr>
+        <td v-if="selectable">
+            <Checkbox v-model="isSelected" />
+        </td>
         <template v-for="(value, name) in row" :key="name">
             <td v-if="!columnsToHide.includes(name)">
                 {{ value }}
@@ -18,11 +21,13 @@
     import { defineComponent, PropType } from 'vue';
     import TableRowActionCell from "./TableRowActionCell.vue";
     import { Action, ColumnType } from "./types";
+    import Checkbox             from "@/components/crudComponent/VueCheckbox.vue";
 
     export default defineComponent({
         name: "TableRow",
         components: {
-            TableRowActionCell
+            TableRowActionCell,
+            Checkbox
         },
         props: {
             row: {
@@ -35,8 +40,25 @@
             columnsToHide: {
                 type: Object as PropType<Array<{ pos: number }> | undefined>
             },
+            selectable: {
+                type: Boolean,
+                required: true
+            },
             actionsAsDropDownList: {
                 type: Boolean
+            }
+        },
+        data() {
+            return {
+                isSelected: false as boolean
+            }
+        },
+
+        emits: ["is-selected"],
+
+        watch: {
+            isSelected() {
+                this.$emit("is-selected", this.isSelected);
             }
         }
     })
