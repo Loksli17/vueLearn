@@ -49,12 +49,14 @@
                 required: true
             }
         },
+
+        // ! Rethink this
         mounted() {
-            // document.body.style.overflow = "hidden";
+            document.body.style.overflow = "hidden";
         },
         beforeUnmount() {
-            console.log("AAAA");
-            // document.body.style.overflow = "";
+            // console.log("AAAA");
+            document.body.style.overflow = "";
         },
         computed: {
             showMenuLocal: {

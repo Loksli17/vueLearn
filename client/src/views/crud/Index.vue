@@ -108,7 +108,7 @@
                     { name: "seq-crud",  path: "/seq-crud" },
                     { name: "long text", path: "/long" }
                 ] as Array<LinkButton>,
-                
+
                 columnNames   : [ 
                         { displayedName: "Id",      fieldName: "id" },
                         { displayedName: "Title",   fieldName: "title" },
@@ -128,7 +128,7 @@
 
                 tableConfig: { 
                     sortableByColumn: { default: SortOrder.DESCENDING }, 
-                    hideColumn: [], 
+                    // hideColumn: [], 
                     dropDownActions: true 
                 } as TableConfig,
 

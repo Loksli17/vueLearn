@@ -58,12 +58,7 @@
             padding: 0;
 
             li {
-                padding: 10px 15px;
-                &:hover {
-                    cursor: pointer;
-                    background-color: #ccc;
-                }
-
+                
                 a {
                     display: grid;
                     grid-template-columns: max-content auto;
@@ -72,6 +67,11 @@
                     text-decoration: none;
                     color: #000;
                     // justify-content: center;
+                    padding: 10px 15px;
+                    &:hover {
+                        cursor: pointer;
+                        background-color: #ccc;
+                    }
                     
                     img {
                         width: 20px;

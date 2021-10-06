@@ -145,9 +145,9 @@
             columnNamesToBeHidden(): Array<string> {
                 const columns: Array<string> = [];
 
-                if (this.config.hideColumn) {
+                if (this.config.columnsToHide) {
                     for (const col of this.cols) {
-                        if (this.config.hideColumn.includes(col.fieldName)) {
+                        if (this.config.columnsToHide.includes(col.fieldName)) {
                             columns.push(col.fieldName);
                         }
                     }
