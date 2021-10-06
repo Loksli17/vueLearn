@@ -75,7 +75,7 @@ export default class ArticleService extends Service {
 
         this.checkResponse(response, [200]);
 
-        return { article: response.data.article, file: response.data.file };
+        return response.data;
     }
     
     @decorators.normalArticle("view")
