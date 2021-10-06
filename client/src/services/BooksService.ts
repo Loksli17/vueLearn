@@ -55,4 +55,21 @@ export default class BooksService extends Service {
         return response.data.book;
     }
 
+    
+    public static async removeOne(data: Record<string, any>): Promise<void | null> {
+
+        const response: AxiosResponse | void = await axios.post(`/books/${data.id}/remove`)
+        .catch((reason: AxiosError) => {
+            if(reason.response == undefined) return;
+            this.errorMessage(reason.response.status);
+            console.error(reason);
+        });
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
+
+        return;
+    }
+
 }
