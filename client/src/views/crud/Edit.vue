@@ -121,33 +121,12 @@
                 this.types = await ArticleTypeService.getAll() || [];
             },
 
-
-            // ! Think about this ???
-            // dataURLtoFile: function(dataurl: any, filename: string) {
-
-            //     console.log(dataurl);
- 
-            //     var arr = dataurl.split(','),
-            //         mime = arr[0].match(/:(.*?);/)[1],
-            //         bstr = atob(arr[1]), 
-            //         n = bstr.length, 
-            //         u8arr = new Uint8Array(n);
-
-            //     console.log("bstr", arr);
-                    
-            //     while(n--){
-            //         u8arr[n] = bstr.charCodeAt(n);
-            //     }
-
-            //     console.log('uint:', [u8arr], mime);
-                
-            //     return new File([u8arr], filename, {type:mime});
-            // },
-
             getArticle: async function(){
                 const serviceResult: Record<string, any> | null = await ArticleService.getOneDb({id: this.$route.params.id});
                 if(serviceResult == null) return;
+                
                 this.article = serviceResult!.article;
+
                 const file = new File([new Uint8Array(serviceResult.buffer.data)], this.article.img as string, {type: "text/image"});
                 this.files.push(file);
             },

@@ -1,8 +1,8 @@
 <template>
 
     <div class="file">
-        <div class="file-img" v-if="loadingFile.image" :style="{backgroundImage: `url('${loadingFile.image}'`}"></div>
-        <img v-else :src="require(`@/assets/img/type-icons/${loadingFile.icon}`) " alt="">
+        <div class="file-img" @click="showPopup = true" v-if="loadingFile.image" :style="{backgroundImage: `url('${loadingFile.image}'`}"></div>
+        <img v-else @click="showPopup = true" :src="require(`@/assets/img/type-icons/${loadingFile.icon}`) " alt="">
 
         <div class="filename">
             <span>{{loadingFile.shortName}}</span>
@@ -11,6 +11,12 @@
         
         <progress v-if="progressBarType == 'different'" :value="progress" max="100">{{progress}}%</progress>
         <div class="remove-file" @click="removeFile">&#10006;</div>
+
+        <ModalWrapper class="file-view-wrap" v-model:show-modal="showPopup" v-if="showPopup">
+            <h1>File {{loadingFile.file.name}}</h1>
+
+            <div class="file-large-img" v-if="loadingFile.image" :style="{backgroundImage: `url('${loadingFile.image}'`}"></div>
+        </ModalWrapper>
     </div>
     
 </template>
@@ -20,8 +26,13 @@
     import { defineComponent } from 'vue';
     import { LoadingFile }     from './types';
     import { ProgressBar }     from './utils';
+    import ModalWrapper        from '../Modal/ModalWrapper.vue';
 
     export default defineComponent({
+
+        components: {
+            ModalWrapper,
+        },
         
         props: {
             loadingFile: {
@@ -46,14 +57,15 @@
 
         data: function(){
             return {
-                iconWay: ''
+                iconWay  : '',
+                showPopup: false as boolean,
             }
         },
 
         methods: {
             removeFile: function(){
                 this.$emit('remove-file', this.loadingFile);
-            }
+            },
         }
     });
 
@@ -119,7 +131,22 @@
         }
     }
 
-     @media screen and (max-width: 700px) {
+    .modal-wrapper {
+
+        .modal-wrapper-body {
+            display: grid;
+            grid-template-rows: max-content auto;
+            height: 80%;
+            
+            .file-large-img{
+                height: 100%;
+                background-position: center;
+                background-size: cover;
+            }
+        }
+    }
+
+    @media screen and (max-width: 700px) {
         .file{
             height: 40px;
             column-gap: 8px;

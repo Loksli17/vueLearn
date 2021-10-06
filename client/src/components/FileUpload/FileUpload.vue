@@ -102,6 +102,7 @@
 
         computed: {
 
+            //! may be to util?
             normalMaxFileSize: function(): string{
 
                 if(!this.maxFileSize) throw new Error('maxFileSize is null');
@@ -229,6 +230,7 @@
                 });
             },
 
+            //! may be to util?
             loadFiles: function(){
                 
                 const sendedFiles: Array<LoadingFile> = [];
