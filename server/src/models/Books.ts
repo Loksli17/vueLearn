@@ -19,6 +19,7 @@ export default class Books extends Model<BooksAttributes, BooksCreationAttribute
     public text!       : string;
     public writingDate!: string; 
     public isCompleted!: boolean; 
+    
 }
 
 
@@ -54,10 +55,10 @@ Books.init({
 });
 
 
-// Books.belongsToMany(
-//     Author, 
-//     {
-//         through   : 'Author_books',
-//         foreignKey: 'booksId',
-//     }
-// );
+//  Books.belongsToMany(
+//      Author, 
+//      {
+//          through   : 'bookshasauthor',
+//          foreignKey: 'booksId',
+//      }
+//  );

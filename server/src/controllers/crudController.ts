@@ -3,7 +3,7 @@ import ErrorMessage                  from "../libs/error";
 import Query                         from "../libs/query";
 import pool                          from '../config/database';
 import { FileArray }                 from "express-fileupload";
-import fs                            from 'fs/promises';
+import { promises as fs }            from 'fs';
 import { contains } from "sequelize/types/lib/operators";
 
 

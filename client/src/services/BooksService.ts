@@ -21,4 +21,38 @@ export default class BooksService extends Service {
 
         return response.data.books;
     }
+
+
+    public static async getAmount(): Promise<number | null> {
+        const response: AxiosResponse | void = await axios.post('/books/amount')
+        .catch((reason: AxiosError) => {
+            if(reason.response == undefined) return;
+            this.errorMessage(reason.response.status);
+            console.error(reason);
+        });
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
+
+        return response.data.amount;
+    }
+
+
+    public static async getOne(data: Record<string, any>): Promise<Record<string, any> | null> {
+        
+        const response: AxiosResponse | void = await axios.post(`/books/${data.id}`)
+        .catch((reason: AxiosError) => {
+            if(reason.response == undefined) return;
+            this.errorMessage(reason.response.status);
+            console.error(reason);
+        });
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
+
+        return response.data.book;
+    }
+
 }

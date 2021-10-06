@@ -71,12 +71,19 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/seq/Edit.vue'),
     },
 
-    // ! ---Index---
+    // ! ---Books---
     {
         path: '/books-crud',
         name: 'Book-index',
         component: () => import('../views/books/Index.vue'),
     },
+
+    {
+        path: '/books-crud/:id/view',
+        name: 'Book-view',
+        component: () => import('../views/books/View.vue'),
+    },
+
 
 ];
 
