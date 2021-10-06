@@ -2,7 +2,7 @@
 
     <div class="file">
         <div class="file-img" @click="showPopup = true" v-if="loadingFile.image" :style="{backgroundImage: `url('${loadingFile.image}'`}"></div>
-        <img v-else @click="showPopup = true" :src="require(`@/assets/img/type-icons/${loadingFile.icon}`) " alt="">
+        <img v-else :src="require(`@/assets/img/type-icons/${loadingFile.icon}`) " alt="">
 
         <div class="filename">
             <span>{{loadingFile.shortName}}</span>
@@ -12,9 +12,8 @@
         <progress v-if="progressBarType == 'different'" :value="progress" max="100">{{progress}}%</progress>
         <div class="remove-file" @click="removeFile">&#10006;</div>
 
-        <ModalWrapper class="file-view-wrap" v-model:show-modal="showPopup" v-if="showPopup">
+        <ModalWrapper v-model:show-modal="showPopup" v-if="showPopup">
             <h1>File {{loadingFile.file.name}}</h1>
-
             <div class="file-large-img" v-if="loadingFile.image" :style="{backgroundImage: `url('${loadingFile.image}'`}"></div>
         </ModalWrapper>
     </div>
@@ -131,20 +130,18 @@
         }
     }
 
-    .modal-wrapper {
-
-        .modal-wrapper-body {
-            display: grid;
-            grid-template-rows: max-content auto;
-            height: 80%;
-            
-            .file-large-img{
-                height: 100%;
-                background-position: center;
-                background-size: cover;
-            }
+    .modal-wrapper .modal-wrapper-body{
+        display: grid;
+        grid-template-rows: max-content auto;
+        height: 80%;
+        
+        .file-large-img{
+            height: 100%;
+            background-position: center;
+            background-size: cover;
         }
     }
+
 
     @media screen and (max-width: 700px) {
         .file{

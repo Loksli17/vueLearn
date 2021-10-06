@@ -42,7 +42,7 @@
     })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .modal-wrapper {
         position: fixed;
         z-index: 3000;
