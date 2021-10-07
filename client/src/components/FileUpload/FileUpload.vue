@@ -24,10 +24,10 @@
 
 
 <script lang="ts">
-    import {defineComponent }         from 'vue';
-    import FileComponent              from './File.vue';
-    import { AddFile, LoadingFile, AddStatus }   from './types';
-    import { typeIcons, ProgressBar } from './utils';
+    import {defineComponent }                  from 'vue';
+    import FileComponent                       from './File.vue';
+    import { AddFile, LoadingFile, AddStatus } from './types';
+    import { typeIcons, ProgressBar, normalFileSize, readFile } from './utils';
 
     /**
      * todo some methods in utils file?
@@ -102,40 +102,10 @@
 
         computed: {
 
-            //! may be to util?
             normalMaxFileSize: function(): string{
-
                 if(!this.maxFileSize) throw new Error('maxFileSize is null');
-
-                let
-                    size    : number = this.maxFileSize,
-                    count   : number    = 0,
-                    dataType: string = '';
-
-                while(size >= 1024){
-                    count++;
-                    size /= 1024;
-                    size = +size.toFixed(3);
-                }
-
-                switch(count){
-                    case 0:
-                        dataType = 'b';
-                        break;
-                    case 1:
-                        dataType = 'kb';
-                        break;
-                    case 2:
-                        dataType = 'mb';
-                        break;
-                    case 3:
-                        dataType = 'gb';
-                        break;
-                }
-
-                return `${size} ${dataType}`;
-            },
-                
+                return normalFileSize(this.maxFileSize);
+            },   
         },
 
         created: function(){
@@ -217,20 +187,7 @@
                 if(this.autoLoad) this.$emit('load-handler', sendedFiles);
             },
 
-            readFile: function(file: File): Promise<string | ArrayBuffer>{
-                return new Promise((resolve, reject) => {
-                    const reader: FileReader = new FileReader();
 
-                    reader.onload = () => {
-                        resolve(reader.result || '');
-                    }
-
-                    reader.onerror = reject;
-                    reader.readAsDataURL(file);
-                });
-            },
-
-            //! may be to util?
             loadFiles: function(){
                 
                 const sendedFiles: Array<LoadingFile> = [];
@@ -243,9 +200,11 @@
                 this.$emit('load-handler', sendedFiles);
             },
 
+
             removeFile: function(removingFile: LoadingFile): void{
                 this.localFiles = this.localFiles.filter((file: LoadingFile) => file.index != removingFile.index);
             },
+
 
             checkFileType: function(file: File){
                 
@@ -261,12 +220,14 @@
                 }
             },
 
+
             checkFileSize: function(file: File){
                 if(file.size > this.maxFileSize) { 
                     this.$emit('size-error-handler', file, `File's size more then ${this.normalMaxFileSize}!`);
                     throw new Error(`File ${file.name} has so big size!`);
                 }
             },
+
 
             determineDragAndDropCapable: function(){
 
@@ -277,12 +238,13 @@
                     'FileReader' in window;
             },
 
+
             fromFileToLoadingFile: async function(addFile: AddFile, addStatus: AddStatus){
 
                 const
                     imagesTypes     : Array<string>        = ['.svg', '.jpeg', '.jpg', '.png'],
                     regExpType      : RegExp               = /\.[a-zA-Z]+$/gi,
-                    dataFile        : string | ArrayBuffer = await this.readFile(addFile.file),
+                    dataFile        : string | ArrayBuffer = await readFile(addFile.file),
                     regExpTypeResult: Array<string> | null = addFile.file.name.match(regExpType),
                     clearFileName   : string               = addFile.file.name.slice(0, addFile.file.name.indexOf('.'));
 
@@ -305,8 +267,8 @@
                 return loadingFile;
             },
 
+
             computedLocalFiles: function() {
-                console.log(this.files);
                 this.files.forEach(async (file: AddFile) => {
                     const loadingFile: LoadingFile = await this.fromFileToLoadingFile(file, AddStatus.Before);
                     this.localFiles.push(loadingFile);
@@ -317,7 +279,8 @@
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
+
     .file-upload-container{
         margin-top: 20px;
         cursor: pointer;

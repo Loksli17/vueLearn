@@ -14,7 +14,7 @@
         </div>
 
         <div v-else-if="progressBarType == 'different'">
-            <button>Continue upload</button>
+            <button v-if="loadingFile.addStatus == 'before'">Continue upload</button>
             <progress :value="progress" max="100">{{progress}}%</progress>
         </div>
         

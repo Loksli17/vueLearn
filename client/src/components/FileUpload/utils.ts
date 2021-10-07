@@ -17,7 +17,53 @@ enum ProgressBar {
     Overall   = 'overall',
 }
 
+const normalFileSize = (size: number): string => {
+
+    let
+        count   : number    = 0,
+        dataType: string = '';
+
+    while(size >= 1024){
+        count++;
+        size /= 1024;
+        size = +size.toFixed(3);
+    }
+
+    switch(count){
+        case 0:
+            dataType = 'b';
+            break;
+        case 1:
+            dataType = 'kb';
+            break;
+        case 2:
+            dataType = 'mb';
+            break;
+        case 3:
+            dataType = 'gb';
+            break;
+    }
+
+    return `${size} ${dataType}`;
+}
+
+const readFile = (file: File): Promise<string | ArrayBuffer> => {
+    return new Promise((resolve, reject) => {
+        const reader: FileReader = new FileReader();
+
+        reader.onload = () => {
+            resolve(reader.result || '');
+        }
+
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+
 export { 
     typeIcons,
-    ProgressBar
+    ProgressBar,
+    normalFileSize,
+    readFile,
 }
