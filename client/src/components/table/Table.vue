@@ -31,9 +31,9 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent, PropType }                          from 'vue';
-    import TableHeader                                            from './TableHeader.vue';
-    import TableRow                                               from "./TableRow.vue";
+    import { ComponentPublicInstance, defineComponent, PropType }                        from 'vue';
+    import TableHeader                                                                   from './TableHeader.vue';
+    import TableRow                                                                      from "./TableRow.vue";
     import { Column, ColumnType, Action, TableConfig, SortOrder, TableColumnComparator } from "./types";
 
     // export { Column, CustomCell, Action, TableConfig, SortOrder, ColumnType }
@@ -81,7 +81,7 @@
             return {
                 columnId: 0 as number,
                 sortOrder: SortOrder.ASCENDING as SortOrder,
-                rowRefs: [] as Array<any>
+                rowRefs: [] as Array<ComponentPublicInstance<typeof TableRow>>
             }
         },
 
@@ -202,18 +202,22 @@
                     this.selectedRowsComputed.splice(index, 1);
                 }
             },
+            // ! This is not a particualrly good way of doing this,
+            // ! but the alternatives would be worse
+            // ! It's fine if we keep this internally
+            // TODO: Refactor the entire table
             toggleAllSelection(selectAll: boolean) {
                 if (selectAll) {
-                    this.rowRefs.forEach(row => {
-                        row.setSelection(true);
+                    this.rowRefs.forEach(rowRef => {
+                        rowRef.setSelection(true);
                     })
                 } else {
-                    this.rowRefs.forEach(row => {
-                        row.setSelection(false);
+                    this.rowRefs.forEach(rowRef => {
+                        rowRef.setSelection(false);
                     })
                 }
             },
-            addToRefArray(el: any) {
+            addToRefArray(el: ComponentPublicInstance<typeof TableRow>) {
                 this.rowRefs.push(el);
             }
         },
