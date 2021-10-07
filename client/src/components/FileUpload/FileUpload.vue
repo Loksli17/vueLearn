@@ -18,7 +18,7 @@
             <button v-if="!autoLoad" @click="loadFiles">Send files</button>
         </div>
 
-        <progress v-if="progressBar == 'overall' && files.length" :value="progress" max="100">{{progress}}%</progress>
+        <progress v-if="progressBar == 'overall' && localFiles.length" :value="progress" max="100">{{progress}}%</progress>
     </div>
 
 </template>
@@ -83,7 +83,7 @@
             },
             progress: {
                 type   : Number,
-                defailt: 0,
+                default: 0,
             },
             files: {
                 type   : Array as () => Array<AddFile>,

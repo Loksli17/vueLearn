@@ -26,11 +26,11 @@
                 :autoLoad="true"
                 :maxFileSize="1024 * 1024 * 100"
                 :types="['png', 'jpg', 'jpeg']"
-                :progressBar="'different'"
+                :progressBar="'overall'"
                 v-model:progress="progress"
                 :files="files"
                 
-                v-on:load-handler="imagesLoad"
+                v-on:load-handler="imagesLoadOverall"
                 v-on:type-error-handler="fileTypeError"
                 v-on:size-error-handler="fileSizeError"
                 v-on:not-drag-and-drop-capable-error="dragAndDropCapableError"
