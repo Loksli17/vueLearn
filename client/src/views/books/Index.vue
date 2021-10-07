@@ -6,6 +6,7 @@
                 :column-names="tableHeader" 
                 :config="tableConfig"
                 :row-data="books"
+                :column-handlers="tableColumnHandlers"
                 v-model:selected-rows="selectedRows" />
 
             <Table 
@@ -25,9 +26,10 @@
     import { defineComponent }                 from 'vue';
     import BooksService                        from '../../services/BooksService';
     import Table                               from "@/components/table/Table.vue";
-    import { TableConfig, Column, SortOrder }  from "@/components/table/types";
+    import { TableConfig, Column, SortOrder, TableColumnHandler }  from "@/components/table/types";
     import FloatingButton                      from "@/components/FloatingButton/FloatingButton.vue"
     import AddButton                           from "@/components/FloatingButton/AddButton.vue";
+import moment from 'moment';
 
     export default defineComponent({
 
@@ -46,6 +48,37 @@
                     { fieldName: "writingDate", displayedName: "Creation date" },
                     { fieldName: "isCompleted", displayedName: "Status" },
                 ] as Array<Column>,
+                tableColumnHandlers: [
+                    {
+                        fieldName: "id",
+                        columnComparator: (val1, val2) => {
+                            if (val1 < val2) return -1;
+                            if (val1 > val2) return 1;
+                            return 0;
+                        }
+                    },
+                    { 
+                        fieldName: "writingDate",
+                        columnHandler: (val: string) => {
+                            return moment(val, "YYYY-MM-DD").locale("pl").format("Do MMMM YYYY");
+                        },
+                        columnComparator: (val1, val2) => {
+                            const 
+                                t1 = moment(val1, "YYYY-MM-DD").toDate(),
+                                t2 = moment(val2, "YYYY-MM-DD").toDate();
+                            console.log(t1, t2);
+                            if (t1 < t2) return -1;
+                            if (t1 > t2) return 1;
+                            return 0;
+                        }
+                    },
+                    {
+                        fieldName: "isCompleted",
+                        columnHandler(val: boolean) {
+                            return val ? "ready" : "not ready";
+                        }
+                    }
+                ] as Array<TableColumnHandler>,
                 tableConfig: {
                     sortableByColumn: { default: SortOrder.ASCENDING },
                     dropDownActions: true,

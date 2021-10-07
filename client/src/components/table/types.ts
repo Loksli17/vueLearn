@@ -17,7 +17,7 @@ export interface TableColumnHandler {
      */
     fieldName: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    columnComparator: (val: any, nextVal: any) => 0 | 1 | -1;
+    columnComparator?: (val: any, nextVal: any) => 0 | 1 | -1;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnHandler?:   (value: any) => string;
 }

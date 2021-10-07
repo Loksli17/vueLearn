@@ -13,7 +13,7 @@
         />
         <tbody>
             <TableRow 
-                v-for="row in rows" 
+                v-for="row in rowsForDisplay" 
                 :ref="addToRefArray"
                 :key="row.id" 
                 :row="row" 
@@ -106,9 +106,32 @@
                         const fieldName: keyof typeof row = col.fieldName;
                         if (!(fieldName in row)) continue;
 
-                        const handler = this.columnHandlers?.find(handler => handler.fieldName === fieldName);
+                        // const handler = this.columnHandlers?.find(handler => handler.fieldName === fieldName);
+                        newRow[fieldName] = row[fieldName];
+                        // newRow[fieldName] = (handler && handler.columnHandler) ? handler.columnHandler(row[fieldName]) : row[fieldName];
+                    }
 
-                        newRow[fieldName] = (handler && handler.columnHandler) ? handler.columnHandler(row[fieldName]) : row[fieldName];
+                    arr.push(newRow);
+                }
+
+                return arr;
+            },
+
+            rowsForDisplay(): Array<Record<string, ColumnType>> {
+                let arr: Array<Record<string, ColumnType>> = [];
+
+                for (let row of this.rows) {
+                    const newRow = {} as typeof row;
+
+                    for (const fieldName in row) {
+                        
+                        const handler = this.columnHandlers?.find(handler => handler.fieldName === fieldName)?.columnHandler;
+                        if (handler) {
+                            newRow[fieldName] = handler(row[fieldName]);
+                        } else {
+                            newRow[fieldName] = row[fieldName]
+                        }
+
                     }
 
                     arr.push(newRow);
@@ -127,10 +150,10 @@
                             fieldName = this.cols[this.columnId].fieldName,
                             val1       = row1[fieldName],
                             val2       = row2[fieldName],
-                            comparator = this.columnHandlers?.find(comp => comp.fieldName == fieldName);
+                            comparator = this.columnHandlers?.find(comp => comp.fieldName == fieldName)?.columnComparator;
                         
                         if (comparator) {
-                            return comparator.columnComparator(val1, val2) * this.sortOrder;
+                            return comparator(val1, val2) * this.sortOrder;
                         }
 
                         // default behavior
@@ -196,12 +219,15 @@
             // TODO: make selectAll happen
             addToSelection(isSelected: boolean, row: Record<string, ColumnType>) {
                 if (isSelected) {
-                    this.selectedRowsComputed.push(row);
+                    const actualRow = this.rows.find(r => r.id === row.id);
+
+                    if (actualRow)
+                        this.selectedRowsComputed.push(actualRow);
                 } else {
-                    // Array.filter doesn't work right, for some fucking reason,
-                    // so I resort to this
-                    const index = this.selectedRowsComputed.indexOf(row);
-                    this.selectedRowsComputed.splice(index, 1);
+                    // ! Kostyl, will be changed later
+                    const rowToDelete = this.selectedRowsComputed.find(r => r.id === row.id);
+                    if (rowToDelete)
+                        this.selectedRowsComputed.splice(this.selectedRowsComputed.indexOf(rowToDelete), 1);
                 }
             },
             // ! This is not a particualrly good way of doing this,
