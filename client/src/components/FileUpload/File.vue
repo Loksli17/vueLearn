@@ -7,11 +7,11 @@
         <div class="filename">
             <span>{{loadingFile.shortName}}</span>
             <span>({{loadingFile.normalType}})</span>
-            {{loadingFile.static}}
         </div>
         
         <div v-if="loadingFile.static" class="static-file">
-            This file was already upload
+            <button>Continue upload</button>
+            <span>This file was already upload</span>  
         </div>
         
         <progress v-else-if="progressBarType == 'different'" :value="progress" max="100">{{progress}}%</progress>
