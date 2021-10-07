@@ -75,12 +75,17 @@
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </p>
     </div>
-    <ScrollToTop behavior="smooth" position="right" :dist="{ bottom: 40, side: 40 }" />
+
+    <!-- This is more flexible -->
+    <FloatingButton position="right" :dist="{ bottom: 40, side: 40 }">
+        <ScrollToTopButton behavior="smooth" />
+    </FloatingButton>
 </template>
 
 <script lang="ts">
     import { defineComponent }      from 'vue'
-    import ScrollToTop              from "@/components/ScrollToTop.vue";
+    import ScrollToTopButton        from "@/components/FloatingButton/ScrollToTopButton.vue";
+    import FloatingButton           from "@/components/FloatingButton/FloatingButton.vue";
     // import DragList, { IDraggable } from "@/components/DragList/DragList.vue";
     import PageProgressBar          from "@/components/PageProgressBar.vue";
     import TopMenu                  from "@/components/TopMenu/TopMenu.vue";
@@ -95,7 +100,8 @@
 
     export default defineComponent({
         components: {
-            ScrollToTop,
+            FloatingButton,
+            ScrollToTopButton,
             PageProgressBar,
             // DragList,
             TopMenu,

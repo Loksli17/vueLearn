@@ -13,6 +13,10 @@
                 :row-data="selectedRows" />
         </div>
     </div>
+
+    <FloatingButton position="left">
+        <AddButton />
+    </FloatingButton>
 </template>
 
 
@@ -22,11 +26,15 @@
     import BooksService                        from '../../services/BooksService';
     import Table                               from "@/components/table/Table.vue";
     import { TableConfig, Column, SortOrder }  from "@/components/table/types";
+    import FloatingButton                      from "@/components/FloatingButton/FloatingButton.vue"
+    import AddButton                           from "@/components/FloatingButton/AddButton.vue";
 
     export default defineComponent({
 
         components: {
-            Table
+            Table,
+            FloatingButton,
+            AddButton
         },
 
         data: function(){
