@@ -58,6 +58,15 @@
 
         watch: {
             isSelected() {
+                this.emitSelected();
+            }
+        },
+
+        methods: {
+            setSelection(val: boolean): void {
+                this.isSelected = val;
+            },
+            emitSelected(): void {
                 this.$emit("is-selected", this.isSelected);
             }
         }

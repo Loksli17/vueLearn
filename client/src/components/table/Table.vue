@@ -2,17 +2,19 @@
     <table>
         <TableHeader 
             :columnNames="cols" 
-            @selected-column="setSelectedColumn"
             :columnId="columnId"
             :sortOrder="sortOrder"
             :table-is-sortable="(config.sortableByColumn && config.sortableByColumn != {})"
             :has-actions="!!actions" 
             :columns-to-hide="columnNamesToBeHidden"
             :selectable="config.selectableRows"
+            @selected-column="setSelectedColumn"
+            @select-all="toggleAllSelection"
         />
         <tbody>
             <TableRow 
                 v-for="row in rows" 
+                :ref="addToRefArray"
                 :key="row.id" 
                 :row="row" 
                 :actions="actions"
@@ -79,7 +81,12 @@
             return {
                 columnId: 0 as number,
                 sortOrder: SortOrder.ASCENDING as SortOrder,
+                rowRefs: [] as Array<any>
             }
+        },
+
+        beforeUpdate() {
+            this.rowRefs = [];
         },
 
         mounted() {
@@ -184,6 +191,7 @@
                 this.columnId = id;
                 this.sortOrder = (this.sortOrder === SortOrder.ASCENDING) ? SortOrder.DESCENDING : SortOrder.ASCENDING;
             },
+            // TODO: make selectAll happen
             addToSelection(isSelected: boolean, row: Record<string, ColumnType>) {
                 if (isSelected) {
                     this.selectedRowsComputed.push(row);
@@ -193,6 +201,20 @@
                     const index = this.selectedRowsComputed.indexOf(row);
                     this.selectedRowsComputed.splice(index, 1);
                 }
+            },
+            toggleAllSelection(selectAll: boolean) {
+                if (selectAll) {
+                    this.rowRefs.forEach(row => {
+                        row.setSelection(true);
+                    })
+                } else {
+                    this.rowRefs.forEach(row => {
+                        row.setSelection(false);
+                    })
+                }
+            },
+            addToRefArray(el: any) {
+                this.rowRefs.push(el);
             }
         },
     });

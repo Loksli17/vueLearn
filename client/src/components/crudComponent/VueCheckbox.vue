@@ -3,7 +3,7 @@
         <div 
             class="checkbox-content" 
             :class="{ 'checkbox-active': valueComputed }"
-            @click="valueComputed = !valueComputed"
+            @click="change"
             ></div>
         <input type="checkbox" :name="name" v-model="valueComputed" hidden>
     </div>
@@ -16,7 +16,7 @@
         
         name: "checkbox",
 
-        emits: ["update:modelValue"],
+        emits: ["update:modelValue", "change"],
 
         props: {
             modelValue: {
@@ -40,8 +40,14 @@
                 }
             });
 
+            const change = () => {
+                valueComputed.value = !valueComputed.value;
+                emit("change", valueComputed.value);
+            }
+
             return {
-                valueComputed
+                valueComputed,
+                change
             }
         },
     })

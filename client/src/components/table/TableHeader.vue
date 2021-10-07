@@ -1,6 +1,8 @@
 <template>
     <thead class="table-header">
-        <th v-if="selectable"></th>
+        <th v-if="selectable">
+            <Checkbox v-model="selectAll" />
+        </th>
         <template v-for="(column, index) in columnNames" 
                 :key="index"
             >
@@ -27,10 +29,14 @@
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
     import { Column } from "./types";
+    import Checkbox             from "@/components/crudComponent/VueCheckbox.vue";
 
     export default defineComponent({
         name: "TableHeader",
-        emits: ["selected-column"],
+        components: {
+            Checkbox
+        },
+        emits: ["selected-column", "select-all"],
         props: {
             columnNames: {
                 type: Object as PropType<Array<Column>>,
@@ -59,6 +65,19 @@
                 type: Object as PropType<Array<number>>
             }
         },
+
+        data() {
+            return {
+                selectAll: false as boolean
+            }
+        },
+
+        watch: {
+            selectAll: function() {
+                this.$emit("select-all", this.selectAll);
+            }
+        },
+
         methods: {
             emitSelectedColumn(id: number): void {
                 if (this.hasActions && id === this.columnNames.length - 1) return;
