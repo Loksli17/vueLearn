@@ -53,7 +53,7 @@
     import ArticleService                 from '../../services/ArticleService';
     import FlashMessageData               from '../../libs/flashMessage';
     import FileUpload                     from '../../components/FileUpload/FileUpload.vue';
-    import { LoadingFile }                from '../../components/FileUpload/types';
+    import { LoadingFile, AddingFile }    from '../../components/FileUpload/types';
 
 
     export default defineComponent({
@@ -67,7 +67,7 @@
         data: function(){
             return {
                 types   : [] as Array<Record<string, any>>,
-                files   : [] as Array<File>,
+                files   : [] as Array<AddingFile>,
                 article : {} as Record<string, unknown>,
                 curID   : 1,
                 rowsForm: null as Array<Array<FormHtmlItem>> | null,
@@ -127,7 +127,7 @@
                 this.article = serviceResult!.article;
 
                 const file = new File([new Uint8Array(serviceResult.buffer.data)], this.article.img as string, {type: "text/image"});
-                this.files.push(file);
+                this.files.push({file: file, static: true});
             },
 
             initRowsForm: function(){

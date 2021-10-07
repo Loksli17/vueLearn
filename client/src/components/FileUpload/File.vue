@@ -7,9 +7,14 @@
         <div class="filename">
             <span>{{loadingFile.shortName}}</span>
             <span>({{loadingFile.normalType}})</span>
+            {{loadingFile.static}}
         </div>
         
-        <progress v-if="progressBarType == 'different'" :value="progress" max="100">{{progress}}%</progress>
+        <div v-if="loadingFile.static" class="static-file">
+            This file was already upload
+        </div>
+        
+        <progress v-else-if="progressBarType == 'different'" :value="progress" max="100">{{progress}}%</progress>
         <div class="remove-file" @click="removeFile">&#10006;</div>
 
         <ModalWrapper v-model:show-modal="showPopup" v-if="showPopup">

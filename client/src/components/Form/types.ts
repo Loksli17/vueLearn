@@ -1,6 +1,6 @@
 
 import { ListItem }    from "../dropDown/types";
-import { LoadingFile } from "../FileUpload/types";
+import { AddingFile, LoadingFile } from "../FileUpload/types";
 
 
 export interface FormHtmlItem{
@@ -40,7 +40,7 @@ export interface FormHtmlItem{
     autoLoad?      : boolean,
     maxFileSize?   : number,
     types?         : Array<string>,
-    files?         : Array<File>, //!! bad
+    files?         : Array<AddingFile>, //!! bad
     loadHandler?   : (files: LoadingFile[]) => Promise<void> | void, //?????
     fileSizeError? : (file: LoadingFile, msg: string) => void, //?????
     fileTypeError? : (file: LoadingFile, msg: string) => void, //?????

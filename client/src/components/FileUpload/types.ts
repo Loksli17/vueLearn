@@ -1,12 +1,17 @@
-export interface LoadingFile{
-    file      : File;
+export interface AddingFile{
+    file     : File;
+    static?  : boolean;
+    progress?: number;
+}
+
+export interface LoadingFile extends AddingFile{
     index     : number;
-    progress  : number;
     image     : string;
     shortName : string;
     normalType: string;
     icon?     : string;
 }
+
 
 export interface TypeIcons{
     [index: string]: string;

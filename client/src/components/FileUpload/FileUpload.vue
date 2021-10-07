@@ -24,10 +24,10 @@
 
 
 <script lang="ts">
-    import {defineComponent }         from 'vue';
-    import FileComponent              from './File.vue';
-    import { LoadingFile }            from './types';
-    import { typeIcons, ProgressBar } from './utils';
+    import {defineComponent }          from 'vue';
+    import FileComponent               from './File.vue';
+    import { AddingFile, LoadingFile } from './types';
+    import { typeIcons, ProgressBar }  from './utils';
 
     /**
      * todo some methods in utils file?
@@ -84,7 +84,7 @@
                 defailt: 0,
             },
             files: {
-                type   : Array as () => Array<File>,
+                type   : Array as () => Array<AddingFile>,
                 default: () => [],
             }
         },
@@ -112,7 +112,7 @@
                     count   : number    = 0,
                     dataType: string = '';
 
-                while(size > 1024){
+                while(size >= 1024){
                     count++;
                     size /= 1024;
                     size = +size.toFixed(3);
@@ -208,7 +208,7 @@
                 for(let i = 0; i < allowedFiles.length; i++){
                     const 
                         file: File = allowedFiles[i],
-                        loadingFile: LoadingFile = await this.fromFileToLoadingFile(file);
+                        loadingFile: LoadingFile = await this.fromFileToLoadingFile({file});
 
                     this.localFiles.push(loadingFile);
                     sendedFiles.push(this.localFiles[this.localFiles.length - 1]); // ! it needs for parralel uploading of files / working with pointer.
@@ -277,34 +277,36 @@
                     'FileReader' in window;
             },
 
-            fromFileToLoadingFile: async function(file: File){
+            fromFileToLoadingFile: async function(addingFile: AddingFile){
 
                 const
                     imagesTypes     : Array<string>        = ['.svg', '.jpeg', '.jpg', '.png'],
                     regExpType      : RegExp               = /\.[a-zA-Z]+$/gi,
-                    dataFile        : string | ArrayBuffer = await this.readFile(file),
-                    regExpTypeResult: Array<string> | null = file.name.match(regExpType),
-                    clearFileName   : string               = file.name.slice(0, file.name.indexOf('.'));
+                    dataFile        : string | ArrayBuffer = await this.readFile(addingFile.file),
+                    regExpTypeResult: Array<string> | null = addingFile.file.name.match(regExpType),
+                    clearFileName   : string               = addingFile.file.name.slice(0, addingFile.file.name.indexOf('.'));
 
                 if(!regExpTypeResult) throw Error('file has bad type');
 
                 const typeFile: string = regExpTypeResult[0];
 
                 const loadingFile: LoadingFile = {
-                    file      : file, 
+                    file      : addingFile.file, 
                     index     : this.currentIndex++, 
-                    progress  : 0,
+                    progress  : addingFile.progress || 0,
                     image     : imagesTypes.includes(typeFile.toLowerCase()) && typeof dataFile == "string" ? dataFile : '',
                     icon      : !imagesTypes.includes(typeFile) && typeof dataFile == "string" ? (this.typeIcons[typeFile] || 'default.png') : 'default.png',
                     shortName : (clearFileName.length > 5) ? `${clearFileName.slice(0, 5)}..`: clearFileName,
                     normalType: typeFile,
+                    static    : addingFile.static,
                 };
 
                 return loadingFile;
             },
 
             computedLocalFiles: function() {
-                this.files.forEach(async (file: File) => {
+                console.log(this.files);
+                this.files.forEach(async (file: AddingFile) => {
                     const loadingFile: LoadingFile = await this.fromFileToLoadingFile(file);
                     this.localFiles.push(loadingFile);
                 });
