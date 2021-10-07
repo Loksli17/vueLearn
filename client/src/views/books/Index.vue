@@ -31,7 +31,7 @@
 
         data: function(){
             return {
-                books: [] as Array<Record<string, any>>,
+                books: [] as Array<Record<string, unknown>>,
                 tableHeader: [
                     { fieldName: "id", displayedName: "ID" },
                     { fieldName: "title", displayedName: "Title" },
@@ -43,7 +43,7 @@
                     dropDownActions: true,
                     selectableRows: true
                 } as TableConfig,
-                selectedRows: [] as Array<Record<string, any>>,
+                selectedRows: [] as Array<Record<string, unknown>>,
                 take : 10 as number,
                 skip : 0 as number,
             }
@@ -55,7 +55,7 @@
 
         methods: {
 
-            getBooks: async function(data: Record<string, any>){
+            getBooks: async function(data: Record<string, unknown>){
                 this.books = await BooksService.getAll(data) || [];
                 console.log("Books:", this.books);
             },

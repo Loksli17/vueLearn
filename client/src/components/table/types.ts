@@ -1,8 +1,6 @@
 export interface Column {
     fieldName: string;
     displayedName: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    columnHandler?: (value: any) => string;
 }
 
 /**
@@ -13,13 +11,15 @@ export interface Column {
  * as Column's fieldName;
  * 2. columnComparator, a function that compares the two adjacent values
  */
-export interface TableColumnComparator {
+export interface TableColumnHandler {
     /**
      * Name of the column, has to be the same as Column's fieldName
      */
     fieldName: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     columnComparator: (val: any, nextVal: any) => 0 | 1 | -1;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    columnHandler?:   (value: any) => string;
 }
 
 // export interface CustomCell {

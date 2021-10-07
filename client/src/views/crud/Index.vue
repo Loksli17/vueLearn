@@ -43,8 +43,7 @@
                     :row-data="articles" 
                     :actions="tableActions"
                     :config="tableConfig"
-                    :comparators="tableComparators"
-                    >
+                    :column-handlers="tableColumnHandlers" >
                     <template #footer>
                         <div> This is a footer </div>
                     </template>
@@ -90,7 +89,7 @@
     import ArticleService                  from '../../services/ArticleService';
     import moment                          from 'moment';
     
-    import { Column, Action, TableConfig, TableColumnComparator, SortOrder } from "@/components/table/types";
+    import { Column, Action, TableConfig, TableColumnHandler, SortOrder } from "@/components/table/types";
 
     export default defineComponent({
 
@@ -113,7 +112,7 @@
                 columnNames   : [ 
                         { displayedName: "Id",      fieldName: "id" },
                         { displayedName: "Title",   fieldName: "title" },
-                        { displayedName: "Type",    fieldName: "t_title", columnHandler: (val: string) => val.toUpperCase() },
+                        { displayedName: "Type",    fieldName: "t_title" },
                         { displayedName: "Ready",   fieldName: "isReady" },
                         { displayedName: "Time",    fieldName: "time" },
                         { displayedName: "Date",    fieldName: "date" },
@@ -133,7 +132,7 @@
                     dropDownActions: true 
                 } as TableConfig,
 
-                tableComparators: [
+                tableColumnHandlers: [
                     {
                         fieldName: "id",
                         columnComparator: (val1, val2) => {
@@ -155,6 +154,10 @@
                         } 
                     },
                     {
+                        fieldName: "t_title",
+                        columnHandler: (val: string) => val.toUpperCase()
+                    },
+                    {
                         fieldName: "date",
                         columnComparator: (val1, val2) => {
                             const 
@@ -166,7 +169,7 @@
                             return 0;
                         }
                     }
-                ] as Array<TableColumnComparator>,
+                ] as Array<TableColumnHandler>,
                 take          : 10 as number,
                 skip          : 0 as number,
                 currentPage   : 1 as number,

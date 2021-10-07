@@ -7,7 +7,7 @@
             :table-is-sortable="(config.sortableByColumn && config.sortableByColumn != {})"
             :has-actions="!!actions" 
             :columns-to-hide="columnNamesToBeHidden"
-            :selectable="config.selectableRows"
+            :selectable="config.selectableRows ?? false"
             @selected-column="setSelectedColumn"
             @select-all="toggleAllSelection"
         />
@@ -20,7 +20,7 @@
                 :actions="actions"
                 :columns-to-hide="columnNamesToBeHidden"
                 :actions-as-drop-down-list="config.dropDownActions"
-                :selectable="config.selectableRows"
+                :selectable="config.selectableRows ?? false"
                 @is-selected="addToSelection($event, row)"
             />
         </tbody>
@@ -34,7 +34,7 @@
     import { ComponentPublicInstance, defineComponent, PropType }                        from 'vue';
     import TableHeader                                                                   from './TableHeader.vue';
     import TableRow                                                                      from "./TableRow.vue";
-    import { Column, ColumnType, Action, TableConfig, SortOrder, TableColumnComparator } from "./types";
+    import { Column, ColumnType, Action, TableConfig, SortOrder, TableColumnHandler } from "./types";
 
     // export { Column, CustomCell, Action, TableConfig, SortOrder, ColumnType }
 
@@ -58,8 +58,8 @@
             actions: {
                 type: Object as PropType<Array<Action>>
             },
-            comparators: {
-                type: Object as PropType<Array<TableColumnComparator>>
+            columnHandlers: {
+                type: Object as PropType<Array<TableColumnHandler>>
             },
             selectedRows: {
                 type: Object as PropType<Array<Record<string, ColumnType>>>
@@ -106,7 +106,9 @@
                         const fieldName: keyof typeof row = col.fieldName;
                         if (!(fieldName in row)) continue;
 
-                        newRow[fieldName] = col.columnHandler ? col.columnHandler(row[fieldName]) : row[fieldName];
+                        const handler = this.columnHandlers?.find(handler => handler.fieldName === fieldName);
+
+                        newRow[fieldName] = (handler && handler.columnHandler) ? handler.columnHandler(row[fieldName]) : row[fieldName];
                     }
 
                     arr.push(newRow);
@@ -122,10 +124,10 @@
                     /* */
                     const comparator = (row1: Record<string, ColumnType>, row2: Record<string, ColumnType>): number => {
                         const
-                            columnName = this.cols[this.columnId].fieldName,
-                            val1       = row1[columnName],
-                            val2       = row2[columnName],
-                            comparator = this.comparators?.find(comp => comp.fieldName == columnName);
+                            fieldName = this.cols[this.columnId].fieldName,
+                            val1       = row1[fieldName],
+                            val2       = row2[fieldName],
+                            comparator = this.columnHandlers?.find(comp => comp.fieldName == fieldName);
                         
                         if (comparator) {
                             return comparator.columnComparator(val1, val2) * this.sortOrder;
