@@ -13,11 +13,12 @@
                 :progressBarType="progressBar"
                 v-model:progress="file.progress"
                 v-on:remove-file="removeFile"
+                v-on:continue-upload="continueUpload"
             />
             <button v-if="!autoLoad" @click="loadFiles">Send files</button>
         </div>
 
-        <progress v-if="progressBar == 'overall' && files.length" :value="progress" max="100">{{progress}}%</progress>
+        <progress v-if="progressBar == 'overall' && localFiles.length" :value="progress" max="100">{{progress}}%</progress>
     </div>
 
 </template>
@@ -44,6 +45,7 @@
             'load-handler',
             'type-error-handler',
             'size-error-handler',
+            'continue-upload'
         ],
 
         props: {
@@ -81,7 +83,7 @@
             },
             progress: {
                 type   : Number,
-                defailt: 0,
+                default: 0,
             },
             files: {
                 type   : Array as () => Array<AddFile>,
@@ -205,6 +207,10 @@
                 this.localFiles = this.localFiles.filter((file: LoadingFile) => file.index != removingFile.index);
             },
 
+            continueUpload: function(loadingFile: LoadingFile): void{
+                console.log('2');
+                this.$emit('continue-upload', loadingFile);
+            },
 
             checkFileType: function(file: File){
                 
