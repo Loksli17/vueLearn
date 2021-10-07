@@ -64,10 +64,12 @@ const
         'maxFileSize',
         'types',
         'files',
+
         'loadHandler',
         'dragAndDropCapableError',
         'fileSizeError',
         'fileTypeError',
+        'continueUpload',
     ];
 
 

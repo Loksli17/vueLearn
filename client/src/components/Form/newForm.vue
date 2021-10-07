@@ -30,6 +30,7 @@
                         v-on:type-error-handler="item.fileTypeError"
                         v-on:size-error-handler="item.fileSizeError"
                         v-on:not-drag-and-drop-capable-error="item.dragAndDropCapableError"
+                        v-on:continue-upload="item.continueUpload"
                     >
                     </FileUpload>
 

@@ -14,7 +14,7 @@
         </div>
 
         <div v-else-if="progressBarType == 'different'">
-            <button v-if="loadingFile.addStatus == 'before'">Continue upload</button>
+            <button @click.prevent="continueUpload" v-if="loadingFile.addStatus == 'before'">Continue upload</button>
             <progress :value="progress" max="100">{{progress}}%</progress>
         </div>
         
@@ -73,6 +73,11 @@
         methods: {
             removeFile: function(){
                 this.$emit('remove-file', this.loadingFile);
+            },
+
+            continueUpload: function(){
+                console.log('1');
+                this.$emit('continue-upload', this.loadingFile);
             },
         }
     });

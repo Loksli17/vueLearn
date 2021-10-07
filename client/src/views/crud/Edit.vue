@@ -36,6 +36,7 @@
                 v-on:type-error-handler="fileTypeError"
                 v-on:size-error-handler="fileSizeError"
                 v-on:not-drag-and-drop-capable-error="dragAndDropCapableError"
+                v-on:continue-upload="continueUpload"
             />
         </div>
 
@@ -127,7 +128,7 @@
                 this.article = serviceResult!.article;
 
                 const file = new File([new Uint8Array(serviceResult.buffer.data)], this.article.img as string, {type: "text/image"});
-                this.files.push({file: file, static: true});
+                this.files.push({file: file, static: false});
             },
 
             initRowsForm: function(){
@@ -149,6 +150,7 @@
                         loadHandler   : this.imagesLoad,
                         fileSizeError : this.fileSizeError,
                         fileTypeError : this.fileTypeError,
+                        continueUpload: this.continueUpload, 
                         dragAndDropCapableError: this.dragAndDropCapableError,
                     }],
                     [{type: 'submit', name: 'sendArticle'}]
@@ -167,6 +169,12 @@
                 await ArticleService.editOne({article: formData});                
                 this.$flashMessage.show(FlashMessageData.successMessage('Edit article', `Article with id = ${formData.id} was edit`));
             },
+
+            continueUpload: async function(loadingFile: LoadingFile){
+                const data: FormData = new FormData();
+                data.append('image', loadingFile.file);
+                await ArticleService.fileUpload(data, loadingFile);
+            }
         }
     });
 </script>

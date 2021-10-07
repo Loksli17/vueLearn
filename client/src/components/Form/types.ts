@@ -45,6 +45,7 @@ export interface FormHtmlItem{
     fileSizeError? : (file: LoadingFile, msg: string) => void, //?????
     fileTypeError? : (file: LoadingFile, msg: string) => void, //?????
     dragAndDropCapableError?: (msg: string) => void, //?????
+    continueUpload?: (file: LoadingFile) => void; //?????
     
 }
 
