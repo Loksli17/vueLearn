@@ -24,10 +24,10 @@
 
 
 <script lang="ts">
-    import {defineComponent }          from 'vue';
-    import FileComponent               from './File.vue';
-    import { AddingFile, LoadingFile } from './types';
-    import { typeIcons, ProgressBar }  from './utils';
+    import {defineComponent }         from 'vue';
+    import FileComponent              from './File.vue';
+    import { AddFile, LoadingFile, AddStatus }   from './types';
+    import { typeIcons, ProgressBar } from './utils';
 
     /**
      * todo some methods in utils file?
@@ -84,7 +84,7 @@
                 defailt: 0,
             },
             files: {
-                type   : Array as () => Array<AddingFile>,
+                type   : Array as () => Array<AddFile>,
                 default: () => [],
             }
         },
@@ -208,7 +208,7 @@
                 for(let i = 0; i < allowedFiles.length; i++){
                     const 
                         file: File = allowedFiles[i],
-                        loadingFile: LoadingFile = await this.fromFileToLoadingFile({file});
+                        loadingFile: LoadingFile = await this.fromFileToLoadingFile({file}, AddStatus.After);
 
                     this.localFiles.push(loadingFile);
                     sendedFiles.push(this.localFiles[this.localFiles.length - 1]); // ! it needs for parralel uploading of files / working with pointer.
@@ -277,28 +277,29 @@
                     'FileReader' in window;
             },
 
-            fromFileToLoadingFile: async function(addingFile: AddingFile){
+            fromFileToLoadingFile: async function(addFile: AddFile, addStatus: AddStatus){
 
                 const
                     imagesTypes     : Array<string>        = ['.svg', '.jpeg', '.jpg', '.png'],
                     regExpType      : RegExp               = /\.[a-zA-Z]+$/gi,
-                    dataFile        : string | ArrayBuffer = await this.readFile(addingFile.file),
-                    regExpTypeResult: Array<string> | null = addingFile.file.name.match(regExpType),
-                    clearFileName   : string               = addingFile.file.name.slice(0, addingFile.file.name.indexOf('.'));
+                    dataFile        : string | ArrayBuffer = await this.readFile(addFile.file),
+                    regExpTypeResult: Array<string> | null = addFile.file.name.match(regExpType),
+                    clearFileName   : string               = addFile.file.name.slice(0, addFile.file.name.indexOf('.'));
 
                 if(!regExpTypeResult) throw Error('file has bad type');
 
                 const typeFile: string = regExpTypeResult[0];
 
                 const loadingFile: LoadingFile = {
-                    file      : addingFile.file, 
+                    file      : addFile.file, 
                     index     : this.currentIndex++, 
-                    progress  : addingFile.progress || 0,
+                    progress  : addFile.progress || 0,
                     image     : imagesTypes.includes(typeFile.toLowerCase()) && typeof dataFile == "string" ? dataFile : '',
                     icon      : !imagesTypes.includes(typeFile) && typeof dataFile == "string" ? (this.typeIcons[typeFile] || 'default.png') : 'default.png',
                     shortName : (clearFileName.length > 5) ? `${clearFileName.slice(0, 5)}..`: clearFileName,
                     normalType: typeFile,
-                    static    : addingFile.static,
+                    static    : addFile.static,
+                    addStatus : addStatus, 
                 };
 
                 return loadingFile;
@@ -306,8 +307,8 @@
 
             computedLocalFiles: function() {
                 console.log(this.files);
-                this.files.forEach(async (file: AddingFile) => {
-                    const loadingFile: LoadingFile = await this.fromFileToLoadingFile(file);
+                this.files.forEach(async (file: AddFile) => {
+                    const loadingFile: LoadingFile = await this.fromFileToLoadingFile(file, AddStatus.Before);
                     this.localFiles.push(loadingFile);
                 });
             },

@@ -53,7 +53,7 @@
     import ArticleService                 from '../../services/ArticleService';
     import FlashMessageData               from '../../libs/flashMessage';
     import FileUpload                     from '../../components/FileUpload/FileUpload.vue';
-    import { LoadingFile, AddingFile }    from '../../components/FileUpload/types';
+    import { LoadingFile, AddFile }       from '../../components/FileUpload/types';
 
 
     export default defineComponent({
@@ -67,7 +67,7 @@
         data: function(){
             return {
                 types   : [] as Array<Record<string, any>>,
-                files   : [] as Array<AddingFile>,
+                files   : [] as Array<AddFile>,
                 article : {} as Record<string, unknown>,
                 curID   : 1,
                 rowsForm: null as Array<Array<FormHtmlItem>> | null,

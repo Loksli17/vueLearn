@@ -1,15 +1,21 @@
-export interface AddingFile{
+export interface AddFile{
     file     : File;
     static?  : boolean;
     progress?: number;
 }
 
-export interface LoadingFile extends AddingFile{
+export enum AddStatus{
+    Before = "before",
+    After  = "after",
+}
+
+export interface LoadingFile extends AddFile{
     index     : number;
     image     : string;
     shortName : string;
     normalType: string;
     icon?     : string;
+    addStatus : AddStatus;
 }
 
 

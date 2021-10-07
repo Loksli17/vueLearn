@@ -10,11 +10,15 @@
         </div>
         
         <div v-if="loadingFile.static" class="static-file">
-            <button>Continue upload</button>
             <span>This file was already upload</span>  
         </div>
+
+        <div v-else-if="progressBarType == 'different'">
+            <button>Continue upload</button>
+            <progress :value="progress" max="100">{{progress}}%</progress>
+        </div>
         
-        <progress v-else-if="progressBarType == 'different'" :value="progress" max="100">{{progress}}%</progress>
+        
         <div class="remove-file" @click="removeFile">&#10006;</div>
 
         <ModalWrapper v-model:show-modal="showPopup" v-if="showPopup">
@@ -76,7 +80,7 @@
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
     .file{
         width: 100%;
         display: grid;
