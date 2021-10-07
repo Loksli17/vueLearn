@@ -77,7 +77,7 @@
     </div>
 
     <!-- This is more flexible -->
-    <FloatingButton position="right" :dist="{ bottom: 40, side: 40 }">
+    <FloatingButton position="right" :side="60" :bottom="60">
         <ScrollToTopButton behavior="smooth" />
     </FloatingButton>
 </template>

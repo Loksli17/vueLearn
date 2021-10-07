@@ -25,16 +25,18 @@ export default defineComponent({
 
 <style lang="scss">
     .add-button {
-        width: 50px;
-        height: 50px;
+        width: 70px;
+        height: 70px;
         border-radius: 50%;
         background-color: cadetblue;
         background-image: url("../../assets/img/logo.png");
         background-size: contain;
         background-repeat: no-repeat;
+        transition: all .3s;
 
         &:hover {
             cursor: pointer;
+            background-color: #ccc;
         }
     }
 </style>

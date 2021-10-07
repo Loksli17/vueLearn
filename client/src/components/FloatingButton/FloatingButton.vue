@@ -2,7 +2,8 @@
     <teleport to="body">
         <div 
             class="floating-button-wrapper"
-            :class="posClassName">
+            :class="posClassName"
+            :style="buttonStyle">
             <slot>
 
             </slot>
@@ -11,7 +12,7 @@
 </template>
 
 <script lang="ts">
-    import { computed, defineComponent, PropType } from 'vue'
+    import { computed, defineComponent } from 'vue'
 
     export default defineComponent({
 
@@ -20,9 +21,13 @@
                 type: String,
                 default: "right"
             },
-            dist: {
-                type: Object as PropType<{ bottom: number, side: number }>,
-                default: () => ({ bottom: 20, side: 20 })
+            side: {
+                type: Number,
+                default: 40
+            },
+            bottom: {
+                type: Number,
+                default: 40
             }
         },
 
@@ -46,8 +51,8 @@
             const buttonStyle = computed(() => {
                 const style: { [k: string]: string } = {};
 
-                style["bottom"]       = `${props.dist.bottom}px`;
-                style[props.position] = `${props.dist.side}px`;
+                style["bottom"]       = `${props.bottom}px`;
+                style[props.position] = `${props.side}px`;
 
                 return style;
             });

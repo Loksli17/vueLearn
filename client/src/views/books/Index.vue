@@ -14,8 +14,8 @@
         </div>
     </div>
 
-    <FloatingButton position="left">
-        <AddButton />
+    <FloatingButton position="right" :side="80" :bottom="80">
+        <AddButton @clicked="clickHandler" />
     </FloatingButton>
 </template>
 
@@ -67,6 +67,10 @@
                 this.books = await BooksService.getAll(data) || [];
                 console.log("Books:", this.books);
             },
+
+            clickHandler(): void {
+                alert('Oi mate, ya pressed the button')
+            }
         }
     })
 </script>
