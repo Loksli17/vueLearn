@@ -56,7 +56,6 @@
     import { LoadingFile }                from '../../components/FileUpload/types';
 
 
-
     export default defineComponent({
         
         components: {
@@ -137,7 +136,21 @@
                     [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
                     [{type: 'textarea', name: 'text'}],
                     [{type: 'select', name: 'articleTypeId', label: 'Article`s type', options: this.optionsTypes, currentItem: this.article.articleTypeId as number}],
-                    [{type: 'file', name: 'img', label: 'Image', maxFilesAmount: 1, maxFileSize: 1024 * 1024 * 100, autoLoad: true, files: this.files, loadHandler: this.imagesLoad}],
+                    [{
+                        type          : 'file', 
+                        name          : 'img', 
+                        label         : 'Image', 
+                        maxFilesAmount: 1, 
+                        maxFileSize   : 1024 * 1024 * 1, 
+                        autoLoad      : true, 
+                        files         : this.files, 
+                        types         : ['png', 'jpg', 'jpeg'],
+                        
+                        loadHandler   : this.imagesLoad,
+                        fileSizeError : this.fileSizeError,
+                        fileTypeError : this.fileTypeError,
+                        dragAndDropCapableError: this.dragAndDropCapableError,
+                    }],
                     [{type: 'submit', name: 'sendArticle'}]
                 ]
             },
@@ -150,7 +163,7 @@
             sendForm: async function(formData: FormDataView){ 
 
                 //! important
-                // TODO: fix FORMDATA form form
+                // TODO: fix FORMDATA from form
                 await ArticleService.editOne({article: formData});                
                 this.$flashMessage.show(FlashMessageData.successMessage('Edit article', `Article with id = ${formData.id} was edit`));
             },

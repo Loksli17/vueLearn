@@ -27,9 +27,9 @@
                         :files="item.files"
                         
                         v-on:load-handler="item.loadHandler"
-                        v-on:type-error-handler="fileTypeError"
-                        v-on:size-error-handler="fileSizeError"
-                        v-on:not-drag-and-drop-capable-error="dragAndDropCapableError"
+                        v-on:type-error-handler="item.fileTypeError"
+                        v-on:size-error-handler="item.fileSizeError"
+                        v-on:not-drag-and-drop-capable-error="item.dragAndDropCapableError"
                     >
                     </FileUpload>
 

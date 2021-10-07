@@ -18,10 +18,10 @@
 
 
 <script lang="ts">
-    import { defineComponent }         from 'vue';
-    import BooksService                from '../../services/BooksService';
-    import Table                       from "@/components/table/Table.vue";
-    import { TableConfig, Column, SortOrder }     from "@/components/table/types";
+    import { defineComponent }                 from 'vue';
+    import BooksService                        from '../../services/BooksService';
+    import Table                               from "@/components/table/Table.vue";
+    import { TableConfig, Column, SortOrder }  from "@/components/table/types";
 
     export default defineComponent({
 

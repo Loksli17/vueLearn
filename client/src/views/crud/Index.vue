@@ -88,7 +88,8 @@
     import FlashMessageData                from '../../libs/flashMessage';
     import Table                           from "@/components/table/Table.vue";
     import ArticleService                  from '../../services/ArticleService';
-    import moment from 'moment';
+    import moment                          from 'moment';
+    
     import { Column, Action, TableConfig, TableColumnComparator, SortOrder } from "@/components/table/types";
 
     export default defineComponent({

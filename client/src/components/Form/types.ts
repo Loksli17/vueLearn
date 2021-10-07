@@ -1,7 +1,7 @@
 
-//! It's bad imports!!!!
 import { ListItem }    from "../dropDown/types";
 import { LoadingFile } from "../FileUpload/types";
+
 
 export interface FormHtmlItem{
     type: string;
@@ -42,6 +42,10 @@ export interface FormHtmlItem{
     types?         : Array<string>,
     files?         : Array<File>, //!! bad
     loadHandler?   : (files: LoadingFile[]) => Promise<void> | void, //?????
+    fileSizeError? : (file: LoadingFile, msg: string) => void, //?????
+    fileTypeError? : (file: LoadingFile, msg: string) => void, //?????
+    dragAndDropCapableError?: (msg: string) => void, //?????
+    
 }
 
 
