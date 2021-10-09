@@ -4,9 +4,29 @@ import { LoadingFile }          from '@/components/FileUpload/types';
 import Service                  from '@/libs/Service';
 
 
+const normalUser = (user: Record<string, any>): Record<string, any> => {
+    user.animal = `id: ${user.Animal.id}; name: ${user.Animal.name}`;
+    delete user.AnimalId; delete user.Animal; delete user.animalId;
+    return user;
+};
+
+const decorators = {
+
+    normalUser: () => {
+        return Service.createDecoratorAfter(normalUser);
+    },
+
+    normalUsers: () => {
+        return Service.createDecoratorAfter((users: Array<Record<string, any>>): Array<Record<string, any>> => {
+            return users.map(normalUser);
+        });
+    }
+}
+
+
 export default class UserService extends Service{
 
-
+    @decorators.normalUsers()
     public static async getAll(data: Record<string, any>): Promise<Array<Record<string, any>> | null>{
 
         const response: AxiosResponse | void = await axios.post('/seq', data)
@@ -40,7 +60,7 @@ export default class UserService extends Service{
         return response.data.amount;
     }
 
-
+    @decorators.normalUser()
     public static async getOne(data: Record<string, any>): Promise<Record<string, any> | null> {
         
         const response: AxiosResponse | void = await axios.post(`/seq/${data.id}`)

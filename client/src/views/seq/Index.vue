@@ -86,6 +86,7 @@
                     { displayedName: 'E-mail',  fieldName: 'email' },
                     { displayedName: 'Login',   fieldName: 'login'},
                     { displayedName: 'Avatar',  fieldName: 'avatar'},
+                    { displayedName: 'Animal',  fieldName: 'animal'},
                     { displayedName: "Actions", fieldName: "actions" },
                 ] as Array<Column>,
                 tableConfig: {dropDownActions: true},

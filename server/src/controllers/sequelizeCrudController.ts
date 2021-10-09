@@ -32,7 +32,12 @@ export default class SequelizeCrudController{
         }
 
         try {
-            users = await User.findAll({limit: Number(QueryData.take), offset: Number(QueryData.skip), order: [['id', 'DESC']]});
+            users = await User.findAll({
+                limit  : Number(QueryData.take), 
+                offset : Number(QueryData.skip),
+                include: [{model: Animal}],
+                order  : [['id', 'DESC']]
+            });
         } catch (error) {
             res.status(400).send({error: ErrorMessage.db()});
             console.error(error);
