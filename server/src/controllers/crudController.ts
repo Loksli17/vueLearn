@@ -4,7 +4,6 @@ import Query                         from "../libs/query";
 import pool                          from '../config/database';
 import { FileArray }                 from "express-fileupload";
 import { promises as fs }            from 'fs';
-import { contains } from "sequelize/types/lib/operators";
 
 
 export default class CrudController {

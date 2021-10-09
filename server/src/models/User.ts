@@ -1,6 +1,6 @@
 import {Optional, Model, DataTypes} from 'sequelize';
-import { threadId } from 'worker_threads';
 import sequelize                    from '../config/databaseSeq';
+import Animal                       from './Animal';
 
 
 interface UserAttributes{
@@ -10,6 +10,7 @@ interface UserAttributes{
     password    : string;
     avatar      : string;
     refreshToken: string;
+    animalId    : number | null;
 }
 
 
@@ -18,12 +19,13 @@ export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes{
 
-    public id!         : number;
-    public email!      : string;
-    public login!      : string;
-    public password!   : string;
-    public avatar!     : string;
+    public id!          : number;
+    public email!       : string;
+    public login!       : string;
+    public password!    : string;
+    public avatar!      : string;
     public refreshToken!: string;
+    public animalId!    : number | null;
 
     // public readonly createdAt!: Date;
     // public readonly updateAt! : Date;
@@ -34,6 +36,11 @@ User.init({
         type         : DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,
         primaryKey   : true,
+    },
+
+    animalId: {
+        type     : DataTypes.INTEGER.UNSIGNED,
+        allowNull: true,
     },
 
     email: {

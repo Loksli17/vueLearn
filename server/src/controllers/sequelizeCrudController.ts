@@ -71,6 +71,7 @@ export default class SequelizeCrudController{
 
         try {
             user = await User.findOne({where: {id: id}});
+            console.log(user);
         } catch (error) {
             console.error(error);
             res.status(400).send({error: ErrorMessage.dataNotSended('id')});
@@ -190,7 +191,14 @@ export default class SequelizeCrudController{
             return;
         }
 
-        user = User.build({refreshToken: '', login: QueryData.user.login, email: QueryData.user.email, avatar: 'default.png', password: QueryData.user.password});
+        user = User.build({
+            refreshToken: '', 
+            login       : QueryData.user.login,
+            email       : QueryData.user.email,
+            avatar      : 'default.png',
+            password    : QueryData.user.password,
+            animalId    : null,
+        });
         
         try {
             await user.validate();
