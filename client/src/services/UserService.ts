@@ -6,7 +6,15 @@ import Service                  from '@/libs/Service';
 
 const normalUser = (user: Record<string, any>): Record<string, any> => {
     user.animal = `id: ${user.Animal.id}; name: ${user.Animal.name}`;
-    delete user.AnimalId; delete user.Animal; delete user.animalId;
+  
+    if(user.Roles != undefined) {
+        user.roles = user.Roles.map((role: Record<string, any>) => {
+            return role.name;
+        });
+        user.roles = user.roles.join('; ');
+    }
+
+    delete user.AnimalId; delete user.Animal; delete user.animalId; delete user.Roles;
     return user;
 };
 

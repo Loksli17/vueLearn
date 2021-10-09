@@ -31,7 +31,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public roles?: Array<Role>;
 
     public static associations: {
-        users: Association<User, Role>;
+        roles: Association<User, Role>;
     }
 
     // public readonly createdAt!: Date;
