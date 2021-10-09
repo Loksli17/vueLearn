@@ -1,6 +1,7 @@
-import {Optional, Model, DataTypes} from 'sequelize';
+import {Optional, Model, DataTypes, Association} from 'sequelize';
 import sequelize                    from '../config/databaseSeq';
-import Animal                       from './Animal';
+import Role                         from './Role';
+import UserHasRole                  from './UserHasRole';
 
 
 interface UserAttributes{
@@ -27,9 +28,16 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public refreshToken!: string;
     public animalId!    : number | null;
 
+    public roles?: Array<Role>;
+
+    public static associations: {
+        users: Association<User, Role>;
+    }
+
     // public readonly createdAt!: Date;
     // public readonly updateAt! : Date;
 }
+
 
 User.init({
     id: {
@@ -106,5 +114,7 @@ User.init({
     timestamps: false,
 });
 
+User.belongsToMany(Role, { through: UserHasRole, foreignKey: 'userId', sourceKey: 'id'});
+Role.belongsToMany(User, { through: UserHasRole, foreignKey: 'roleId', sourceKey: 'id'});
 
 export default User;

@@ -4,7 +4,8 @@ import Query                            from "../libs/query";
 import User                             from "../models/User";
 import crypto                           from "crypto-js";
 import {  ValidationErrorItem }         from 'sequelize/types';
-import Animal from "../models/Animal";
+import Animal                           from "../models/Animal";
+import Role from "../models/Role";
 
 
 export default class SequelizeCrudController{
@@ -76,7 +77,8 @@ export default class SequelizeCrudController{
         }
 
         try {
-            user = await User.findOne({where: {id: id}, include: [{model: Animal}]});
+            user = await User.findOne({where: {id: id}, include: [{model: Animal}, {model: Role}]});
+            console.log(user);
         } catch (error) {
             console.error(error);
             res.status(400).send({error: ErrorMessage.dataNotSended('id')});
