@@ -3,9 +3,29 @@ import Filters                              from '@/libs/filters';
 import { LoadingFile }                      from '@/components/FileUpload/types';
 import Service                              from '@/libs/Service';
 
+const decorators = {
+    normalBooks: () => {
+        return Service.createDecoratorAfter((books: Array<Record<string,any>>):Array<Record<string,any>> => {
+            return books.map((book: Record<string,any>) => {
+                book.isCompleted = book.isCompleted ? 'Completed' : 'Not completed';
+                book.writingDate = Filters.dateToView(book.writingDate);  
+                return book;
+            });
+        });
+    },
+
+   normalBook: () => {
+       return Service.createDecoratorAfter((book: Record<string,any>):Record<string,any> => {
+            book.isCompleted = book.isCompleted ? 'Completed' : 'Not completed';
+            book.writingDate = Filters.dateToView(book.writingDate);  
+            return book;
+       });
+   }
+}
 
 export default class BooksService extends Service {
     
+    @decorators.normalBooks()
     public static async getAll(data: Record<string, any>): Promise<Array<Record<string, any>> | null>{
 
         const response: AxiosResponse | void = await axios.post('/books', data)
@@ -38,7 +58,7 @@ export default class BooksService extends Service {
         return response.data.amount;
     }
 
-
+    @decorators.normalBook()
     public static async getOne(data: Record<string, any>): Promise<Record<string, any> | null> {
         
         const response: AxiosResponse | void = await axios.post(`/books/${data.id}`)
