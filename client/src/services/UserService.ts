@@ -80,7 +80,7 @@ export default class UserService extends Service{
 
     public static async removeOne(data: Record<string, any>): Promise<void | null> {
 
-        const response: AxiosResponse | void = await axios.post(`/seq/${data.id}/remove`)
+        const response: AxiosResponse | void = await axios.delete(`/seq/${data.id}/remove`)
         .catch((reason: AxiosError) => {
             if(reason.response == undefined) return;
             this.errorMessage(reason.response.status);
