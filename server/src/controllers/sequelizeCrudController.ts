@@ -5,7 +5,10 @@ import User                             from "../models/User";
 import crypto                           from "crypto-js";
 import {  ValidationErrorItem }         from 'sequelize/types';
 import Animal                           from "../models/Animal";
-import Role from "../models/Role";
+import Role                             from "../models/Role";
+import { FileArray, UploadedFile }      from "express-fileupload";
+import Parser                           from "../libs/parser";
+import Error                            from "../libs/error";
 
 
 export default class SequelizeCrudController{
@@ -121,8 +124,9 @@ export default class SequelizeCrudController{
 
         interface QueryData{
             user: {
-                email: string,
-                login: string,
+                email : string;
+                login : string;
+                avatar: string;
             }
         }
 
@@ -159,6 +163,7 @@ export default class SequelizeCrudController{
 
         user.set('login', QueryData.user.login);
         user.set('email', QueryData.user.email);
+        user.set('avatar', QueryData.user.avatar);
 
         try {
             await user.validate();
@@ -175,7 +180,7 @@ export default class SequelizeCrudController{
     }
 
 
-    public static async createUser(req: Request, res: Response){
+    public static async createUser(req: Request, res: Response) {
 
         interface QueryData{
             user: {
@@ -221,10 +226,48 @@ export default class SequelizeCrudController{
     }
 
 
+    public static async uploadAvatar(req: Request, res: Response) {
+
+        interface QueryData{
+            id: string;
+        }
+
+        let
+            dataErrors: Array<keyof QueryData> = [],
+            filename  : string                 = "",
+            files     : FileArray | undefined  = req.files,
+            QueryData : QueryData              = req.body,
+            file      : UploadedFile;
+
+        dataErrors = Query.checkData(QueryData, ['id']);
+
+        if(dataErrors.length){
+            res.status(400).send(ErrorMessage.dataNotSended(dataErrors[0]));
+            return;
+        }
+
+        if(files == undefined){
+            res.status(400).send(ErrorMessage.file());
+            return;
+        }
+
+        file = files.image as UploadedFile;
+        filename = Parser.createFileName(file.name, QueryData.id);
+
+        try {
+            await file.mv(`public/seq/avatars/${filename}`);
+            res.status(200).send({msg: 'Success', filename: filename});
+        } catch (error) {
+            res.status(400).send({error: Error.file()});
+        }
+    }
+
+
     public static routes(){
 
         this.router.post(  '/',           this.getUsers);
         this.router.post(  '/amount',     this.getAmountUsers);
+        this.router.post(  '/avatar',     this.uploadAvatar);
         this.router.post(  '/:id',        this.getUser);
         this.router.delete('/:id/remove', this.removeUser);
         this.router.put(   '/:id/edit',   this.editUser);

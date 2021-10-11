@@ -135,4 +135,25 @@ export default class UserService extends Service {
 
         return response;
     }
+
+
+    public static async avatarUpload(data: FormData, loadingFile: LoadingFile): Promise<string | null>{
+
+        const response: AxiosResponse | void = await axios.post(`/seq/avatar`, data, {
+            onUploadProgress: (e) => {
+                loadingFile.progress = Math.floor(e.loaded * 100 / e.total);
+            }
+        }).catch((reason) => {
+            this.errorMessage(reason.response.status);
+            console.error(reason);
+        });
+
+        console.log(response);
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
+
+        return response.data.filename;
+    }
 }
