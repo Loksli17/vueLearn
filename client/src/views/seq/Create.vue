@@ -38,6 +38,7 @@
     import UserService                              from '../../services/UserService';
     import { AxiosResponse }                        from 'axios';
     import FlashMessageData                         from '../../libs/flashMessage';
+    import { LoadingFile }                          from '../../components/FileUpload/types';
 
 
     export default defineComponent({
@@ -53,7 +54,9 @@
             
                 scheme    : [] as Array<Array<FormHtmlItem>> | null,
                 formData  : null as FormDataView | null,
-                formErrors: null as FormErrors | null, 
+                formErrors: null as FormErrors | null,
+
+                filename: "" as string | null,
             }
         },
 
@@ -68,6 +71,20 @@
                 this.scheme = [
                     [{type: 'text', name: 'login', label: 'Login'}, {type: 'text', name: 'email', label: 'E-mail'}],
                     [{type: 'text', name: 'password', label: 'Password'}],
+                    [{
+                        type          : 'file', 
+                        name          : 'avatar', 
+                        label         : 'Avatar', 
+                        maxFilesAmount: 1, 
+                        maxFileSize   : 1024 * 1024 * 1, 
+                        autoLoad      : true,  
+                        types         : ['png', 'jpg', 'jpeg'],
+                        
+                        loadHandler   : this.imagesLoad,
+                        fileSizeError : this.fileSizeError,
+                        fileTypeError : this.fileTypeError,
+                        dragAndDropCapableError: this.dragAndDropCapableError,
+                    }],
                     [{type: 'submit', name: 'sendUser'}]
                 ];
             },
@@ -76,7 +93,31 @@
                 this.formData = {};
             },
 
+            fileSizeError: function(file: LoadingFile, msg: string){
+                this.$flashMessage.show(FlashMessageData.warningMessage('File loading', msg))
+            },
+
+            fileTypeError: function(file: LoadingFile, msg: string){
+                this.$flashMessage.show(FlashMessageData.warningMessage('File loading', msg))
+            },
+
+            dragAndDropCapableError: function(msg: string){
+                this.$flashMessage.show(FlashMessageData.errorMessage('File loading', msg));
+            },
+        
+            imagesLoad: async function(files: Array<LoadingFile>){
+                
+                // !Parralel variant. Sync variant work with classic for  
+                files.forEach(async (loadingFile: LoadingFile) => {
+                    const data: FormData = new FormData();
+                    data.append('image', loadingFile.file);
+                    this.filename = await UserService.avatarUpload(data, loadingFile);
+                });
+
+            },
+
             sendForm: async function(data: FormDataView){
+                data.avatar = this.filename!;
                 let response: AxiosResponse | null = await UserService.addUser({user: data});
    
                 if(response == null) { console.error("Error with response"); return; }

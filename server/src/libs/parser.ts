@@ -3,7 +3,7 @@ import CryptoJS from "crypto-js";
 
 export default {
 
-    createFileName: (filename: string, id: string): string => {
+    createFileName: (filename: string): string => {
         
         let 
             regType: RegExp                  = /\.[A-Za-z]{3,5}/g,
@@ -16,7 +16,7 @@ export default {
         type = regRes[0];
 
         name = filename.replace(`${type}`, "");
-        name = CryptoJS.SHA224(`${name}${id}`).toString();
+        name = CryptoJS.SHA224(`${name}`).toString();
         return `${name}${type}`;
     }
 }

@@ -197,6 +197,7 @@ export default class SequelizeCrudController{
                 email   : string;
                 login   : string;
                 password: string;
+                avatar  : string;
             }
         }
 
@@ -216,9 +217,9 @@ export default class SequelizeCrudController{
             refreshToken: '', 
             login       : QueryData.user.login,
             email       : QueryData.user.email,
-            avatar      : 'default.png',
+            avatar      : QueryData.user.avatar,
             password    : QueryData.user.password,
-            animalId    : null,
+            animalId    : 1,
         });
         
         try {
@@ -238,23 +239,10 @@ export default class SequelizeCrudController{
 
     public static async uploadAvatar(req: Request, res: Response) {
 
-        interface QueryData{
-            id: string;
-        }
-
         let
-            dataErrors: Array<keyof QueryData> = [],
             filename  : string                 = "",
             files     : FileArray | undefined  = req.files,
-            QueryData : QueryData              = req.body,
             file      : UploadedFile;
-
-        dataErrors = Query.checkData(QueryData, ['id']);
-
-        if(dataErrors.length){
-            res.status(400).send(ErrorMessage.dataNotSended(dataErrors[0]));
-            return;
-        }
 
         if(files == undefined){
             res.status(400).send(ErrorMessage.file());
@@ -262,7 +250,7 @@ export default class SequelizeCrudController{
         }
 
         file = files.image as UploadedFile;
-        filename = Parser.createFileName(file.name, QueryData.id);
+        filename = Parser.createFileName(file.name);
 
         try {
             await file.mv(`public/seq/avatars/${filename}`);

@@ -46,7 +46,9 @@
 
         mounted: async function(){
             this.id   = Number(this.$route.params.id);
-            this.user = await UserService.getOne({id: this.id});
+            const res: Record<string, any> | null = await UserService.getOne({id: this.id});
+            if(res == null) return;
+            this.user = res.user;
         },
     });
 

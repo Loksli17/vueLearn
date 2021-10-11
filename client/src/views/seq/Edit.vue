@@ -65,13 +65,12 @@
             getUser: async function(){
                 const serviceResult: Record<string, any> | null = await UserService.getOne({id: this.$route.params.id});
                 if(serviceResult == null) return;
-
-                console.log(serviceResult);
                 
                 this.user = serviceResult.user;
 
                 const file = new File([new Uint8Array(serviceResult.buffer.data)], this.user!.avatar as string, {type: "text/image"});
                 this.files.push({file: file, static: true});
+                this.filename = file.name;
             },
 
             initScheme: function(){
@@ -114,7 +113,6 @@
                 files.forEach(async (loadingFile: LoadingFile) => {
                     const data: FormData = new FormData();
                     data.append('image', loadingFile.file);
-                    data.append('id'   , this.user!.id);
                     this.filename = await UserService.avatarUpload(data, loadingFile);
                 });
 
@@ -133,8 +131,11 @@
                 if(response.status == 422) {
                     this.formErrors = response.data.validationErrors;
                 } else {
+                    this.formErrors = {};
                     this.$flashMessage.show(FlashMessageData.successMessage('Edit user', `User with id = ${this.$route.params.id} was edit`));
                 }
+
+               
             }
         },
     });
