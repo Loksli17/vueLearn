@@ -21,7 +21,9 @@ const normalUser = (user: Record<string, any>): Record<string, any> => {
 const decorators = {
 
     normalUser: () => {
-        return Service.createDecoratorAfter(normalUser);
+        return Service.createDecoratorAfter((data: Record<string, any>): Record<string, any> => {
+            return { user: normalUser(data.user), buffer: data.buffer };
+        });
     },
 
     normalUsers: () => {
@@ -82,7 +84,7 @@ export default class UserService extends Service {
 
         this.checkResponse(response, [200]);
 
-        return response.data.user;
+        return response.data;
     }
 
 

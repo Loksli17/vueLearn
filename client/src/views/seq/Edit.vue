@@ -63,7 +63,15 @@
         methods: {
 
             getUser: async function(){
-                this.user = await UserService.getOne({id: this.$route.params.id}) || null;
+                const serviceResult: Record<string, any> | null = await UserService.getOne({id: this.$route.params.id});
+                if(serviceResult == null) return;
+
+                console.log(serviceResult);
+                
+                this.user = serviceResult.user;
+
+                const file = new File([new Uint8Array(serviceResult.buffer.data)], this.user!.avatar as string, {type: "text/image"});
+                this.files.push({file: file, static: true});
             },
 
             initScheme: function(){

@@ -9,6 +9,7 @@ import Role                             from "../models/Role";
 import { FileArray, UploadedFile }      from "express-fileupload";
 import Parser                           from "../libs/parser";
 import Error                            from "../libs/error";
+import { promises as fs }               from 'fs';
 
 
 export default class SequelizeCrudController{
@@ -71,8 +72,9 @@ export default class SequelizeCrudController{
     public static async getUser(req: Request, res: Response){
 
         let 
-            id  : number = Number(req.params.id),
-            user: User | null;
+            id    : number = Number(req.params.id),
+            buffer: Buffer,
+            user  : User | null;
 
         if(id == undefined) {
             res.status(400).send({error: ErrorMessage.dataNotSended('id')});
@@ -92,7 +94,15 @@ export default class SequelizeCrudController{
             return;
         }
 
-        res.status(200).send({user: user});
+        try {
+            buffer = await fs.readFile(`public/seq/avatars/${user.getDataValue('avatar')}`);
+        } catch (error) {
+            console.error(error);
+            res.status(400).send({error: 'Error with reading file'});
+            return;
+        }
+
+        res.status(200).send({user: user, buffer: buffer});
     }
 
 
