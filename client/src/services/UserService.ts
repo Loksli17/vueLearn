@@ -30,7 +30,7 @@ const decorators = {
         return Service.createDecoratorAfter((users: Array<Record<string, any>>): Array<Record<string, any>> => {
             return users.map(normalUser);
         });
-    }
+    },
 }
 
 
@@ -150,12 +150,26 @@ export default class UserService extends Service {
             console.error(reason);
         });
 
-        console.log(response);
-
         if(response == undefined) { console.error('Bad response'); return null; }
 
         this.checkResponse(response, [200]);
 
         return response.data.filename;
+    }
+
+
+    public static async getAnimals(): Promise<Array<Record<string, any>> | null>{
+
+        const response: AxiosResponse | void = await axios.post(`/seq/animals`)
+        .catch((reason) => {
+            this.errorMessage(reason.response.status);
+            console.error(reason);
+        });
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
+
+        return response.data.animals;
     }
 }

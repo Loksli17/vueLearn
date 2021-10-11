@@ -55,7 +55,7 @@
             },
             disabledOption: {
                 type: String,
-                default: 'Please'
+                default: 'Please, choose item',
             }
         },
 

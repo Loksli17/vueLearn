@@ -198,6 +198,7 @@ export default class SequelizeCrudController{
                 login   : string;
                 password: string;
                 avatar  : string;
+                animalId: number;
             }
         }
 
@@ -219,7 +220,7 @@ export default class SequelizeCrudController{
             email       : QueryData.user.email,
             avatar      : QueryData.user.avatar,
             password    : QueryData.user.password,
-            animalId    : 1,
+            animalId    : Number(QueryData.user.animalId),
         });
         
         try {
@@ -261,10 +262,25 @@ export default class SequelizeCrudController{
     }
 
 
+    public static async getAnimals(req: Request, res: Response) {
+
+        let animals: Array<Animal> = [];
+
+        try {
+            animals = await Animal.findAll();
+        } catch (error) {
+            res.status(400).send({error: Error.db()});
+        }
+        
+        res.status(200).send({animals: animals})
+    }
+
+
     public static routes(){
 
         this.router.post(  '/',           this.getUsers);
         this.router.post(  '/amount',     this.getAmountUsers);
+        this.router.post(  '/animals',    this.getAnimals);
         this.router.post(  '/avatar',     this.uploadAvatar);
         this.router.post(  '/:id',        this.getUser);
         this.router.delete('/:id/remove', this.removeUser);

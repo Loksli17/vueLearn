@@ -44,6 +44,7 @@
                         v-on:emitValue="setItemValue"
                     /> -->
 
+
                     <DropList
                         v-else-if="item.type == 'select' && item.options.length"
                         :optionsList="item.options"
@@ -177,6 +178,7 @@
                         }
                     });
                 });
+
             },
 
             // ! it can be bad

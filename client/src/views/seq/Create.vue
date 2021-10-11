@@ -39,6 +39,7 @@
     import { AxiosResponse }                        from 'axios';
     import FlashMessageData                         from '../../libs/flashMessage';
     import { LoadingFile }                          from '../../components/FileUpload/types';
+    import { ListItem }                             from '../../components/dropDown/types';
 
 
     export default defineComponent({
@@ -52,25 +53,42 @@
             return {
                 checked: false as boolean,
             
-                scheme    : [] as Array<Array<FormHtmlItem>> | null,
+                scheme    : null as Array<Array<FormHtmlItem>> | null,
                 formData  : null as FormDataView | null,
                 formErrors: null as FormErrors | null,
+                animals   : [] as Array<Record<string, any>> | null,
 
                 filename: "" as string | null,
             }
         },
 
         mounted: async function(){
+            await this.getAnimals();
             this.initScheme();
             this.initFormData();
         },
 
+        computed: {
+            options: function(): Array<ListItem>{
+                return this.animals!.map((item): ListItem => {
+                    const newItem: ListItem = { value: item.name, id: item.id};
+                    return newItem;
+                });
+            }
+        },
+
         methods: {
 
-            initScheme: function(){
+            getAnimals: async function() {
+                this.animals = await UserService.getAnimals();
+                console.log(this.options);
+            },
+
+            initScheme: function() {
                 this.scheme = [
                     [{type: 'text', name: 'login', label: 'Login'}, {type: 'text', name: 'email', label: 'E-mail'}],
                     [{type: 'text', name: 'password', label: 'Password'}],
+                    [{type: 'select', name: 'animalId', label: 'Animal', options: this.options}],
                     [{
                         type          : 'file', 
                         name          : 'avatar', 
