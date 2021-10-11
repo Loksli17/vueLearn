@@ -1,6 +1,7 @@
 <template>
     
     <div class="file-upload-container">
+       
         <div v-if="localFiles.length < maxFilesAmount" class="file-upload-field" @click="showDialogWindow" :class="{'file-upload-field-drag': dragStatus}" @drop.prevent="dragDrop" @dragenter.prevent @dragover.prevent="dragOver" @dragleave="dragLeave">
             <span>{{message}}</span>
             <input ref="fileInput" :name="name" type="file" :multiple="maxFilesAmount > 1 ? true : false" hidden @change="addFilesDialogWindow">

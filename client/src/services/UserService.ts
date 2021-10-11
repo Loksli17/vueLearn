@@ -32,7 +32,7 @@ const decorators = {
 }
 
 
-export default class UserService extends Service{
+export default class UserService extends Service {
 
     @decorators.normalUsers()
     public static async getAll(data: Record<string, any>): Promise<Array<Record<string, any>> | null>{

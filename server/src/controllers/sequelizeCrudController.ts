@@ -49,7 +49,7 @@ export default class SequelizeCrudController{
     }
 
 
-    public static async getAmountUsers(req: Request, res: Response){
+    public static async getAmountUsers(req: Request, res: Response) {
 
         let amount: number = 0;
         
@@ -78,7 +78,6 @@ export default class SequelizeCrudController{
 
         try {
             user = await User.findOne({where: {id: id}, include: [{model: Animal}, {model: Role}]});
-            console.log(user);
         } catch (error) {
             console.error(error);
             res.status(400).send({error: ErrorMessage.dataNotSended('id')});

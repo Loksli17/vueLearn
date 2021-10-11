@@ -4,20 +4,23 @@
         <div class="file-img" @click="showPopup = true" v-if="loadingFile.image" :style="{backgroundImage: `url('${loadingFile.image}'`}"></div>
         <img v-else :src="require(`@/assets/img/type-icons/${loadingFile.icon}`) " alt="">
 
-        <div class="filename">
-            <span>{{loadingFile.shortName}}</span>
-            <span>({{loadingFile.normalType}})</span>
-        </div>
-        
-        <div v-if="loadingFile.static" class="static-file">
-            <span>This file was already upload</span>  
+
+        <div class="content">
+            <div class="filename">
+                <span>{{loadingFile.shortName}}</span>
+                <span>({{loadingFile.normalType}})</span> 
+            </div>
+            
+            <div v-if="loadingFile.static" class="static-file">
+                <span>This file was already upload</span>  
+            </div>
+
+            <div v-else-if="progressBarType == 'different'">
+                <button @click.prevent="continueUpload" v-if="loadingFile.addStatus == 'before'">Continue upload</button>
+                <progress :value="progress" max="100">{{progress}}%</progress>
+            </div>
         </div>
 
-        <div v-else-if="progressBarType == 'different'">
-            <button @click.prevent="continueUpload" v-if="loadingFile.addStatus == 'before'">Continue upload</button>
-            <progress :value="progress" max="100">{{progress}}%</progress>
-        </div>
-        
         
         <div class="remove-file" @click="removeFile">&#10006;</div>
 
@@ -90,9 +93,18 @@
         width: 100%;
         display: grid;
         column-gap: 20px;
-        grid-template-columns: 60px 1fr 4fr max-content;
+        grid-template-columns: 60px 1fr max-content;
         align-items: center;
         height: 50px;
+
+        .content{
+            display: grid;
+            grid-template-columns: max-content auto;
+            
+            .filename{
+                word-wrap: break-word;
+            }
+        }
 
         img{
             width: 100%;
@@ -161,7 +173,7 @@
         .file{
             height: 40px;
             column-gap: 8px;
-            grid-template-columns: 40px 1fr 2fr max-content;
+            grid-template-columns: 40px 1fr max-content;
 
             .filename{
                 font-size: 16px;
