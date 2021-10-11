@@ -100,22 +100,20 @@
         .content{
             display: grid;
             grid-template-columns: max-content auto;
+            align-items: center;
+            column-gap: 20px;
             
             .filename{
-                word-wrap: break-word;
+                display: grid;
+                grid-auto-flow: column;
+                grid-auto-columns: max-content;
+                justify-content: center;
+                font-size: 18px;
             }
         }
 
         img{
             width: 100%;
-        }
-
-        .filename{
-            display: grid;
-            grid-auto-flow: column;
-            grid-auto-columns: max-content;
-            justify-content: center;
-            font-size: 18px;
         }
 
         .file-img{
@@ -130,6 +128,7 @@
         }
 
         @mixin progress{
+            margin-top: 0px;
             display: block;
             width: 100%;
             border-radius: 10px;
@@ -175,9 +174,14 @@
             column-gap: 8px;
             grid-template-columns: 40px 1fr max-content;
 
-            .filename{
-                font-size: 16px;
+            .content{
+                column-gap: 8px;
+
+                .filename{
+                    font-size: 16px;
+                }
             }
+  
         }
     }
 </style>
