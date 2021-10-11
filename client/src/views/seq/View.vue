@@ -20,6 +20,10 @@
                 :keysHandler="this.$filters.upperFirst"
             />
         </div>
+
+        <div class="img-wrap">
+            <img :src="`http://localhost:3000/seq/avatars/${user.avatar}`" alt="">
+        </div>
     </div>
 </template>
 
@@ -53,3 +57,17 @@
     });
 
 </script>
+
+
+<style lang="scss">
+    .seq-view{
+        .img-wrap{
+            width: 40%;
+            margin-top: 30px;
+
+            img{
+                width: 100%;
+            }
+        }
+    }
+</style>
