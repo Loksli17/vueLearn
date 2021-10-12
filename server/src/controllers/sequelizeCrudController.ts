@@ -134,9 +134,10 @@ export default class SequelizeCrudController{
 
         interface QueryData{
             user: {
-                email : string;
-                login : string;
-                avatar: string;
+                email   : string;
+                login   : string;
+                avatar  : string;
+                animalId: number;
             }
         }
 
@@ -171,9 +172,11 @@ export default class SequelizeCrudController{
             return;
         }
 
+        //! think about another variant
         user.set('login', QueryData.user.login);
         user.set('email', QueryData.user.email);
         user.set('avatar', QueryData.user.avatar);
+        user.set('animalId', Number(QueryData.user.animalId));
 
         try {
             await user.validate();

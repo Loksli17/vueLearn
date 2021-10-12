@@ -34,7 +34,8 @@
     import { FormHtmlItem, FormDataView, FormErrors } from '../../components/Form/types';
     import UserService                                from '../../services/UserService';
     import FlashMessageData                           from '../../libs/flashMessage';
-    import { AddFile, LoadingFile}                             from '../../components/FileUpload/types';
+    import { AddFile, LoadingFile}                    from '../../components/FileUpload/types';
+    import { ListItem }                               from '../../components/dropDown/types';
 
 
     export default defineComponent({
@@ -51,16 +52,31 @@
                 formErrors: null as FormErrors | null,
                 files     : [] as Array<AddFile>,
                 filename  : "" as string | null,
+                animals   : [] as Array<Record<string, any>> | null,
             }
         },
 
         mounted: async function(){
+            await this.getAnimals();
             await this.getUser();
             this.initScheme();
             this.initFormData();
         },
 
+        computed: {
+            options: function(): Array<ListItem>{
+                return this.animals!.map((item): ListItem => {
+                    const newItem: ListItem = { value: item.name, id: item.id};
+                    return newItem;
+                });
+            }
+        },
+
         methods: {
+
+            getAnimals: async function() {
+                this.animals = await UserService.getAnimals();
+            },
 
             getUser: async function(){
                 const serviceResult: Record<string, any> | null = await UserService.getOne({id: this.$route.params.id});
@@ -76,6 +92,7 @@
             initScheme: function(){
                 this.scheme = [
                     [{type: 'text', name: 'login', label: 'Login'}, {type: 'text', name: 'email', label: 'E-mail'}],
+                    [{type: 'select', name: 'animalId', label: 'Animal', options: this.options, currentItem: this.user!.animalId}],
                     [{
                         type          : 'file', 
                         name          : 'avatar', 

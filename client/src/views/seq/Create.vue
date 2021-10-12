@@ -81,7 +81,6 @@
 
             getAnimals: async function() {
                 this.animals = await UserService.getAnimals();
-                console.log(this.options);
             },
 
             initScheme: function() {

@@ -14,7 +14,7 @@ const normalUser = (user: Record<string, any>): Record<string, any> => {
         user.roles = user.roles.join('; ');
     }
 
-    delete user.AnimalId; delete user.Animal; delete user.animalId; delete user.Roles;
+    delete user.AnimalId; delete user.Animal; delete user.Roles;
     return user;
 };
 
