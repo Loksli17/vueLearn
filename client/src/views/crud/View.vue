@@ -30,6 +30,10 @@
         <div class="text">
             {{article.text}}
         </div>
+
+        <FloatingButton position="right" :side="60" :bottom="60">
+            <ScrollToTopButton behavior="smooth" />
+        </FloatingButton>
     </div>    
 </template>
 
@@ -39,6 +43,8 @@
     import GridView          from '../../components/GridView/GridView.vue';
     import ArticleService    from '../../services/ArticleService';
     import PageProgressBar   from '../../components/PageProgressBar.vue';
+    import FloatingButton    from "@/components/FloatingButton/FloatingButton.vue";
+    import ScrollToTopButton from "@/components/FloatingButton/ScrollToTopButton.vue";
 
 
     export default defineComponent({
@@ -46,6 +52,8 @@
         components: {
             GridView,
             PageProgressBar,
+            FloatingButton,
+            ScrollToTopButton,
         },
 
         data: function(){
