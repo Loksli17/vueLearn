@@ -1,9 +1,9 @@
 <template>
     
     <table>
-        <tr v-for="(value, index) in localRecord" :key=index>
-            <td>{{index}}</td>
-            <td>{{value}}</td>
+        <tr v-for="item in localRecord" :key=item.key>
+            <td>{{item.key}}</td>
+            <td>{{item.value}}</td>
         </tr>
     </table>
 </template>
@@ -17,6 +17,7 @@
      */
 
     import {defineComponent} from 'vue';
+
     
     export default defineComponent({
         
@@ -26,9 +27,9 @@
                 default: null,
             },
             fields: {
-                type   : Object as () => Record<string, unknown>,
+                type   : Array as () => Array<string | Record<string, string>>,
                 default: null,
-            }, 
+            },
             //? think about name
             dataHandler: {
                 type   : Function,
@@ -38,23 +39,49 @@
                 type   : Function,
                 default: undefined,
             },
+            upperFirstLetter: {
+                type   : Boolean,
+                default: true,
+            }
         },
 
         computed: {
-            localRecord: function(): Record<string, unknown>{
+            localRecord: function(): Array<Record<string, unknown>>{
                 
-                const record: Record<string, unknown> = {};
+                const record: Array<{key: string, value: string}> = [];
 
-                for (const key in this.data) {
-                    if (Object.prototype.hasOwnProperty.call(this.data, key)) {
-                        let newKey: string = (this.fields ? (this.fields[key] || key) : key) as string;
+                for(let i = 0; i < this.fields.length; i++){
+                    if(typeof this.fields[i] == 'string'){
+                        //*string
+                        const field: string = this.upperFirstLetter ? this.doUpperFirstLetter(this.fields[i] as string) : this.fields[i] as string;
+                        record.push({
+                            key: field, 
+                            value: this.data[this.fields[i] as string] as string
+                        });
+                    
+                    }else if(typeof this.fields[i] == 'object'){
+                        //*object
+                        for (const key in this.fields[i] as any){
+                            if(Object.prototype.hasOwnProperty.call(this.fields[i], key)){
+                                const field: string = (this.fields[i] as Record<string, string>)[key];
+                                record.push({
+                                    key: field, 
+                                    value: this.data[key] as string
+                                });
+                            }
+                        }
 
-                        newKey         = this.keysHandler ? this.keysHandler(newKey)         : newKey;
-                        record[newKey] = this.dataHandler ? this.dataHandler(this.data[key]) : this.data[key];
-                    }
+                    }  
                 }
 
                 return record;
+            },
+        },
+
+        methods: {
+
+            doUpperFirstLetter: function(str: string){
+               return str[0].toUpperCase() + (str.slice(1, (str.length)));
             }
         },
     });
