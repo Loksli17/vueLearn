@@ -30,7 +30,7 @@
 
 <script lang="ts">
     import {defineComponent} from 'vue';
-    import GridView          from '../../components/crudComponent/GridView.vue';
+    import GridView          from '../../components/GridView/GridView.vue';
     import UserService       from '../../services/UserService';
 
 

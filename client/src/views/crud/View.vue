@@ -29,7 +29,7 @@
 
 <script lang="ts">
     import {defineComponent} from 'vue';
-    import GridView          from '../../components/crudComponent/GridView.vue';
+    import GridView          from '../../components/GridView/GridView.vue';
     import ArticleService    from '../../services/ArticleService';
 
     export default defineComponent({
@@ -42,7 +42,7 @@
             return {
                 id     : 0 as number,
                 article: {} as Record<string, any> | null,
-                fields : {'t_title': 'Type of article'},
+                fields : ['id', {'t_title': 'Type of article'}, 'title', 'views', 'date', 'time', {'isReady': 'Rediness'}],
             }
         },
 

@@ -1,9 +1,9 @@
 <template>
     
-    <table>
-        <tr v-for="item in localRecord" :key=item.key>
-            <td>{{item.key}}</td>
-            <td>{{item.value}}</td>
+    <table :class="tableClass">
+        <tr :class="trClass" v-for="item in localRecord" :key=item.key>
+            <td :class="tdClass">{{item.key}}</td>
+            <td :class="tdClass">{{item.value}}</td>
         </tr>
     </table>
 </template>
@@ -42,6 +42,19 @@
             upperFirstLetter: {
                 type   : Boolean,
                 default: true,
+            },
+
+            tableClass: {
+                type   : String,
+                default: 'grid-view-table',
+            },
+            trClass: {
+                type   : String,
+                default: 'grid-view-tr',
+            },
+            tdClass: {
+                type   : String,
+                default: 'grid-view-td',
             }
         },
 
@@ -90,27 +103,6 @@
 
 <style lang="scss" scoped>
 
-    table, th, td{
-        border: 2px solid;
-    }
-
-    table{
-        width: 100%;
-        margin-top: 20px;
-        border-collapse: collapse;
-
-        td{
-            padding: 10px;
-            font-size: 20px;
-        }
-
-        tr:nth-child(even){
-            background: ghostwhite;
-        }
-
-        tr:nth-child(odd){
-            background: lavender;
-        }
-    }
+    @import 'style.scss';
 
 </style>

@@ -1,0 +1,22 @@
+.grid-view-table, .grid-view-tr, .grid-view-td{
+    border: 2px solid #beb8b8;
+}
+
+.grid-view-table{
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+
+    .grid-view-td{
+        font-size: 20px;
+        padding: 10px;
+    }
+
+    .grid-view-tr:nth-child(even){
+        background: rgb(253, 253, 255);
+    }
+
+    .grid-view-tr:nth-child(odd){
+        background: rgb(222, 222, 248);
+    }
+}
