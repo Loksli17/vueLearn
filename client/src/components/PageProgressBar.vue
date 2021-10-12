@@ -1,7 +1,7 @@
 <template>
     <teleport to="body">
         <div class="page-progress-bar-wrapper" :style="{ marginTop }">
-            <div class="page-progress-bar" :style="computedStyles"></div>
+            <div :style="computedStyles" :class="barClass"></div>
         </div>
     </teleport>
 </template>
@@ -13,14 +13,14 @@
         name: "page-progress-bar",
 
         props: {
-            barColor: {
+            barClass: {
                 type: String,
-                default: "green"
+                default: "page-progress-bar",
             },
             marginTop: {
                 type: String,
-                default: "0"
-            }
+                default: "0",
+            },
         },
 
         setup(props) {
@@ -58,8 +58,7 @@
 
             const computedStyles = computed(() => {
                 return {
-                    width          : `${barPercentage.value}%`,
-                    backgroundColor: props.barColor,
+                    width: `${barPercentage.value}%`,
                 }
             });
 
