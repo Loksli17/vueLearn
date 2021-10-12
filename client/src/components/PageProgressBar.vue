@@ -41,12 +41,19 @@
                 userScrolledY.value = window.pageYOffset;
             });
 
-            const barPercentage = computed(() => (userScrolledY.value / documentHeight.value) * 100)
+            const barPercentage = computed(() => { 
+                let height = Math.max(
+                    document.body.scrollHeight, document.documentElement.scrollHeight,
+                    document.body.offsetHeight, document.documentElement.offsetHeight,
+                    document.body.clientHeight, document.documentElement.clientHeight
+                ) - document.documentElement.clientHeight;
+                
+                return (userScrolledY.value / height) * 100;
+            });
 
             onMounted(() => {
                 documentHeight.value = getDocHeight();
                 userScrolledY.value  = window.pageYOffset;
-
             });
 
             const computedStyles = computed(() => {
@@ -54,7 +61,7 @@
                     width          : `${barPercentage.value}%`,
                     backgroundColor: props.barColor,
                 }
-            })
+            });
 
             return {
                 computedStyles
