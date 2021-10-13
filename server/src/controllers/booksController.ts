@@ -6,6 +6,7 @@ import crypto                           from "crypto-js";
 import { ValidationError, ValidationErrorItem }              from 'sequelize/types';
 import { strict } from "assert/strict";
 import { get } from "http";
+import Author from "../models/Author";
 
 
 export default class BooksController {
@@ -56,7 +57,7 @@ export default class BooksController {
         } 
         
         try{
-            book = await Books.findOne({where: {id: id}});
+            book = await Books.findOne({where: {id: id}, include: [{model: Author}]});
         }catch(error){
             console.error(error);
             res.status(400).send({error: ErrorMessage.dataNotSended('id')});

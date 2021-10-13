@@ -1,6 +1,7 @@
 import {Optional, Model, DataTypes} from 'sequelize';
 import sequelize                    from '../config/databaseSeq';
 import Books                        from './Books'; 
+import BooksHasAuthor               from './BooksHasAuthor';
 
 interface AuthorAttributes {
     id   : number, 
@@ -36,10 +37,18 @@ Author.init({
 });
 
 
-// Author.belongsToMany(
-//     Books, 
-//     {
-//         through: 'Author_books',
-//         foreignKey: 'authorId',
-//     }
-// );
+Author.belongsToMany(
+    Books, 
+    {
+        through: BooksHasAuthor,
+        foreignKey: 'authorId',
+    }
+);
+
+Books.belongsToMany(
+    Author,
+    {
+        through: BooksHasAuthor,
+        foreignKey: 'booksId',
+    }
+);
