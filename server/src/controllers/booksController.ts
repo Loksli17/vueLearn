@@ -85,6 +85,7 @@ export default class BooksController {
         res.status(200).send({amount: amount});
     } 
 
+
     public static async removeBook(req: Request, res: Response){
         let 
             id : number = Number(req.body.id),
@@ -105,6 +106,7 @@ export default class BooksController {
         res.status(200).send({id: bookId});
 
     }
+
 
     public static async сreateBook(req: Request, res: Response){
 
@@ -145,6 +147,7 @@ export default class BooksController {
         res.status(200).send({msg: `Book created id  =  ${book.id}` });
     }
 
+    
     public static async editBook(req: Request, res: Response){
         
         interface QueryData{
