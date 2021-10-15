@@ -23,14 +23,10 @@
         
         props: {
             data: {
-                // ! Using PropType is the correct way to annotate props
-                // ! see https://v3.vuejs.org/guide/typescript-support.html#annotating-props
                 type   : Object as PropType<Record<string, unknown>>,
                 default: null,
             },
             fields: {
-                // ! An array of objects { 'fieldName': 'Actual Displayed Name' } seems more convenient,
-                // ! but I guess more options is good
                 type   : Array as PropType<Array<string | Record<string, string>>>,
                 default: null,
             },
@@ -78,7 +74,6 @@
                     
                     }else if(typeof this.fields[i] == 'object'){
                         //*object
-                        // ! Avoid using 'any' as much as possible
                         for (const key in (this.fields[i] as Record<string, string>)){
                             if(Object.prototype.hasOwnProperty.call(this.fields[i], key)){
                                 const field: string = (this.fields[i] as Record<string, string>)[key];
