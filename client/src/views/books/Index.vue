@@ -112,6 +112,7 @@
         },
         
         mounted: async function(){
+            this.skip = (Number(this.$route.query.page) - 1) * 10; //! it's a bad way? 
             await this.getBooks({skip: this.skip, take: this.take});
             await this.getAmountBooks();
         },

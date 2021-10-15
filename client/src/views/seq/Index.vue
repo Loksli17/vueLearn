@@ -108,10 +108,13 @@
             }
         },
 
+
         mounted: async function(){
+            this.skip = (Number(this.$route.query.page) - 1) * 10;
             await this.getUsers({ take: this.take, skip: this.skip });
             await this.getUsersAmount();
         },
+
 
         methods: {
             

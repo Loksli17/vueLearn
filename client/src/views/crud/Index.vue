@@ -180,6 +180,7 @@
 
 
         mounted: async function(){
+            this.skip = (Number(this.$route.query.page) - 1) * 10;
             await this.getArticles({take: this.take, skip: this.skip});
             await this.getArticlesAmount();
         },
