@@ -49,10 +49,10 @@
                 type: Number,
                 required: true
             },
-            currentPage: {
-                type    : Number,
-                required: true,
-            },
+            // currentPage: {
+            //     type    : Number,
+            //     required: true,
+            // },
             pageGap: {
                 type    : Number,
                 required: true,
@@ -100,7 +100,7 @@
             return {
                 pages              : [] as Array<Page>,
                 maxPage            : 0 as number,
-                currentPageData    : 0 as number,
+                localCurrentPage   : 0 as number,
                 classNameData      : '' as string,
                 itemClassData      : '' as string,
                 activePageClassData: '' as string,
@@ -110,13 +110,8 @@
                 firstPage          : undefined as Page | undefined,
                 displayStatus      : true as boolean,
 
-                getParam: 1 as number,
+                // getParam: 1 as number,
             }
-        },
-
-        created: function(){
-            this.getParam = Number(this.$route.query.page) || Number(this.$route.params.page) || 1;
-            console.log(this.getParam);
         },
 
         watch: {
@@ -138,13 +133,22 @@
                 set(val: number): void {
                     this.$emit("update:skip", val);
                 }
+            },
+
+            getParam: function(): number {
+                return Number(this.$route.query.page) || Number(this.$route.params.page) || 1;
+            },
+
+            url: function(): string {
+                return this.$route.path;
             }
         },
 
         methods: {
 
             render: function(): void{
-                this.localSkip = this.take * (this.currentPageData - 1);
+
+                this.localSkip = this.take * (this.localCurrentPage - 1);
                 const pageEndPoints: {first: number; last: number} = this.countEndPoints();
                 
                 this.pages = this.createPages(pageEndPoints.first, pageEndPoints.last);
@@ -168,7 +172,7 @@
                 this.itemClassData       = this.itemClass       == undefined ? 'page' : this.itemClass;
                 this.activePageClassData = this.activePageClass == undefined ? 'active-page' : this.activePageClass;
                 
-                this.currentPageData = this.currentPage > this.maxPage ? this.maxPage : this.currentPage;
+                this.localCurrentPage = this.getParam > this.maxPage ? this.maxPage : this.getParam;
             },
 
 
@@ -178,14 +182,14 @@
                     first: number = 0,
                     last : number = 0;
                
-                if(Number(this.currentPageData) + (this.pageGap / 2) >= this.maxPage){
+                if(Number(this.localCurrentPage) + (this.pageGap / 2) >= this.maxPage){
                     last  = this.maxPage;
                     first = this.maxPage - this.pageGap + 1;
-                }else if(Number(this.currentPageData) - (this.pageGap / 2) <= 1){
+                }else if(Number(this.localCurrentPage) - (this.pageGap / 2) <= 1){
                     first = 1;
                     last = this.pageGap;
                 }else{
-                    first = Math.ceil(Number(this.currentPageData) - this.pageGap / 2);
+                    first = Math.ceil(Number(this.localCurrentPage) - this.pageGap / 2);
                     last = first + this.pageGap - 1;
                 }
                 
@@ -207,7 +211,7 @@
                 
                 for(let i = first; i <= last; i++){
                     const page: Page = { link: i, content: `${i}`, class: this.itemClassData };
-                    if(i == this.currentPageData){
+                    if(i == this.localCurrentPage){
                         page.current = true;
                         page.class += ` ${this.activePageClassData}`;
                     }
@@ -223,8 +227,8 @@
                 if(this.elementAmount <= this.take){return {next: undefined, prev: undefined};}
                 
                 const
-                    nextNum: number = (this.currentPageData + 1) > this.maxPage ? this.maxPage : this.currentPageData + 1,
-                    prevNum: number = (this.currentPageData - 1) < 1            ? 1            : this.currentPageData - 1;
+                    nextNum: number = (this.localCurrentPage + 1) > this.maxPage ? this.maxPage : this.localCurrentPage + 1,
+                    prevNum: number = (this.localCurrentPage - 1) < 1            ? 1            : this.localCurrentPage - 1;
                 
                 return {
                     next: {link: nextNum, content: this.nextPageContent, class: this.itemClassData},
@@ -244,17 +248,22 @@
                 
             },
 
+            changeGetParam: function(pageNumber: number){
+                //todo: i need in best way of this shit!! it way doesn't work with prev and next page buttons
+                //? may be user watch?
+                window.history.pushState({}, "", `${this.url}?page=${pageNumber}`);
+            },
 
             setCurrentPageEvt: function(newPage: number){
-                this.currentPageData = newPage;
+                this.localCurrentPage = newPage;
                 this.render();
-                
+                this.changeGetParam(newPage);
                 this.$emit('page-change');
             },
 
 
             getCurrentPage: function(){
-                return this.currentPageData;
+                return this.localCurrentPage;
             },
             
 

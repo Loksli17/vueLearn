@@ -64,7 +64,7 @@
                 <Pagination
                     v-model:take=take
                     v-model:skip="skip"
-                    :current-page=currentPage
+                    
                     :page-gap="7"
                     :end-button="true"
                     :start-button="true"
@@ -195,8 +195,8 @@
                 this.amountArticles = await ArticleService.getAmount() || 0;
             },
 
-            pageChangeEvt: function(){
-                this.getArticles({ take: this.take, skip: this.skip });
+            pageChangeEvt: async function(){
+                await this.getArticles({ take: this.take, skip: this.skip });
             },
 
             removeArticle: async function(id: number){

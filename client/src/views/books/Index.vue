@@ -13,6 +13,18 @@
                 :column-names="tableHeader" 
                 :row-data="selectedRows" />
         </div>
+
+        <div class="pagination-wrap">
+            <Pagination 
+                v-model:take=take
+                v-model:skip="skip"
+                :page-gap="7"
+                :end-button="true"
+                :start-button="true"
+                :element-amount="amountBooks"
+                @page-change="pageChangeEvt"
+            />
+        </div>
     </div>
 
     <FloatingButton position="right" :side="80" :bottom="80">
@@ -30,6 +42,7 @@
     import FloatingButton                      from "@/components/FloatingButton/FloatingButton.vue"
     import AddButton                           from "@/components/FloatingButton/AddButton.vue";
     import moment                              from 'moment';
+    import Pagination                          from '../../components/Pagination/Pagination.vue';
 
 
     export default defineComponent({
@@ -37,12 +50,16 @@
         components: {
             Table,
             FloatingButton,
-            AddButton
+            AddButton,
+            Pagination
         },
 
         data: function(){
             return {
-                books: [] as Array<Record<string, unknown>>,
+                books      : [] as Array<Record<string, unknown>>,
+                amountBooks: 0 as number | null,
+
+                
                 tableHeader: [
                     { fieldName: "id", displayedName: "ID" },
                     { fieldName: "title", displayedName: "Title" },
@@ -96,12 +113,22 @@
         
         mounted: async function(){
             await this.getBooks({skip: this.skip, take: this.take});
+            await this.getAmountBooks();
         },
 
         methods: {
 
+            //todo write BlackLirium about his mistakes
             getBooks: async function(data: Record<string, unknown>){
                 this.books = await BooksService.getAll(data) || [];
+            },
+
+            pageChangeEvt: async function(){
+                await this.getBooks({skip: this.skip, take: this.take});
+            },
+
+            getAmountBooks: async function(){
+                this.amountBooks = await BooksService.getAmount();
             },
 
             clickHandler(): void {

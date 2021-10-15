@@ -44,7 +44,6 @@
                 <Pagination
                     v-model:take=take
                     v-model:skip="skip"
-                    :current-page=currentPage
                     :page-gap="7"
                     :end-button="true"
                     :start-button="true"
