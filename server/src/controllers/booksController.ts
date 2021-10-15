@@ -3,6 +3,7 @@ import ErrorMessage                     from "../libs/error";
 import Query                            from "../libs/query";
 import Books                            from "../models/Books";
 import { ValidationErrorItem }          from 'sequelize/types';
+import Author                           from "../models/Author";
 
 
 export default class BooksController {
@@ -53,7 +54,7 @@ export default class BooksController {
         } 
         
         try{
-            book = await Books.findOne({where: {id: id}});
+            book = await Books.findOne({where: {id: id}, include: [{model: Author}]});
         }catch(error){
             console.error(error);
             res.status(400).send({error: ErrorMessage.dataNotSended('id')});
