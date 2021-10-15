@@ -29,8 +29,9 @@
 
 
 <script lang="ts">
-    import {defineComponent}        from 'vue';
-    import PaginationPage, { Page } from "./PaginationPage.vue";
+    import { defineComponent } from 'vue';
+    import PaginationPage      from './PaginationPage.vue';
+    import { Page }            from './types';
     
 
     export default defineComponent({
@@ -108,16 +109,27 @@
                 lastPage           : undefined as Page | undefined,
                 firstPage          : undefined as Page | undefined,
                 displayStatus      : true as boolean,
+
+                getParam: 1 as number,
             }
         },
+
+        created: function(){
+            this.getParam = Number(this.$route.query.page) || Number(this.$route.params.page) || 1;
+            console.log(this.getParam);
+        },
+
         watch: {
             elementAmount: function(): void {
+
+                //! think about restructed of this methods
                 this.init();
                 this.render();
                 this.$emit("update:take", this.take);
                 this.$emit("update:skip", this.skip);
             }
         },
+
         computed: {
             localSkip: {
                 get(): number {
@@ -128,8 +140,8 @@
                 }
             }
         },
-        methods: {
 
+        methods: {
 
             render: function(): void{
                 this.localSkip = this.take * (this.currentPageData - 1);
@@ -143,9 +155,9 @@
                 
                 const endPointPages: {last: Page | undefined; first: Page | undefined} = this.createEndPointsPages();
                 
-                if(this.endButton) { this.lastPage = endPointPages.last }
+                if(this.endButton) this.lastPage = endPointPages.last;
                 
-                if(this.startButton) { this.firstPage = endPointPages.first }
+                if(this.startButton) this.firstPage = endPointPages.first;
             },
             
 
@@ -164,7 +176,7 @@
 
                 let 
                     first: number = 0,
-                    last: number = 0;
+                    last : number = 0;
                
                 if(Number(this.currentPageData) + (this.pageGap / 2) >= this.maxPage){
                     last  = this.maxPage;
@@ -177,9 +189,9 @@
                     last = first + this.pageGap - 1;
                 }
                 
-                if(last > this.maxPage) { last = this.maxPage }
+                if(last > this.maxPage) last = this.maxPage
                 
-                if(first < 1) { first = 1 }
+                if(first < 1)  first = 1 
                 
                 return{
                     first: first,
@@ -187,13 +199,14 @@
                 }
             },
 
+
             createPages: function(first: number, last: number): Array<Page>{
                 if(this.elementAmount <= this.take){return [];}
                 
                 const pages: Array<Page> = [];
                 
                 for(let i = first; i <= last; i++){
-                    const page: Page = {link: i, content: `${i}`, class: this.itemClassData};
+                    const page: Page = { link: i, content: `${i}`, class: this.itemClassData };
                     if(i == this.currentPageData){
                         page.current = true;
                         page.class += ` ${this.activePageClassData}`;
@@ -222,11 +235,11 @@
 
             createEndPointsPages: function(): {last: Page | undefined; first: Page | undefined}{
                 
-                if(this.elementAmount <= this.take){return {last: undefined, first: undefined};}
+                if(this.elementAmount <= this.take){ return { last: undefined, first: undefined } }
                
                 return {
-                    first: {link: 1,            content: 'First', class: this.itemClassData},
-                    last : {link: this.maxPage, content: 'Last',  class: this.itemClassData},
+                    first: { link: 1,            content: 'First', class: this.itemClassData },
+                    last : { link: this.maxPage, content: 'Last',  class: this.itemClassData },
                 };
                 
             },
@@ -251,6 +264,7 @@
         },
     });
 </script>
+
 
 <style lang="scss" scoped>
     

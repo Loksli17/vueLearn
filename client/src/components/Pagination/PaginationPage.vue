@@ -6,13 +6,8 @@
 
 <script lang="ts">
     import { defineComponent, PropType } from 'vue';
-
-    export interface Page{
-        content: string;
-        class: string;
-        link: number;
-        current?: boolean;
-    }
+    import { Page }                      from './types';
+    
 
     export default defineComponent({
         

@@ -29,7 +29,8 @@
     import { TableConfig, Column, SortOrder, TableColumnHandler }  from "@/components/table/types";
     import FloatingButton                      from "@/components/FloatingButton/FloatingButton.vue"
     import AddButton                           from "@/components/FloatingButton/AddButton.vue";
-import moment from 'moment';
+    import moment                              from 'moment';
+
 
     export default defineComponent({
 
@@ -48,6 +49,7 @@ import moment from 'moment';
                     { fieldName: "writingDate", displayedName: "Creation date" },
                     { fieldName: "isCompleted", displayedName: "Status" },
                 ] as Array<Column>,
+
                 tableColumnHandlers: [
                     {
                         fieldName: "id",
@@ -79,14 +81,16 @@ import moment from 'moment';
                         }
                     }
                 ] as Array<TableColumnHandler>,
+                
                 tableConfig: {
                     sortableByColumn: { default: SortOrder.ASCENDING },
                     dropDownActions: true,
                     selectableRows: true
                 } as TableConfig,
+
                 selectedRows: [] as Array<Record<string, unknown>>,
-                take : 10 as number,
-                skip : 0 as number,
+                take        : 10 as number,
+                skip        : 0 as number,
             }
         },
         
@@ -98,7 +102,6 @@ import moment from 'moment';
 
             getBooks: async function(data: Record<string, unknown>){
                 this.books = await BooksService.getAll(data) || [];
-                console.log("Books:", this.books);
             },
 
             clickHandler(): void {

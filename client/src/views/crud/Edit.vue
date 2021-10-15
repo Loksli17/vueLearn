@@ -128,7 +128,7 @@
                 this.article = serviceResult!.article;
 
                 const file = new File([new Uint8Array(serviceResult.buffer.data)], this.article.img as string, {type: "text/image"});
-                this.files.push({file: file, static: false});
+                this.files.push({ file: file, static: false });
             },
 
             initRowsForm: function(){
