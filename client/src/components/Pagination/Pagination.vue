@@ -197,10 +197,7 @@
                 
                 if(first < 1)  first = 1 
                 
-                return{
-                    first: first,
-                    last : last,
-                }
+                return { first: first, last: last};
             },
 
 
@@ -251,8 +248,7 @@
             changeGetParam: function(pageNumber: number){
                 //todo: i need in best way of this shit!! it way doesn't work with prev and next page buttons
                 //? may be user watch?
-                // this.$router.push(`${this.url}?page=${pageNumber}`);
-                window.history.pushState({}, "", `${this.url}?page=${pageNumber}`);
+                this.$router.push(`${this.url}?page=${pageNumber}`);
             },
 
             setCurrentPageEvt: function(newPage: number){
