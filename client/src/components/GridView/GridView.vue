@@ -16,18 +16,22 @@
      * todo new data structure from data & fields
      */
 
-    import {defineComponent} from 'vue';
+    import { defineComponent, PropType } from 'vue';
 
     
     export default defineComponent({
         
         props: {
             data: {
-                type   : Object as () => Record<string, unknown>,
+                // ! Using PropType is the correct way to annotate props
+                // ! see https://v3.vuejs.org/guide/typescript-support.html#annotating-props
+                type   : Object as PropType<Record<string, unknown>>,
                 default: null,
             },
             fields: {
-                type   : Array as () => Array<string | Record<string, string>>,
+                // ! An array of objects { 'fieldName': 'Actual Displayed Name' } seems more convenient,
+                // ! but I guess more options is good
+                type   : Array as PropType<Array<string | Record<string, string>>>,
                 default: null,
             },
             //? think about name
@@ -39,7 +43,7 @@
                 type   : Function,
                 default: undefined,
             },
-            upperFirstLetter: {
+            capitaliseFieldName: {
                 type   : Boolean,
                 default: true,
             },
@@ -66,7 +70,7 @@
                 for(let i = 0; i < this.fields.length; i++){
                     if(typeof this.fields[i] == 'string'){
                         //*string
-                        const field: string = this.upperFirstLetter ? this.doUpperFirstLetter(this.fields[i] as string) : this.fields[i] as string;
+                        const field: string = this.capitaliseFieldName ? this.doUpperFirstLetter(this.fields[i] as string) : this.fields[i] as string;
                         record.push({
                             key: field, 
                             value: this.data[this.fields[i] as string] as string
@@ -74,7 +78,8 @@
                     
                     }else if(typeof this.fields[i] == 'object'){
                         //*object
-                        for (const key in this.fields[i] as any){
+                        // ! Avoid using 'any' as much as possible
+                        for (const key in (this.fields[i] as Record<string, string>)){
                             if(Object.prototype.hasOwnProperty.call(this.fields[i], key)){
                                 const field: string = (this.fields[i] as Record<string, string>)[key];
                                 record.push({

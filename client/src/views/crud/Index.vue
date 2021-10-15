@@ -135,7 +135,7 @@
                 tableColumnHandlers: [
                     {
                         fieldName: "id",
-                        columnComparator: (val1, val2) => {
+                        columnComparator: (val1: number, val2: number) => {
                             if (val1 < val2) return -1;
                             if (val1 > val2) return 1;
                             return 0;
@@ -143,7 +143,7 @@
                     },
                     { 
                         fieldName: "time", 
-                        columnComparator: (val1, val2) => {
+                        columnComparator: (val1: string, val2: string) => {
                             const 
                                 t1 = moment(val1, "HH:mm A").toDate(),
                                 t2 = moment(val2, "HH:mm A").toDate();
@@ -159,7 +159,7 @@
                     },
                     {
                         fieldName: "date",
-                        columnComparator: (val1, val2) => {
+                        columnComparator: (val1: string, val2: string) => {
                             const 
                                 t1 = moment(val1, "MMMM Do YYYY").toDate(),
                                 t2 = moment(val2, "MMMM Do YYYY").toDate();

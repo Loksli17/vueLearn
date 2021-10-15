@@ -60,7 +60,7 @@
             return {
                 id     : 0 as number,
                 article: {} as Record<string, any> | null,
-                fields : ['id', {'t_title': 'Type of article'}, 'title', 'views', 'date', 'time', {'isReady': 'Rediness'}],
+                fields : ['id', {'t_title': 'Type of article'}, 'title', 'views', 'date', 'time', {'isReady': 'Status'}],
             }
         },
 

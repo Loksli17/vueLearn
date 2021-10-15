@@ -36,13 +36,13 @@
 
 <script lang="ts">
     import { defineComponent }                 from 'vue';
+    import moment                              from 'moment';
     import BooksService                        from '../../services/BooksService';
-    import Table                               from "@/components/table/Table.vue";
-    import { TableConfig, Column, SortOrder, TableColumnHandler }  from "@/components/table/types";
     import FloatingButton                      from "@/components/FloatingButton/FloatingButton.vue"
     import AddButton                           from "@/components/FloatingButton/AddButton.vue";
-    import moment                              from 'moment';
-    import Pagination                          from '../../components/Pagination/Pagination.vue';
+    import Pagination                          from '@/components/Pagination/Pagination.vue';
+    import Table                               from "@/components/table/Table.vue";
+    import { TableConfig, Column, SortOrder, TableColumnHandler }  from "@/components/table/types";
 
 
     export default defineComponent({
@@ -61,16 +61,16 @@
 
                 
                 tableHeader: [
-                    { fieldName: "id", displayedName: "ID" },
-                    { fieldName: "title", displayedName: "Title" },
-                    { fieldName: "writingDate", displayedName: "Creation date" },
+                    { fieldName: "id",          displayedName: "ID" },
+                    { fieldName: "title",       displayedName: "Title" },
+                    { fieldName: "writingDate", displayedName: "Created on" },
                     { fieldName: "isCompleted", displayedName: "Status" },
                 ] as Array<Column>,
 
                 tableColumnHandlers: [
                     {
                         fieldName: "id",
-                        columnComparator: (val1, val2) => {
+                        columnComparator: (val1: number, val2: number) => {
                             if (val1 < val2) return -1;
                             if (val1 > val2) return 1;
                             return 0;
@@ -78,13 +78,10 @@
                     },
                     { 
                         fieldName: "writingDate",
-                        columnHandler: (val: string) => {
-                            return moment(val, "YYYY-MM-DD").locale("pl").format("Do MMMM YYYY");
-                        },
-                        columnComparator: (val1, val2) => {
+                        columnComparator: (val1: string, val2: string) => {
                             const 
-                                t1 = moment(val1, "YYYY-MM-DD").toDate(),
-                                t2 = moment(val2, "YYYY-MM-DD").toDate();
+                                t1 = moment(val1, "MMMM Do YYYY").toDate(),
+                                t2 = moment(val2, "MMMM Do YYYY").toDate();
                             console.log(t1, t2);
                             if (t1 < t2) return -1;
                             if (t1 > t2) return 1;

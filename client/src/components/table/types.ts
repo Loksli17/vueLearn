@@ -16,10 +16,8 @@ export interface TableColumnHandler {
      * Name of the column, has to be the same as Column's fieldName
      */
     fieldName: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    columnComparator?: (val: any, nextVal: any) => 0 | 1 | -1;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    columnHandler?:   (value: any) => string;
+    columnComparator?: (val: unknown, nextVal: unknown) => 0 | 1 | -1;
+    columnHandler?:   (value: unknown) => string;
 }
 
 // export interface CustomCell {
@@ -41,8 +39,7 @@ export interface Action {
      * 
      * NOTE: Handlers may require to bind their 'this' parameter
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    handler?: (arg: any) => void;
+    handler?: (arg: unknown) => void;
     cssClassName?: string;
 }
 
