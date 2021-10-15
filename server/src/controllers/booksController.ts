@@ -1,11 +1,8 @@
 import e, { Router, Request, Response } from "express";
 import ErrorMessage                     from "../libs/error";
 import Query                            from "../libs/query";
-import Books                             from "../models/Books";
-import crypto                           from "crypto-js";
-import { ValidationError, ValidationErrorItem }              from 'sequelize/types';
-import { strict } from "assert/strict";
-import { get } from "http";
+import Books                            from "../models/Books";
+import { ValidationErrorItem }          from 'sequelize/types';
 
 
 export default class BooksController {
@@ -108,7 +105,7 @@ export default class BooksController {
 
     }
 
-    public static async CreateBook(req: Request, res: Response){
+    public static async сreateBook(req: Request, res: Response){
 
         interface QueryData{
             book: {
@@ -148,6 +145,7 @@ export default class BooksController {
     }
 
     public static async editBook(req: Request, res: Response){
+        
         interface QueryData{
             book: {
                 title      : string,
@@ -214,7 +212,7 @@ export default class BooksController {
         this.router.post(   '/:id',       this.getBook);
         this.router.delete('/:id/remove', this.removeBook);
         this.router.put(    '/:id/edit',  this.editBook)
-        this.router.put(    '/add',       this.CreateBook)
+        this.router.put(    '/add',       this.сreateBook)
 
         return this.router;   
     }
