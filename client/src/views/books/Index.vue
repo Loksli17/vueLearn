@@ -21,6 +21,11 @@
                 :column-handlers="tableColumnHandlers" /> -->
         </div>
 
+        <InRange 
+            v-model="selectedRows.length" 
+            :editable="false"
+            :total="books.length" />
+
         <div class="pagination-wrap">
             <Pagination 
                 v-model:take=take
@@ -48,6 +53,7 @@
     import FloatingButton                      from "@/components/FloatingButton/FloatingButton.vue"
     import AddButton                           from "@/components/FloatingButton/AddButton.vue";
     import Pagination                          from '@/components/Pagination/Pagination.vue';
+    import InRange                             from "@/components/InRange.vue"
     import Table from "@/components/table/Table.vue";
     import { Column, TableColumnHandler, SortOrder,TableConfig } from "@/components/table/types";
 
@@ -58,14 +64,14 @@
             Table,
             FloatingButton,
             AddButton,
-            Pagination
+            Pagination,
+            InRange
         },
 
         data: function(){
             return {
                 books      : [] as Array<Record<string, unknown>>,
                 amountBooks: 0 as number | null,
-
                 
                 tableHeader: [
                     { fieldName: "id",          displayedName: "ID" },
