@@ -12,6 +12,13 @@
             <Table 
                 :column-names="tableHeader" 
                 :row-data="selectedRows" />
+
+            
+<!--        <Table 
+                :columns="tableHeader" 
+                :config="tableConfig"
+                :row-data="books"
+                :column-handlers="tableColumnHandlers" /> -->
         </div>
 
         <div class="pagination-wrap">
@@ -41,8 +48,8 @@
     import FloatingButton                      from "@/components/FloatingButton/FloatingButton.vue"
     import AddButton                           from "@/components/FloatingButton/AddButton.vue";
     import Pagination                          from '@/components/Pagination/Pagination.vue';
-    import Table                               from "@/components/table/Table.vue";
-    import { TableConfig, Column, SortOrder, TableColumnHandler }  from "@/components/table/types";
+    import Table from "@/components/table/Table.vue";
+    import { Column, TableColumnHandler, SortOrder,TableConfig } from "@/components/table/types";
 
 
     export default defineComponent({
@@ -86,12 +93,6 @@
                             if (t1 < t2) return -1;
                             if (t1 > t2) return 1;
                             return 0;
-                        }
-                    },
-                    {
-                        fieldName: "isCompleted",
-                        columnHandler(val: boolean) {
-                            return val ? "ready" : "not ready";
                         }
                     }
                 ] as Array<TableColumnHandler>,
