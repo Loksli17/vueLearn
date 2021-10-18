@@ -1,19 +1,14 @@
 <template>
+
     <div class="toggle-container" tabindex="1">
         <input 
-            v-if="required" 
             id="id" 
             type="checkbox" 
             :name="name" 
             v-model="computedValue" 
-            required hidden>
+            :required="required"
+            hidden>
 
-        <input
-            v-else 
-            id="id" 
-            type="checkbox" 
-            :name="name" 
-            v-model="computedValue" hidden>
 
         <span class="toggle" @click="toggle">
             <span 
@@ -24,7 +19,9 @@
             </span>
         </span>
     </div>
+
 </template>
+
 
 <script lang="ts">
     import { computed, defineComponent } from 'vue'
@@ -52,6 +49,10 @@
             required: {
                 type: Boolean,
                 default: false
+            },
+            class: {
+                type   : String,
+                default: "toggle",
             }
         },
 
@@ -78,6 +79,7 @@
         },
     })
 </script>
+
 
 <style lang="scss" scoped>
     .toggle-container {

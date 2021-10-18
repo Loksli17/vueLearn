@@ -1,8 +1,8 @@
 <template>
     
     <div class="checkbox">
-        <div ref="div" class="content" :class="{'checkbox-active': checked}" @click.prevent="setValue"></div>
-        <input type="checkbox" :name="name" v-model="checked" hidden>
+        <div class="content" :class="{'checkbox-active': computedValue}" @click="change"></div>
+        <input type="checkbox" :name="name" v-model="computedValue" hidden>
     </div>
 
 </template>
@@ -10,9 +10,14 @@
 
 <script lang="ts">
 
-    import {defineComponent} from 'vue';
+    import { computed, defineComponent, WritableComputedRef } from 'vue';
+
 
     export default defineComponent({
+
+        name: "checkbox",
+
+        emits: ["update:value", "change"],
 
         props: {
             value: {
@@ -20,31 +25,54 @@
                 default: false,
             },
             name: {
-                type: String,
+                type   : String,
                 default: 'checkbox',
             },
         },
 
-        data: function(){
+        setup(props, { emit }) {
+
+            const computedValue: WritableComputedRef<boolean> = computed({
+                get(): boolean {
+                    return props.value;
+                },
+                set(newVal: boolean): void {
+                    emit("update:value", newVal);
+                }
+            });
+
+            const change = () => {
+                computedValue.value = !computedValue.value;
+                emit("change", computedValue.value, props.name);
+            }
+
             return {
-                checked: this.value as boolean,
+                computedValue,
+                change
             }
         },
-        
-        methods: {
-            
-            setValue: function(): void{
-                this.checked = !this.checked;
-                this.$emit('emitValue', this.checked, this.name);
-            },
 
-            getValue: function(): boolean{
-                return this.checked;
-            },
-        },
+        // data: function(){
+        //     return {
+        //         checked: this.value as boolean,
+        //     }
+        // },
+        
+        // methods: {
+            
+        //     setValue: function(): void{
+        //         this.checked = !this.checked;
+        //         this.$emit('emitValue', this.checked, this.name);
+        //     },
+
+        //     getValue: function(): boolean{
+        //         return this.checked;
+        //     },
+        // },
     });
 
 </script>
+
 
 
 <style lang="scss" scoped>  

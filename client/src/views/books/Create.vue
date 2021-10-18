@@ -17,6 +17,11 @@
             :errors="formErrors"
             v-on:send="sendForm"
         />
+
+        <Checkbox
+            :name="'check'"
+            v-model:value="checked"
+        />
     </div>
 
 </template>
@@ -25,12 +30,14 @@
     import { defineComponent }                        from 'vue';
     import Form                                       from '../../components/Form/newForm.vue';
     import { FormDataView, FormHtmlItem, FormErrors } from '../../components/Form/types';
+    import Checkbox                                   from '../../components/crudComponent/Checkbox.vue';
 
 
     export default defineComponent({
         
         components: {
             Form,
+            Checkbox,
         },
 
         data(){
@@ -40,6 +47,8 @@
                 formData  : null as FormDataView | null,
                 formErrors: null as FormErrors | null,
                 animals   : [] as Array<Record<string, any>> | null,
+
+                checked: false as boolean,
             }
         },
 
@@ -52,8 +61,8 @@
 
             initScheme: function() {
                 this.scheme = [
-                    [{type: 'text', name: 'title', label: 'Tilte'}, {type: 'date', name: 'date', label: 'Date of creation'}, {type: 'checkbox', name: 'isCompleted', label: 'Readiness of the book'}],
-                    [{type: 'textarea', name: 'text', label: 'Text'}],
+                    [{type: 'text', name: 'title', label: 'Tilte'}, {type: 'checkbox', name: 'isCompleted', label: 'Readiness of the book'}],
+                    [{type: 'textarea', name: 'text', label: 'Text'}, {type: 'date', name: 'date', label: 'Date of creation'}],
                     [{type: 'submit', name: 'sendBook'}]
                 ];
             },
@@ -61,6 +70,10 @@
             initFormData: function(){
                 this.formData = {isCompleted: false};
             },
+
+            sendForm: function(){
+                console.log(this.formData);
+            }
         }
 
     });

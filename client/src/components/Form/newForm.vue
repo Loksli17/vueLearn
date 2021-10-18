@@ -54,8 +54,8 @@
 
                     <Checkbox v-else-if="item.type == 'checkbox'"
                         :name="item.name"
-                        :value="localDataForm[item.name]"
-                        v-on:emitValue="setItemValue"
+                        v-model:value="localDataForm[item.name]"
+                        v-on:change="setItemValue"
                     />
 
                     <input v-else-if="item.type == 'submit'" type="submit" :value="item.value || 'Send'">
