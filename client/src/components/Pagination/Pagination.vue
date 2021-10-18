@@ -49,10 +49,6 @@
                 type: Number,
                 required: true
             },
-            // currentPage: {
-            //     type    : Number,
-            //     required: true,
-            // },
             pageGap: {
                 type    : Number,
                 required: true,
@@ -109,8 +105,6 @@
                 lastPage           : undefined as Page | undefined,
                 firstPage          : undefined as Page | undefined,
                 displayStatus      : true as boolean,
-
-                // getParam: 1 as number,
             }
         },
 
@@ -146,9 +140,20 @@
 
         methods: {
 
-            render: function(): void{
+            init: function(): void{
+                this.maxPage = Math.ceil(this.elementAmount / this.take);
+                
+                this.classNameData       = this.className       == undefined ? 'pages-wrap' : this.className;
+                this.itemClassData       = this.itemClass       == undefined ? 'page' : this.itemClass;
+                this.activePageClassData = this.activePageClass == undefined ? 'active-page' : this.activePageClass;
 
-                this.localSkip = this.take * (this.localCurrentPage - 1);
+                this.localCurrentPage = this.getParam > this.maxPage ? this.maxPage : this.getParam;
+                this.localSkip        = this.take * (this.localCurrentPage - 1);
+
+                console.log('pagination-skip', this.skip, this.localSkip, this.localCurrentPage, this.take, this.take * (this.localCurrentPage - 1));
+            },
+
+            render: function(): void{
                 const pageEndPoints: {first: number; last: number} = this.countEndPoints();
                 
                 this.pages = this.createPages(pageEndPoints.first, pageEndPoints.last);
@@ -162,17 +167,6 @@
                 if(this.endButton) this.lastPage = endPointPages.last;
                 
                 if(this.startButton) this.firstPage = endPointPages.first;
-            },
-            
-
-            init: function(): void{
-                this.maxPage = Math.ceil(this.elementAmount / this.take);
-                
-                this.classNameData       = this.className       == undefined ? 'pages-wrap' : this.className;
-                this.itemClassData       = this.itemClass       == undefined ? 'page' : this.itemClass;
-                this.activePageClassData = this.activePageClass == undefined ? 'active-page' : this.activePageClass;
-                
-                this.localCurrentPage = this.getParam > this.maxPage ? this.maxPage : this.getParam;
             },
 
 
@@ -250,14 +244,6 @@
                 //? may be user watch?
                 this.$router.push(`${this.url}?page=${pageNumber}`);
             },
-
-            // setCurrentPageEvt: function(newPage: number){
-            //     this.localCurrentPage = newPage;
-            //     this.render();
-            //     // this.changeGetParam(newPage);
-            //     // this.$emit('page-change');
-            // },
-
 
             getCurrentPage: function(){
                 return this.localCurrentPage;

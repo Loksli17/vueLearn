@@ -108,13 +108,15 @@
         },
 
 
-        mounted: async function(){
+        created: async function(){
             // ! i don't like this variant
             // ? i want get computed skip from pagination component, case count skip in VIEW is not good idea!!!
-            // ? for this idea we should use ref and create getSkip method from pagination. 
-            this.skip = (Number(this.$route.query.page) - 1) * 10;
+            // ? for this idea we should use ref and create getSkip method from pagination.
+            
+            // this.skip = (Number(this.$route.query.page) - 1) * 10;
             await this.getUsers({ take: this.take, skip: this.skip });
             await this.getUsersAmount();
+            console.log(this.skip);
         },
 
 
