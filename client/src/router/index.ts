@@ -77,13 +77,21 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Book-index',
         component: () => import('../views/books/Index.vue'),
     },
-
     {
         path: '/books-crud/:id/view',
         name: 'Book-view',
         component: () => import('../views/books/View.vue'),
     },
-
+    {
+        path: '/books-crud/:id/edit',
+        name: 'Book-edit',
+        component: () => import('../views/books/Edit.vue'),
+    },
+    {
+        path: '/books-crud/create',
+        name: 'Book-create',
+        component: () => import('../views/books/Create.vue'),
+    },
 
 ];
 

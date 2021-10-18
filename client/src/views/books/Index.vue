@@ -1,5 +1,11 @@
 <template>
     <div class="books-index">
+
+        <div class="add-line">
+            <router-link :to="'/'">Go home</router-link>
+            <router-link :to="'/books-crud/create'">Create book</router-link>
+        </div>
+
         <div>
             <!-- {{books}} -->
             <Table 
