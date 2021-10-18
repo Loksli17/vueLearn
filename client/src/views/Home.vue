@@ -33,10 +33,10 @@
         data: function(){
             return {
                 links: [
-                    {route: '/crud',       img: 'crud-img.svg',     text: 'CRUD for articles with material design from GOOGLE',                                        header: 'CRUD'},
-                    {route: '/seq-crud',   img: 'seq-crud-img.svg', text: 'CRUD for articles with material design from GOOGLE and SEQUENCE ORM. Sequence orm in back', header: 'Sequlize CRUD'},
-                    {route: '/long',       img: 'long-page.svg',    text: 'Page for test scrollToTop component',                                                       header: 'Scroll To Top component'},
-                    {route: '/books-crud', img: 'book-crud.svg',    text: 'CRUD from BlackLirium'              ,                                                       header: 'Book'},
+                    {route: '/crud?page=1',       img: 'crud-img.svg',     text: 'CRUD for articles with material design from GOOGLE',                                        header: 'CRUD'},
+                    {route: '/seq-crud?page=1',   img: 'seq-crud-img.svg', text: 'CRUD for articles with material design from GOOGLE and SEQUENCE ORM. Sequence orm in back', header: 'Sequlize CRUD'},
+                    {route: '/long',              img: 'long-page.svg',    text: 'Page for test scrollToTop component',                                                       header: 'Scroll To Top component'},
+                    {route: '/books-crud?page=1', img: 'book-crud.svg',    text: 'CRUD from BlackLirium'              ,                                                       header: 'Book'},
                 ] as Array<linkObject>,
             }
         },

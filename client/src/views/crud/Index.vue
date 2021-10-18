@@ -51,25 +51,14 @@
             </div>
 
             <div class="pagination">
-                <!-- <Pagination
-                    ref="pagination"
-                    :take=take
-                    :currentPage=currentPage
-                    :pageGap="7"
-                    :endButton="true"
-                    :startButton="true"
-                    v-on:page-change="pageChangeEvt"
-                />   -->
                 <!-- ! The general rule is to write attributes in kebab-case, just like in vanilla HTML -->
                 <Pagination
                     v-model:take=take
                     v-model:skip="skip"
-                    
                     :page-gap="7"
                     :end-button="true"
                     :start-button="true"
                     :element-amount="amountArticles"
-                    @page-change="pageChangeEvt"
                 />
             </div> 
         </div>
@@ -79,15 +68,15 @@
 
 <script lang="ts">
 
-    import { defineComponent }             from 'vue';
-    import Pagination                      from "@/components/Pagination/Pagination.vue";
-    import TopMenu                         from "@/components/TopMenu/TopMenu.vue";
-    import { LinkButton }                  from "@/components/TopMenu/types";
-    import ModalWrapper                    from "@/components/Modal/ModalWrapper.vue";
-    import FlashMessageData                from '../../libs/flashMessage';
-    import Table                           from "@/components/table/Table.vue";
-    import ArticleService                  from '../../services/ArticleService';
-    import moment                          from 'moment';
+    import { defineComponent } from 'vue';
+    import Pagination          from "@/components/Pagination/Pagination.vue";
+    import TopMenu             from "@/components/TopMenu/TopMenu.vue";
+    import { LinkButton }      from "@/components/TopMenu/types";
+    import ModalWrapper        from "@/components/Modal/ModalWrapper.vue";
+    import FlashMessageData    from '../../libs/flashMessage';
+    import Table               from "@/components/table/Table.vue";
+    import ArticleService      from '../../services/ArticleService';
+    import moment              from 'moment';
     
     import { Column, Action, TableConfig, TableColumnHandler, SortOrder } from "@/components/table/types";
 
@@ -196,9 +185,9 @@
                 this.amountArticles = await ArticleService.getAmount() || 0;
             },
 
-            pageChangeEvt: async function(){
-                await this.getArticles({ take: this.take, skip: this.skip });
-            },
+            // pageChangeEvt: async function(){
+            //     await this.getArticles({ take: this.take, skip: this.skip });
+            // },
 
             removeArticle: async function(id: number){
                 await ArticleService.removeOne({id: id});

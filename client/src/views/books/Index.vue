@@ -34,7 +34,6 @@
                 :end-button="true"
                 :start-button="true"
                 :element-amount="amountBooks"
-                @page-change="pageChangeEvt"
             />
         </div>
     </div>
@@ -54,7 +53,8 @@
     import AddButton                           from "@/components/FloatingButton/AddButton.vue";
     import Pagination                          from '@/components/Pagination/Pagination.vue';
     import InRange                             from "@/components/InRange.vue"
-    import Table from "@/components/table/Table.vue";
+    import Table                               from "@/components/table/Table.vue";
+    
     import { Column, TableColumnHandler, SortOrder,TableConfig } from "@/components/table/types";
 
 
@@ -128,9 +128,9 @@
                 this.books = await BooksService.getAll(data) || [];
             },
 
-            pageChangeEvt: async function(){
-                await this.getBooks({skip: this.skip, take: this.take});
-            },
+            // pageChangeEvt: async function(){
+            //     await this.getBooks({skip: this.skip, take: this.take});
+            // },
 
             getAmountBooks: async function(){
                 this.amountBooks = await BooksService.getAmount();
