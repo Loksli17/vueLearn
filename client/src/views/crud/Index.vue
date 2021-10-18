@@ -185,10 +185,6 @@
                 this.amountArticles = await ArticleService.getAmount() || 0;
             },
 
-            // pageChangeEvt: async function(){
-            //     await this.getArticles({ take: this.take, skip: this.skip });
-            // },
-
             removeArticle: async function(id: number){
                 await ArticleService.removeOne({id: id});
                 

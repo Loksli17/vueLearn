@@ -128,10 +128,6 @@
                 this.books = await BooksService.getAll(data) || [];
             },
 
-            // pageChangeEvt: async function(){
-            //     await this.getBooks({skip: this.skip, take: this.take});
-            // },
-
             getAmountBooks: async function(){
                 this.amountBooks = await BooksService.getAmount();
             },
