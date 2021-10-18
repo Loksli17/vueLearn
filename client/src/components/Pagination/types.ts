@@ -1,6 +1,6 @@
 export interface Page {
     content : string;
     class   : string;
-    link    : number;
+    number  : number;
     current?: boolean;
 }

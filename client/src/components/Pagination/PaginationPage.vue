@@ -1,7 +1,7 @@
 <template>
-    <a :href="page.link" :class="page.class" @click.prevent="$emit('clicked')">
+    <router-link :to="{name: url, query: {page: page.number}}" :class="page.class">
         {{page.content}}
-    </a>
+    </router-link>
 </template>
 
 <script lang="ts">
@@ -13,17 +13,19 @@
         
         name: "pagination-page",
         
-        emits: ["clicked"],
-        
         props: {
             page: {
-                type: Object as PropType<Page>,
+                type    : Object as PropType<Page>,
                 required: true
             },
             src: {
                 type   : String,
                 default: undefined,
             },
+            url: {
+                type    : String,
+                required: true, 
+            }
         }
     })
 </script>

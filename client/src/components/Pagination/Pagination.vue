@@ -3,25 +3,25 @@
         <div :class="classNameData">
 
             <div v-if="firstPage">
-                <PaginationPage :page="firstPage" @clicked="setCurrentPageEvt(firstPage.link)" />
+                <PaginationPage :page="firstPage" @clicked="setCurrentPageEvt(firstPage.link)" :url="url" />
             </div>
 
             <div v-if="prevPage">
-                <PaginationPage :page="prevPage"  @clicked="setCurrentPageEvt(prevPage.link)" />
+                <PaginationPage :page="prevPage"  @clicked="setCurrentPageEvt(prevPage.link)" :url="url"/>
             </div>
 
             <template v-for="page in pages" :key="page">
                 <div>
-                    <PaginationPage :page="page" @clicked="setCurrentPageEvt(page.link)" />
+                    <PaginationPage :page="page" @clicked="setCurrentPageEvt(page.link)" :url="url"/>
                 </div>
             </template>
 
             <div v-if="nextPage">
-                <PaginationPage :page="nextPage" @clicked="setCurrentPageEvt(nextPage.link)" />    
+                <PaginationPage :page="nextPage" @clicked="setCurrentPageEvt(nextPage.link)" :url="url" />    
             </div>
 
             <div v-if="lastPage">
-                <PaginationPage :page="lastPage" @clicked="setCurrentPageEvt(lastPage.link)" />    
+                <PaginationPage :page="lastPage" @clicked="setCurrentPageEvt(lastPage.link)" :url="url" />    
             </div>
         </div>
     </div>
@@ -140,7 +140,7 @@
             },
 
             url: function(): string {
-                return this.$route.path;
+                return this.$route.name as string;
             }
         },
 
@@ -207,7 +207,7 @@
                 const pages: Array<Page> = [];
                 
                 for(let i = first; i <= last; i++){
-                    const page: Page = { link: i, content: `${i}`, class: this.itemClassData };
+                    const page: Page = { number: i, content: `${i}`, class: this.itemClassData };
                     if(i == this.localCurrentPage){
                         page.current = true;
                         page.class += ` ${this.activePageClassData}`;
@@ -228,8 +228,8 @@
                     prevNum: number = (this.localCurrentPage - 1) < 1            ? 1            : this.localCurrentPage - 1;
                 
                 return {
-                    next: {link: nextNum, content: this.nextPageContent, class: this.itemClassData},
-                    prev: {link: prevNum, content: this.prevPageContent, class: this.itemClassData},
+                    next: { number: nextNum, content: this.nextPageContent, class: this.itemClassData },
+                    prev: { number: prevNum, content: this.prevPageContent, class: this.itemClassData },
                 };
             },
             
@@ -239,8 +239,8 @@
                 if(this.elementAmount <= this.take){ return { last: undefined, first: undefined } }
                
                 return {
-                    first: { link: 1,            content: 'First', class: this.itemClassData },
-                    last : { link: this.maxPage, content: 'Last',  class: this.itemClassData },
+                    first: { number: 1,            content: 'First', class: this.itemClassData, },
+                    last : { number: this.maxPage, content: 'Last',  class: this.itemClassData, },
                 };
                 
             },
@@ -251,12 +251,12 @@
                 this.$router.push(`${this.url}?page=${pageNumber}`);
             },
 
-            setCurrentPageEvt: function(newPage: number){
-                this.localCurrentPage = newPage;
-                this.render();
-                this.changeGetParam(newPage);
-                this.$emit('page-change');
-            },
+            // setCurrentPageEvt: function(newPage: number){
+            //     this.localCurrentPage = newPage;
+            //     this.render();
+            //     // this.changeGetParam(newPage);
+            //     // this.$emit('page-change');
+            // },
 
 
             getCurrentPage: function(){

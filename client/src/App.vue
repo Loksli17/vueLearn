@@ -5,7 +5,7 @@
             <router-link :to="'/logout'"> Logout => </router-link>
             <span>{{token}}</span>
         </div>
-        <router-view/>
+        <router-view :key="$route.fullPath"/>
     </div>
 </template>
 
