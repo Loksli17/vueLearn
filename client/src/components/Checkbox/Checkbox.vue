@@ -10,9 +10,9 @@
             :required="required" 
             hidden>
         
-        <div v-if="!toggle" class="content" :class="{'checkbox-active': computedValue}" @click="change"></div>
+        <div v-if="!toggle" :class="{'checkbox-active': computedValue, content}" @click="change"></div>
 
-        <span v-else class="toggle" @click="change">
+        <span v-else :class="toggleClass" @click="change">
             <span 
                 v-if="showState" 
                 class="toggle-state"
@@ -53,9 +53,13 @@
                 type   : Boolean,
                 default: false
             },
-            class: {
+            toggleClass: {
                 type   : String,
                 default: "toggle",
+            },
+            class: {
+                type   : String,
+                default: 'content'
             },
             showState: {
                 type   : Boolean,
@@ -63,7 +67,7 @@
             },
             id: {
                 type   : String,
-                default: ""
+                default: "",
             },
         },
 
@@ -93,6 +97,6 @@
 </script>
 
 
-<style lang="scss" scoped>  
+<style lang="scss">  
     @import 'style.scss';
 </style>

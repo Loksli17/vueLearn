@@ -79,3 +79,10 @@
 
     });
 </script>
+
+<style lang="scss">
+    
+    .checkbox input:checked + .toggle {
+        background-color: #4e34dd;
+    }
+</style>

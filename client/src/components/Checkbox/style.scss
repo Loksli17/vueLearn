@@ -27,7 +27,7 @@
 
         input:checked {
             &+ .toggle {
-                background-color: var(--switch-on-color);
+                background-color: green;
 
                 .toggle-state {
                     font-size: 10pt;

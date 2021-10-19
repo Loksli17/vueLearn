@@ -8,16 +8,13 @@
         </div>
 
         <div class="form-wrap">
-
-            <div class="form-wrap">
-                <Form 
-                    v-if="scheme && dataForm"
-                    :scheme="scheme"
-                    :data="dataForm"
-                    :tableName="'article'"
-                    v-on:send="sendForm"
-                />
-            </div>
+            <Form 
+                v-if="scheme && dataForm"
+                :scheme="scheme"
+                :data="dataForm"
+                :tableName="'article'"
+                v-on:send="sendForm"
+            />
         </div>
 
         <div>

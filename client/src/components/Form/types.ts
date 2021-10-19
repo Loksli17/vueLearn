@@ -7,6 +7,7 @@ export interface FormHtmlItem{
     type  : string;
     name  : string;
     error?: string;
+    class?: string;
 
     //input
     max?         : number;
@@ -49,8 +50,9 @@ export interface FormHtmlItem{
 
 
     //checkbox
-    toggle?   : boolean,
-    showState?: boolean,
+    toggle?     : boolean,
+    showState?  : boolean,
+    toggleClass?: string,
     
 }
 
