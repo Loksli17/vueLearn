@@ -4,36 +4,36 @@ import { AddFile, LoadingFile } from "../FileUpload/types";
 
 
 export interface FormHtmlItem{
-    type: string;
-    name: string;
+    type  : string;
+    name  : string;
     error?: string;
 
     //input
-    max?: number;
-    min?: number;
-    label?: string;
-    placeholder?: string | number | Date;
-    required?: boolean;
-    step?: number | string;
-    disabled?: boolean;
-    pattern?: RegExp;
-    autofocus?: boolean;
+    max?         : number;
+    min?         : number;
+    label?       : string;
+    placeholder? : string | number | Date;
+    required?    : boolean;
+    step?        : number | string;
+    disabled?    : boolean;
+    pattern?     : RegExp;
+    autofocus?   : boolean;
     autocomplete?: boolean;
 
     //select
-    selected?: string | number;
-    multiple?: boolean;
-    search?: boolean;
+    selected?      : string | number;
+    multiple?      : boolean;
+    search?        : boolean;
     disabledOption?: string;
-    options?: Array<ListItem>; //!! bad
-    currentItem?: string | number | ListItem;
+    options?       : Array<ListItem>; //!! bad
+    currentItem?   : string | number | ListItem;
 
     //textarea
-    cols?: number;
+    cols?    : number;
     maxLenth?: number;
-    rows?: number;
+    rows?    : number;
     tabindex?: number;
-    wrap?: string;
+    wrap?    : string;
 
     //file
     maxFilesAmount?: number,
@@ -44,8 +44,13 @@ export interface FormHtmlItem{
     loadHandler?   : (files: LoadingFile[]) => Promise<void> | void, //?????
     fileSizeError? : (file: LoadingFile, msg: string) => void, //?????
     fileTypeError? : (file: LoadingFile, msg: string) => void, //?????
-    dragAndDropCapableError?: (msg: string) => void, //?????
     continueUpload?: (file: LoadingFile) => void; //?????
+    dragAndDropCapableError?: (msg: string) => void, //?????
+
+
+    //checkbox
+    toggle?   : boolean,
+    showState?: boolean,
     
 }
 

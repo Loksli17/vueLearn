@@ -57,6 +57,7 @@
                         v-model:value="localDataForm[item.name]"
                         :required="item.required"
                         :toggle="item.toggle"
+                        :showState="item.showState"
                         v-on:change="setItemValue"
                     />
 

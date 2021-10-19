@@ -1,4 +1,5 @@
 //! check this props attentivle
+//todo restruct this file: create common properties in new array;
 
 const 
     selectProps: Array<string> = [
@@ -53,7 +54,8 @@ const
         'label',
 
         'required',
-        'toggle'
+        'toggle',
+        'showState'
     ],
 
     fileProps: Array<string> = [

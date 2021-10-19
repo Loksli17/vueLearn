@@ -61,7 +61,7 @@
 
             initScheme: function() {
                 this.scheme = [
-                    [{type: 'text', name: 'title', label: 'Tilte'}, {type: 'checkbox', name: 'isCompleted', label: 'Readiness of the book'}],
+                    [{type: 'text', name: 'title', label: 'Tilte'}, {type: 'checkbox', toggle: true, showState: true, name: 'isCompleted', label: 'Readiness of the book'}],
                     [{type: 'date', name: 'date', label: 'Date of creation'}],
                     [{type: 'textarea', name: 'text', label: 'Text'}],
                     [{type: 'submit', name: 'sendBook'}]
@@ -69,7 +69,7 @@
             },
 
             initFormData: function(){
-                this.formData = {isCompleted: false};
+                this.formData = {isCompleted: true};
             },
 
             sendForm: function(){
