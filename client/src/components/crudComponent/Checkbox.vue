@@ -42,8 +42,7 @@
             });
 
             const change = () => {
-                computedValue.value = !computedValue.value;
-                emit("change", computedValue.value, props.name);
+                emit("change", computedValue.value = !computedValue.value, props.name);
             }
 
             return {
