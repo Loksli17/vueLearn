@@ -4,8 +4,14 @@
     <div class="long-page-wrapper">
         <div>
             <Toggle v-model="toggleVal" name="toggle" />
-            <span>{{ toggleVal }}</span>
+            <span>{{ toggleVal ? "show collapse buttons" : "don't show collapse buttons" }}</span>
         </div>
+
+        <CollapsableList 
+            :items="list" 
+            :only-one-open="true"
+            :show-collapse-button="toggleVal" />
+
         <!-- <div class="drag-drop-wrapper">
             <div class="drag-drop-left">
                 <DragList :model-item-list="itemsLeft">
@@ -74,6 +80,7 @@
             Cras quis urna eu libero cursus congue placerat vitae odio. Fusce eu malesuada urna. Proin id magna diam. Sed et tempor quam. Nunc dictum est nulla, eget iaculis massa laoreet vitae. 
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </p>
+
     </div>
 
     <!-- This is more flexible -->
@@ -91,6 +98,8 @@
     import TopMenu                  from "@/components/TopMenu/TopMenu.vue";
     import { LinkButton }           from "@/components/TopMenu/types";
 
+    import CollapsableList          from "@/components/CollapsableList/CollapsableList.vue";
+
     import Toggle                   from "@/components/Toggle.vue";
 
     // interface Item extends IDraggable {
@@ -104,6 +113,7 @@
             ScrollToTopButton,
             PageProgressBar,
             // DragList,
+            CollapsableList,
             TopMenu,
             Toggle
         },
@@ -122,6 +132,12 @@
                 //     { id: 0, name: "kek" },
                 //     { id: 1, name: "lol" }
                 // ] as Array<Item>,
+
+                list: [
+                    { header: "ПРОГРАММА SETAP BIOS", content: "BIOS – это термин, который используется для описания базовой системы ввода/вывода. Она представляет собой промежуточный слой между про-грам¬м¬ной и аппаратной частями компьютера. Часто под BIOS подразумева-ют драйверы устройств. Однако, кроме системной BIOS, существует еще BIOS адаптеров, которые загружаются при запуске системы. Поэтому базо-вая система ввода-вывода – это комбинация всех типов BIOS, а также загру-жаемые драйверы устройств. Часть BIOS содержится в микросхеме на си-стемной плате или платах адаптеров, именно из-за наличия этих микросхем пользователи чаще всего относят BIOS к аппаратной части компьютера." },
+                    { header: "Общие свойства", content: "В этом разделе устанавливается системное время, настраиваются IDE- и флоппи-дисководы, выбирается реакция системы на ошибки. Здесь же приводит-ся размер инсталлированной в компьютере RAM. " },
+                    { header: "Свойства BIOS", content: "В этом разделе находятся различные опции, так или иначе относящиеся к специфичным настройкам BIOS, CPU, кэша и подобного. " }
+                ],
                 toggleVal: false as boolean
             }
         }
