@@ -125,6 +125,7 @@
                     return this.skip;
                 },
                 set(val: number): void {
+                    console.log('setter:', val);
                     this.$emit("update:skip", val);
                 }
             },

@@ -1,8 +1,24 @@
 <template>
     
     <div class="checkbox">
-        <div class="content" :class="{'checkbox-active': computedValue}" @click="change"></div>
-        <input type="checkbox" :name="name" v-model="computedValue" hidden>
+        
+        <div v-if="!toggle" class="content" :class="{'checkbox-active': computedValue}" @click="change"></div>
+
+        <span v-else class="toggle" @click="change">
+            <span 
+                v-if="showState" 
+                class="toggle-state"
+                >
+                {{ computedValue ? "on" : "off" }}
+            </span>
+        </span>
+
+        <input 
+            type="checkbox" 
+            :name="name" 
+            v-model="computedValue"
+            :required="required" 
+            hidden>
     </div>
 
 </template>
@@ -28,6 +44,22 @@
                 type   : String,
                 default: 'checkbox',
             },
+            toggle: {
+                type   : Boolean,
+                default: false,
+            },
+            required: {
+                type   : Boolean,
+                default: false
+            },
+            class: {
+                type   : String,
+                default: "toggle",
+            },
+            showState: {
+                type   : Boolean,
+                default: false
+            },
         },
 
         setup(props, { emit }) {
@@ -42,8 +74,7 @@
             });
 
             const change = () => {
-                computedValue.value = !computedValue.value;
-                emit("change", computedValue.value, props.name);
+                emit("change", computedValue.value = !computedValue.value, props.name);
             }
 
             return {

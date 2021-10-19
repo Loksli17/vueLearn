@@ -51,6 +51,9 @@ const
         'type',
         'error',
         'label',
+
+        'required',
+        'toggle'
     ],
 
     fileProps: Array<string> = [

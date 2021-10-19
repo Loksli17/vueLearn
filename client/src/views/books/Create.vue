@@ -62,7 +62,8 @@
             initScheme: function() {
                 this.scheme = [
                     [{type: 'text', name: 'title', label: 'Tilte'}, {type: 'checkbox', name: 'isCompleted', label: 'Readiness of the book'}],
-                    [{type: 'textarea', name: 'text', label: 'Text'}, {type: 'date', name: 'date', label: 'Date of creation'}],
+                    [{type: 'date', name: 'date', label: 'Date of creation'}],
+                    [{type: 'textarea', name: 'text', label: 'Text'}],
                     [{type: 'submit', name: 'sendBook'}]
                 ];
             },

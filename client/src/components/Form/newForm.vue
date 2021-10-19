@@ -55,6 +55,8 @@
                     <Checkbox v-else-if="item.type == 'checkbox'"
                         :name="item.name"
                         v-model:value="localDataForm[item.name]"
+                        :required="item.required"
+                        :toggle="item.toggle"
                         v-on:change="setItemValue"
                     />
 
