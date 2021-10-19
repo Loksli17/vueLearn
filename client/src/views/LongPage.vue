@@ -94,7 +94,7 @@
     import ScrollToTopButton        from "@/components/FloatingButton/ScrollToTopButton.vue";
     import FloatingButton           from "@/components/FloatingButton/FloatingButton.vue";
     // import DragList, { IDraggable } from "@/components/DragList/DragList.vue";
-    import PageProgressBar          from "@/components/PageProgressBar.vue";
+    import PageProgressBar          from "@/components/PageProgressBar/PageProgressBar.vue";
     import TopMenu                  from "@/components/TopMenu/TopMenu.vue";
     import { LinkButton }           from "@/components/TopMenu/types";
 
@@ -145,7 +145,7 @@
 </script>
 
 <style lang="scss">
-    @import "./../assets/scss/page-progress-bar/page-progress-bar.scss";
+    // @import "./../assets/scss/page-progress-bar/page-progress-bar.scss";
 
     // .page-progress-bar {
     //     margin-top: 60px;

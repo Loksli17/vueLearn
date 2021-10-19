@@ -42,7 +42,7 @@
     import {defineComponent} from 'vue';
     import GridView          from '../../components/GridView/GridView.vue';
     import ArticleService    from '../../services/ArticleService';
-    import PageProgressBar   from '../../components/PageProgressBar.vue';
+    import PageProgressBar   from '../../components/PageProgressBar/PageProgressBar.vue';
     import FloatingButton    from "@/components/FloatingButton/FloatingButton.vue";
     import ScrollToTopButton from "@/components/FloatingButton/ScrollToTopButton.vue";
 

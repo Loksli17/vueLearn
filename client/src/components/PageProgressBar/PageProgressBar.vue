@@ -15,7 +15,7 @@
 
         props: {
             barClass: {
-                type: String,
+                type   : String,
                 default: "page-progress-bar",
             },
             marginTop: {
@@ -69,3 +69,9 @@
         },
     })
 </script>
+
+<style lang="scss">
+
+    @import 'style.scss';
+    
+</style>
