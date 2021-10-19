@@ -140,7 +140,7 @@
 
             initScheme: function(){
                 this.scheme = [
-                    [{type: 'text', name: 'title', label: 'Title of article'}, {type: 'checkbox', name: 'isReady', label: 'Readiness of the article'}],
+                    [{type: 'text', name: 'title', label: 'Title of article'}, {type: 'checkbox', toggle: true, name: 'isReady', label: 'Readiness of the article'}],
                     [{type: 'date', name: 'date'}, {type: 'time', name: 'time'}],
                     [{type: 'textarea', name: 'text'}],
                     [{type: 'select', name: 'articleTypeId', label: 'Article`s type', search: true, options: this.optionsTypes, disabledOption: 'Please, choose a item'}],

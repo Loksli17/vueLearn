@@ -91,7 +91,7 @@
 
 <script lang="ts">
 
-    import Checkbox                                  from '../crudComponent/Checkbox.vue';
+    import Checkbox                                  from '../Checkbox/Checkbox.vue';
     import DropList                                  from "../dropDown/DropDown.vue";
     import Props                                     from './props';
     import { ListItem }                              from "../dropDown/types";

@@ -57,7 +57,7 @@
 
     import {defineComponent}        from "vue";
     import DropDownList, {ListItem} from '../DropDownList.vue';
-    import Checkbox                 from '../crudComponent/Checkbox.vue';
+    import Checkbox                 from '../Checkbox/Checkbox.vue';
     import DropList                 from '../dropDown/DropDown.vue';
 
     interface Prop{

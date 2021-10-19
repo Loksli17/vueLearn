@@ -113,10 +113,6 @@
             }
         }
 
-        // &:focus .toggle::before {
-        //     border: 2px solid var(--switch-toggle-element-focus-color);
-        // }
-
         .toggle {
             display: flex;
             align-items: center;

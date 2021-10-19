@@ -30,7 +30,7 @@
     import { defineComponent }                        from 'vue';
     import Form                                       from '../../components/Form/newForm.vue';
     import { FormDataView, FormHtmlItem, FormErrors } from '../../components/Form/types';
-    import Checkbox                                   from '../../components/crudComponent/Checkbox.vue';
+    import Checkbox                                   from '../../components/Checkbox/Checkbox.vue';
 
 
     export default defineComponent({
