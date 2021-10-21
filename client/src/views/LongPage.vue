@@ -12,7 +12,7 @@
             :only-one-open="true"
             :show-collapse-button="toggleVal" />
 
-        <!-- <div class="drag-drop-wrapper">
+        <div class="drag-drop-wrapper">
             <div class="drag-drop-left">
                 <DragList :model-item-list="itemsLeft">
                     <template #default="{item}">
@@ -27,7 +27,14 @@
                     </template>
                 </DragList>
             </div>
-        </div> -->
+            <div class="drag-drop-right">
+                <DragList :model-item-list="itemsBottom">
+                    <template #default="{item}">
+                        <div> {{ item.name }}</div>
+                    </template>
+                </DragList>
+            </div>
+        </div>
         <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi interdum vel urna gravida pellentesque. 
             Phasellus ex nisi, molestie eu felis id, maximus vestibulum mi. Phasellus nec ex ornare, vestibulum ipsum eu, 
@@ -93,7 +100,7 @@
     import { defineComponent }      from 'vue'
     import ScrollToTopButton        from "@/components/FloatingButton/ScrollToTopButton.vue";
     import FloatingButton           from "@/components/FloatingButton/FloatingButton.vue";
-    // import DragList, { IDraggable } from "@/components/DragList/DragList.vue";
+    import DragList                 from "@/components/DragList/DragList.vue";
     import PageProgressBar          from "@/components/PageProgressBar/PageProgressBar.vue";
     import TopMenu                  from "@/components/TopMenu/TopMenu.vue";
     import { LinkButton }           from "@/components/TopMenu/types";
@@ -102,17 +109,13 @@
 
     import Toggle                   from "@/components/Toggle.vue";
 
-    // interface Item extends IDraggable {
-    //     id: number;
-    //     name: string;
-    // }
 
     export default defineComponent({
         components: {
             FloatingButton,
             ScrollToTopButton,
             PageProgressBar,
-            // DragList,
+            DragList,
             CollapsableList,
             TopMenu,
             Toggle
@@ -124,14 +127,19 @@
                     { name: "crud", path: "/crud" },
                     { name: "seq-crud", path: "/seq-crud" }
                 ] as Array<LinkButton>,
-                // itemsLeft: [
-                //     { id: 0, name: "kek" },
-                //     { id: 1, name: "lol" }
-                // ] as Array<Item>,
-                // itemsRight: [
-                //     { id: 0, name: "kek" },
-                //     { id: 1, name: "lol" }
-                // ] as Array<Item>,
+
+                itemsLeft: [
+                    { name: "kek" },
+                    { name: "lol" }
+                ] as Array<Record<string, unknown>>,
+                itemsRight: [
+                    { name: "hah" },
+                    { name: "ahha" }
+                ] as Array<Record<string, unknown>>,
+                itemsBottom: [
+                    { name: "phah" },
+                    { name: "loh" }
+                ] as Array<Record<string, unknown>>,
 
                 list: [
                     { header: "ПРОГРАММА SETAP BIOS", content: "BIOS – это термин, который используется для описания базовой системы ввода/вывода. Она представляет собой промежуточный слой между про-грам¬м¬ной и аппаратной частями компьютера. Часто под BIOS подразумева-ют драйверы устройств. Однако, кроме системной BIOS, существует еще BIOS адаптеров, которые загружаются при запуске системы. Поэтому базо-вая система ввода-вывода – это комбинация всех типов BIOS, а также загру-жаемые драйверы устройств. Часть BIOS содержится в микросхеме на си-стемной плате или платах адаптеров, именно из-за наличия этих микросхем пользователи чаще всего относят BIOS к аппаратной части компьютера." },
