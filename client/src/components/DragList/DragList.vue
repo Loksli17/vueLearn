@@ -1,7 +1,7 @@
 <template>
     <div class="drag-list-container">
         <div class="drag-list-area left">
-            <ul>
+            <ul v-if="computedLeft.length !== 0">
                 <li 
                     class="drag-list-item"
                     v-for="(item, index) in computedLeft" 
@@ -9,17 +9,28 @@
                     draggable="true"
                     @dragstart="onDragStart($event, index, 1)"
                     @dragover="onDragOver"
-                    @dragleave="onDragLeave"
                     @drop="onDrop($event, index, 1)"
+                    @dragleave="onDragLeave"
                     @dragend="onDragEnd" >
                     <slot :item="item">
 
                     </slot>
                 </li>
             </ul>
+            <ul v-else>
+                <li
+                    class="drag-list-empty-item"
+                    @dragstart="onDragStart($event, index, 1)"
+                    @dragover="onDragOver"
+                    @drop="onDrop($event, index, 1)"
+                    @dragleave="onDragLeave"
+                    @dragend="onDragEnd" >
+                    
+                </li>
+            </ul>
         </div>
         <div class="drag-list-area right">
-            <ul>
+            <ul v-if="computedRight.length !== 0">
                 <li 
                     class="drag-list-item"
                     v-for="(item, index) in computedRight" 
@@ -27,12 +38,23 @@
                     draggable="true"
                     @dragstart="onDragStart($event, index, 2)"
                     @dragover="onDragOver"
-                    @dragleave="onDragLeave"
                     @drop="onDrop($event, index, 2)"
+                    @dragleave="onDragLeave"
                     @dragend="onDragEnd" >
                     <slot :item="item">
                         
                     </slot>
+                </li>
+            </ul>
+            <ul v-else>
+                <li
+                    class="drag-list-empty-item"
+                    @dragstart="onDragStart($event, index, 2)"
+                    @dragover="onDragOver"
+                    @drop="onDrop($event, index, 2)"
+                    @dragleave="onDragLeave"
+                    @dragend="onDragEnd" >
+                    
                 </li>
             </ul>
         </div>
@@ -161,6 +183,9 @@
                         }
                     }
                 }
+
+                const target = e.currentTarget as HTMLLIElement;
+                target.classList.remove("drop-zone");
             }
 
             return {
@@ -193,10 +218,25 @@
 
                 .drag-list-item {
                     padding: 10px 20px;
-                    width: 100%;
+                    width: 200px;
+                    height: 60px;
 
-                    background-color: green;
+                    box-sizing: border-box;
+                    border-radius: 10px;
+
+                    background-color: cadetblue;
                     user-select: none;
+                }
+
+                .drag-list-empty-item {
+                    width: 200px;
+                    height: 50px;
+                }
+
+                .drop-zone {
+                    border: 1px dashed white;
+
+                    opacity: .5;
                 }
             }
         }
