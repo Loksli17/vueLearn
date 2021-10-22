@@ -13,27 +13,16 @@
             :show-collapse-button="toggleVal" />
 
         <div class="drag-drop-wrapper">
-            <div class="drag-drop-left">
-                <DragList :model-item-list="itemsLeft">
-                    <template #default="{item}">
-                        <div> {{ item.name }}</div>
-                    </template>
-                </DragList>
-            </div>
-            <div class="drag-drop-right">
-                <DragList :model-item-list="itemsRight">
-                    <template #default="{item}">
-                        <div> {{ item.name }}</div>
-                    </template>
-                </DragList>
-            </div>
-            <div class="drag-drop-right">
-                <DragList :model-item-list="itemsBottom">
-                    <template #default="{item}">
-                        <div> {{ item.name }}</div>
-                    </template>
-                </DragList>
-            </div>
+            <DragList 
+                v-model:left="itemsLeft"
+                v-model:right="itemsRight">
+                <template #default="{item}" >
+                    <div>
+                        <span>{{ item.name }}</span>
+                        <span>{{ item.num }}</span>
+                    </div>
+                </template>
+            </DragList>
         </div>
         <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi interdum vel urna gravida pellentesque. 
@@ -100,13 +89,11 @@
     import { defineComponent }      from 'vue'
     import ScrollToTopButton        from "@/components/FloatingButton/ScrollToTopButton.vue";
     import FloatingButton           from "@/components/FloatingButton/FloatingButton.vue";
-    import DragList                 from "@/components/DragList/DragList.vue";
     import PageProgressBar          from "@/components/PageProgressBar/PageProgressBar.vue";
     import TopMenu                  from "@/components/TopMenu/TopMenu.vue";
     import { LinkButton }           from "@/components/TopMenu/types";
-
+    import DragList                 from "@/components/DragList/DragList.vue";
     import CollapsableList          from "@/components/CollapsableList/CollapsableList.vue";
-
     import Toggle                   from "@/components/Toggle.vue";
 
 
@@ -115,8 +102,8 @@
             FloatingButton,
             ScrollToTopButton,
             PageProgressBar,
-            DragList,
             CollapsableList,
+            DragList,
             TopMenu,
             Toggle
         },
@@ -129,16 +116,12 @@
                 ] as Array<LinkButton>,
 
                 itemsLeft: [
-                    { name: "kek" },
-                    { name: "lol" }
+                    { name: "kek", num: 0 },
+                    { name: "lol", num: 2 }
                 ] as Array<Record<string, unknown>>,
                 itemsRight: [
-                    { name: "hah" },
-                    { name: "ahha" }
-                ] as Array<Record<string, unknown>>,
-                itemsBottom: [
-                    { name: "phah" },
-                    { name: "loh" }
+                    { name: "hah", num: 55 },
+                    { name: "ahha", num: 45 }
                 ] as Array<Record<string, unknown>>,
 
                 list: [

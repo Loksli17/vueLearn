@@ -1,139 +1,203 @@
 <template>
     <div class="drag-list-container">
-        <span>{{ listID }}</span>
-        <ul class="drag-list">
-            <li 
-                class="drag-list-item"
-                v-for="(item, index) in computedList" 
-                :key="index" 
-                draggable="true"
-                @dragstart="onDragStart($event, index)"
-                @dragover="onDragOver($event, index)"
-                @drop="onDrop($event, index)"
-                @dragend="onDragEnd($event, index)">
-                <slot :item="item">
+        <div class="drag-list-area left">
+            <ul>
+                <li 
+                    class="drag-list-item"
+                    v-for="(item, index) in computedLeft" 
+                    :key="`${index} 1`"
+                    draggable="true"
+                    @dragstart="onDragStart($event, index, 1)"
+                    @dragover="onDragOver"
+                    @dragleave="onDragLeave"
+                    @drop="onDrop($event, index, 1)"
+                    @dragend="onDragEnd" >
+                    <slot :item="item">
 
-                </slot>
-            </li>
-        </ul>
+                    </slot>
+                </li>
+            </ul>
+        </div>
+        <div class="drag-list-area right">
+            <ul>
+                <li 
+                    class="drag-list-item"
+                    v-for="(item, index) in computedRight" 
+                    :key="`${index} 2`"
+                    draggable="true"
+                    @dragstart="onDragStart($event, index, 2)"
+                    @dragover="onDragOver"
+                    @dragleave="onDragLeave"
+                    @drop="onDrop($event, index, 2)"
+                    @dragend="onDragEnd" >
+                    <slot :item="item">
+                        
+                    </slot>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
-    import { computed, defineComponent, PropType } from 'vue';
-    import { IDGenerator }                         from "./utils";
+    import { computed, defineComponent, PropType, ref } from 'vue'
 
     export default defineComponent({
-        emits: ["update:modelItemList"],
+
+        name: "drag-list",
+
         props: {
-            modelItemList: {
+            left: {
+                type: Object as PropType<Array<Record<string, unknown>>>,
+                required: true
+            },
+            right: {
                 type: Object as PropType<Array<Record<string, unknown>>>,
                 required: true
             }
         },
-        
-        setup(props, { emit }) {
-            
-            const listID = IDGenerator.getID(); 
 
-            const computedList = computed({
+        // emits: ["update:left", "update:right"],
+        emits: {
+            "update:left": (arr: Array<Record<string, unknown>>) => {
+                return Array.isArray(arr);
+            },
+            "update:right": (arr: Array<Record<string, unknown>>) => {
+                return Array.isArray(arr);
+            },
+        },
+
+        setup(props, { emit }) {
+
+            const dragged = ref(null as { listID: number, val: Record<string, unknown> } | null);
+
+            const computedLeft = computed({
                 get(): Array<Record<string, unknown>> {
-                    return props.modelItemList;
+                    return props.left;
                 },
-                set(newVal: Array<Record<string, unknown>>): void {
-                    emit("update:modelItemList", newVal);
+                set(newVal: Array<Record<string, unknown>>) {
+                    emit("update:left", newVal);
                 }
             });
 
-            const onDragStart = (e: DragEvent, index: number) => {
-                // e.preventDefault();
-                const target = e.target as HTMLLIElement;
-                target.classList.toggle("dragged");
+            const computedRight = computed({
+                get(): Array<Record<string, unknown>> {
+                    return props.right;
+                },
+                set(newVal: Array<Record<string, unknown>>) {
+                    emit("update:right", newVal);
+                }
+            });
+            
+            const onDragStart = (e: DragEvent, index: number, listID: number) => {
 
-                const dataTransfer = e.dataTransfer;
-
-                if (dataTransfer) {
-                    dataTransfer.dropEffect = "copy";
-                    dataTransfer.setData("text/plain", JSON.stringify({ val: computedList.value[index], id: listID }));
+                if (listID === 1) {
+                    dragged.value = {
+                        listID,
+                        val: computedLeft.value[index]
+                    };
+                } else if (listID === 2) {
+                    dragged.value = {
+                        listID,
+                        val: computedRight.value[index]
+                    };
                 }
 
             }
 
-            const onDragOver = (e: DragEvent, index: number) => {
+            const onDragOver = (e: DragEvent) => {
                 e.preventDefault();
-                const dragged = document.querySelector(".dragged") as HTMLLIElement;
 
-                // console.log(dragged, listID, index);
+                const target = e.currentTarget as HTMLLIElement;
+                target.classList.add("drop-zone");
             }
 
-            const onDragEnd = (e: DragEvent, index: number) => {
+            const onDragLeave = (e: DragEvent) => {
                 e.preventDefault();
-                const target = e.target as HTMLLIElement;
 
-                computedList.value.splice(index, 1);
-
-                target.classList.toggle("dragged");
+                const target = e.currentTarget as HTMLLIElement;
+                target.classList.remove("drop-zone");
             }
 
-            const onDrop = (e: DragEvent, index: number) => {
+            const onDragEnd = (e: DragEvent) => {
                 e.preventDefault();
-                const dataTransfer = e.dataTransfer;
 
+                dragged.value === null;
+            }
 
-                if (dataTransfer) {
-                    const dataString = dataTransfer.getData("text/plain");
-                    const data = JSON.parse(dataString) as { id: number, val: Record<string, unknown> };
-                    const { id, val } = data;
+            const onDrop = (e: DragEvent, index: number, listID: number) => {
+                e.preventDefault();
 
-                    if (id === listID) 
-                    {
-                        const foundIndex = computedList.value.findIndex(el => JSON.stringify(el) === JSON.stringify(val));
-
-                        if (foundIndex  !== -1) {
-                            // computedList.value.splice(foundIndex, 1);
-                            computedList.value.splice(index + 1, 0, val);
+                if (dragged.value) {
+                    if (dragged.value.listID === listID) {
+                        if (listID === 1) 
+                        {
+                            const foundIndex = computedLeft.value.indexOf(dragged.value.val);
+                            const temp = computedLeft.value[index];
+                            computedLeft.value[index] = dragged.value.val;
+                            computedLeft.value[foundIndex] = temp;
+                        } 
+                        else if (listID === 2)
+                        {
+                            const foundIndex = computedRight.value.indexOf(dragged.value.val);
+                            const temp = computedRight.value[index];
+                            computedRight.value[index] = dragged.value.val;
+                            computedRight.value[foundIndex] = temp;
                         }
-                    } 
-                    else 
-                    {
-                        computedList.value.splice(index + 1, 0, val);
+                    } else {
+                        if (listID === 1)
+                        {
+                            const removeIndex = computedRight.value.indexOf(dragged.value.val);
+
+                            computedLeft.value.splice(index + 1, 0, dragged.value.val);
+                            computedRight.value.splice(removeIndex, 1);
+                        } 
+                        else if (listID === 2)
+                        {
+                            const removeIndex = computedLeft.value.indexOf(dragged.value.val);
+
+                            computedRight.value.splice(index + 1, 0, dragged.value.val);
+                            computedLeft.value.splice(removeIndex, 1);
+                        }
                     }
-                    dataTransfer.clearData();
                 }
             }
 
             return {
-                computedList,
+                computedLeft,
+                computedRight,
+                dragged,
                 onDragStart,
                 onDragOver,
+                onDragLeave,
                 onDrop,
-                onDragEnd,
-                listID
+                onDragEnd
             }
-
         },
     })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .drag-list-container {
-        .drag-list {
-            list-style: none;
-            padding: none;
+        display: grid;
+        grid-template-columns: repeat(2, max-content);
+        gap: 20px;
 
-            .drag-list-item {
-                padding: 10px 20px;
-                background-color: green;
+        .drag-list-area {
+            ul {
+                list-style: none;
+                margin: 0;
+                display: grid;
+                grid-auto-rows: max-content;
+                row-gap: 5px;
 
-                margin: 5px;
+                .drag-list-item {
+                    padding: 10px 20px;
+                    width: 100%;
 
-                &:hover {
-                    cursor: pointer;
+                    background-color: green;
+                    user-select: none;
                 }
-            }
-
-            .dragged {
-                //
             }
         }
     }
