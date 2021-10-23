@@ -1,61 +1,30 @@
 <template>
     <div class="drag-list-container">
-        <div class="drag-list-area left">
-            <ul v-if="computedLeft.length !== 0">
+        <div class="drag-list-area" v-for="(list, index) in computedList" :key="index">
+            <ul v-if="list.length !== 0">
                 <li 
                     class="drag-list-item"
-                    v-for="(item, index) in computedLeft" 
-                    :key="`${index} 1`"
+                    v-for="(item, i) in list"
+                    :key="`${index} ${i}`"
                     draggable="true"
-                    @dragstart="onDragStart($event, index, 1)"
+                    @dragstart="onDragStart($event, i, index)"
                     @dragover="onDragOver"
-                    @drop="onDrop($event, index, 1)"
+                    @drop="onDrop($event, i, index)"
                     @dragleave="onDragLeave"
-                    @dragend="onDragEnd" >
+                    @dragend="onDragEnd"
+                    >
                     <slot :item="item">
 
                     </slot>
                 </li>
             </ul>
-            <ul v-else>
-                <li
-                    class="drag-list-empty-item"
-                    @dragstart="onDragStart($event, index, 1)"
-                    @dragover="onDragOver"
-                    @drop="onDrop($event, index, 1)"
-                    @dragleave="onDragLeave"
-                    @dragend="onDragEnd" >
-                    
-                </li>
-            </ul>
-        </div>
-        <div class="drag-list-area right">
-            <ul v-if="computedRight.length !== 0">
-                <li 
-                    class="drag-list-item"
-                    v-for="(item, index) in computedRight" 
-                    :key="`${index} 2`"
-                    draggable="true"
-                    @dragstart="onDragStart($event, index, 2)"
-                    @dragover="onDragOver"
-                    @drop="onDrop($event, index, 2)"
-                    @dragleave="onDragLeave"
-                    @dragend="onDragEnd" >
-                    <slot :item="item">
-                        
-                    </slot>
-                </li>
-            </ul>
-            <ul v-else>
-                <li
-                    class="drag-list-empty-item"
-                    @dragstart="onDragStart($event, index, 2)"
-                    @dragover="onDragOver"
-                    @drop="onDrop($event, index, 2)"
-                    @dragleave="onDragLeave"
-                    @dragend="onDragEnd" >
-                    
-                </li>
+            <ul v-else
+                @dragstart="onDragStart($event, 0, index)"
+                @dragover="onDragOver"
+                @drop="onDrop($event, 0, index)"
+                @dragleave="onDragLeave"
+                @dragend="onDragEnd">
+                <li class="drag-list-empty-item"></li>
             </ul>
         </div>
     </div>
@@ -79,7 +48,32 @@
             }
         },
 
-        // emits: ["update:left", "update:right"],
+        // props: {
+        //     lists: {
+        //         type: Object as PropType<Array<Array<Record<string, unknown>>>>,
+        //         required: true
+        //     }
+        // },
+
+        // emits: {
+        //     "update:lists": (arr: Array<Array<Record<string, unknown>>>) => {
+
+        //         let isCorrect = false;
+
+        //         isCorrect = Array.isArray(arr);
+
+        //         if (isCorrect) {
+        //             for (let i = 0; i < arr.length; i++) {
+        //                 isCorrect = Array.isArray(arr[i]);
+
+        //                 if (!isCorrect) break;
+        //             }
+        //         }
+
+        //         return isCorrect;
+        //     }
+        // },
+
         emits: {
             "update:left": (arr: Array<Record<string, unknown>>) => {
                 return Array.isArray(arr);
@@ -93,38 +87,30 @@
 
             const dragged = ref(null as { listID: number, val: Record<string, unknown> } | null);
 
-            const computedLeft = computed({
-                get(): Array<Record<string, unknown>> {
-                    return props.left;
+            const computedList = computed({
+                get(): Array<Array<Record<string, unknown>>> {
+                    return [props.left, props.right];
                 },
-                set(newVal: Array<Record<string, unknown>>) {
-                    emit("update:left", newVal);
+                set(newVal: Array<Array<Record<string, unknown>>>): void {
+                    emit("update:left", newVal[0]);
+                    emit("update:right", newVal[1]);
                 }
             });
 
-            const computedRight = computed({
-                get(): Array<Record<string, unknown>> {
-                    return props.right;
-                },
-                set(newVal: Array<Record<string, unknown>>) {
-                    emit("update:right", newVal);
-                }
-            });
-            
-            const onDragStart = (e: DragEvent, index: number, listID: number) => {
+            // const computedList = computed({
+            //     get(): Array<Array<Record<string, unknown>>> {
+            //         return props.lists;
+            //     },
+            //     set(newVal: Array<Array<Record<string, unknown>>>): void {
+            //         emit("update:lists", newVal);
+            //     }
+            // });
 
-                if (listID === 1) {
-                    dragged.value = {
-                        listID,
-                        val: computedLeft.value[index]
-                    };
-                } else if (listID === 2) {
-                    dragged.value = {
-                        listID,
-                        val: computedRight.value[index]
-                    };
+            const onDragStart = (e: DragEvent, index: number, listIndex: number) => {
+                dragged.value = {
+                    listID: listIndex,
+                    val: computedList.value[listIndex][index]
                 }
-
             }
 
             const onDragOver = (e: DragEvent) => {
@@ -147,40 +133,25 @@
                 dragged.value === null;
             }
 
-            const onDrop = (e: DragEvent, index: number, listID: number) => {
+            const onDrop = (e: DragEvent, index: number, listIndex: number) => {
                 e.preventDefault();
 
-                if (dragged.value) {
-                    if (dragged.value.listID === listID) {
-                        if (listID === 1) 
-                        {
-                            const foundIndex = computedLeft.value.indexOf(dragged.value.val);
-                            const temp = computedLeft.value[index];
-                            computedLeft.value[index] = dragged.value.val;
-                            computedLeft.value[foundIndex] = temp;
-                        } 
-                        else if (listID === 2)
-                        {
-                            const foundIndex = computedRight.value.indexOf(dragged.value.val);
-                            const temp = computedRight.value[index];
-                            computedRight.value[index] = dragged.value.val;
-                            computedRight.value[foundIndex] = temp;
-                        }
-                    } else {
-                        if (listID === 1)
-                        {
-                            const removeIndex = computedRight.value.indexOf(dragged.value.val);
+                if (dragged.value) 
+                {
+                    if (dragged.value.listID === listIndex) 
+                    {
+                        const foundIndex = computedList.value[listIndex].indexOf(dragged.value.val);
+                        const temp = computedList.value[listIndex][index];
 
-                            computedLeft.value.splice(index + 1, 0, dragged.value.val);
-                            computedRight.value.splice(removeIndex, 1);
-                        } 
-                        else if (listID === 2)
-                        {
-                            const removeIndex = computedLeft.value.indexOf(dragged.value.val);
+                        computedList.value[listIndex][index] = dragged.value.val;
+                        computedList.value[listIndex][foundIndex] = temp;
+                    }
+                    else
+                    {
+                        const removeIndex = computedList.value[listIndex === 0 ? 1 : 0].indexOf(dragged.value.val);
 
-                            computedRight.value.splice(index + 1, 0, dragged.value.val);
-                            computedLeft.value.splice(removeIndex, 1);
-                        }
+                        computedList.value[listIndex].splice(index + 1, 0, dragged.value.val);
+                        computedList.value[listIndex === 0 ? 1 : 0].splice(removeIndex, 1);
                     }
                 }
 
@@ -189,8 +160,7 @@
             }
 
             return {
-                computedLeft,
-                computedRight,
+                computedList,
                 dragged,
                 onDragStart,
                 onDragOver,
