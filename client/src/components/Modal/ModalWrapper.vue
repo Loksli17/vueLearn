@@ -1,18 +1,33 @@
 <template>
     <teleport to="body">
-        <div class="modal-wrapper">
-            <div class="modal-wrapper-background" @click="clickedOnBackground"></div>
-            <div class="modal-wrapper-body">
-                <slot>
+        <template v-if="transitionName.length !== 0">
+            <transition :name="transitionName">
+                <div class="modal-wrapper" :class="modalWrapperClass" v-if="showModalComputed">
+                    <div class="modal-wrapper-background" :class="modalBackgroundClass" @click="clickedOnBackground"></div>
+                    <div class="modal-wrapper-body" :class="modalBodyClass">
+                        <slot>
 
-                </slot>
+                        </slot>
+                    </div>
+                </div>
+            </transition>
+        </template>
+        <template v-else>
+            <div class="modal-wrapper" :class="modalWrapperClass" v-if="showModalComputed">
+                <div class="modal-wrapper-background" :class="modalBackgroundClass" @click="clickedOnBackground"></div>
+                <div class="modal-wrapper-body" :class="modalBodyClass">
+                    <slot>
+
+                    </slot>
+                </div>
             </div>
-        </div>
+        </template>
     </teleport>
 </template>
 
 <script lang="ts">
-    import { defineComponent } from 'vue'
+    import { computed, defineComponent, onBeforeUnmount, onMounted } from 'vue';
+
     export default defineComponent({
         name: "modal-wrapper",
 
@@ -22,23 +37,82 @@
             showModal: {
                 type:     Boolean,
                 required: true
+            },
+            /**
+             * Name of the transition
+             */
+            transitionName: {
+                type: String,
+                default: ""
+            },
+            /**
+             * Custom class for the modal wrapper
+             */
+            modalWrapperClass: {
+                type: String,
+                default: ""
+            },
+            /**
+             * Custom class for the modal background
+             */
+            modalBackgroundClass: {
+                type: String,
+                default: ""
+            },
+            /**
+             * Custom class for the modal body
+             */
+            modalBodyClass: {
+                type: String,
+                default: ""
             }
         },
 
-        mounted() {
-            document.body.style.overflow = "hidden";
-        },
+        setup(props, { emit }) {
 
-        beforeUnmount() {
-            document.body.style.overflow = "initial";
-        },
-        
-        methods: {
-            clickedOnBackground() {
+            const showModalComputed = computed({
+                get(): boolean {
+                    return props.showModal;
+                },
+                set(newVal: boolean): void {
+                    emit("update:show-modal", newVal);
+                }
+            })
+            
+            onMounted(() => {
+                document.body.style.overflow = "hidden";
+            });
+
+            onBeforeUnmount(() => {
                 document.body.style.overflow = "initial";
-                this.$emit("update:show-modal", false);
+            });
+
+            const clickedOnBackground = () => {
+                document.body.style.overflow = "initial";
+                showModalComputed.value = false;
+            }
+
+
+            return {
+                showModalComputed,
+                clickedOnBackground
             }
         }
+
+        // mounted() {
+        //     document.body.style.overflow = "hidden";
+        // },
+
+        // beforeUnmount() {
+        //     document.body.style.overflow = "initial";
+        // },
+        
+        // methods: {
+        //     clickedOnBackground() {
+        //         document.body.style.overflow = "initial";
+        //         this.$emit("update:show-modal", false);
+        //     }
+        // }
     })
 </script>
 

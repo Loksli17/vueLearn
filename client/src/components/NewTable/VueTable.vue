@@ -15,6 +15,7 @@
                 :row="row"
                 :custom-cells="customCells"
                 :selectable="config.selectableRows"
+                @toggled-selection="toggleSelection"
                  />
         </tbody>
         <tfoot class="vue-table-footer">
@@ -30,6 +31,8 @@
     import TableRow                      from "./VueTableRow.vue";
     import { Column,TableColumnHandlers, TableConfig, SortOrder } from "./types";
 
+    type Row = Record<string, unknown>;
+
     export default defineComponent({
 
         components: {
@@ -40,12 +43,16 @@
 
         props: {
             rowData: {
-                type: Object as PropType<Array<Record<string, unknown>>>,
+                type: Object as PropType<Array<Row>>,
                 required: true
             },
             columns: {
                 type: Object as PropType<Array<Column>>,
                 required: true
+            },
+            selectedRows: {
+                type: Object as PropType<Array<Row>>,
+                default: () => ({})
             },
             columnHandlers: {
                 type: Object as PropType<Array<TableColumnHandlers>>
@@ -60,7 +67,7 @@
             }
         },
 
-        setup(props) {
+        setup(props, { emit }) {
             const 
                 selectedField = ref(""),
                 sortOrder     = ref(SortOrder.ASCENDING),
@@ -68,15 +75,26 @@
 
             onMounted(() => {
                 selectedField.value = props.columns[0].fieldName;
+            });
+
+            const computedSelected = computed({
+                get(): Array<Row> {
+                    return props.selectedRows;
+                },
+                set(newVal: Array<Row>) {
+                    emit("update:modelSelectedRows", newVal);
+                }
             })
 
             const rowsWithOnlyRequiredFields = computed(() => {
-                const arr: Array<Record<string, unknown>> = [];
+                const arr: Array<Row> = [];
 
-                for (const row of props.rowData) {
+                for (const row of props.rowData) 
+                {
                     const rowWithRequiredFields = {} as typeof row;
 
-                    for (const col of props.columns) {
+                    for (const col of props.columns) 
+                    {
                         const fieldName: keyof typeof row = col.fieldName;
 
                         if (!(fieldName in row)) continue;
@@ -91,21 +109,24 @@
             });
 
             const sortedRows = computed(() => {
-                let arr: Array<Record<string, unknown>> = [];
+                let arr: Array<Row> = [];
 
-                if (props.config.sortable) {
-                    const comparator = (row1: Record<string, unknown>, row2: Record<string, unknown>): number => {
+                if (props.config.sortable)
+                {
+                    const comparator = (row1: Row, row2: Row): number => {
                         const fieldName = props.columns.find(col => col.fieldName === selectedField.value)?.fieldName;
                         let res = 0;
 
-                        if (fieldName) {
+                        if (fieldName) 
+                        {
                             const
                                 val1 = row1[fieldName],
                                 val2 = row2[fieldName],
                                 columnHandler = props.columnHandlers?.find(comp => 
                                     comp.fieldName === fieldName);
 
-                            if (columnHandler && columnHandler.columnComparator) {
+                            if (columnHandler && columnHandler.columnComparator) 
+                            {
                                 return columnHandler.columnComparator(val1, val2);
                             }
 
@@ -124,7 +145,9 @@
                     }
 
                     arr = rowsWithOnlyRequiredFields.value.slice().sort(comparator);
-                } else {
+                }
+                else
+                {
                     arr = rowsWithOnlyRequiredFields.value;
                 }
 
@@ -132,20 +155,25 @@
             });
 
             const displayableRows = computed(() => {
-                const arr: Array<Record<string, unknown>> = [];
+                const arr: Array<Row> = [];
 
-                for (const row of sortedRows.value) {
+                for (const row of sortedRows.value) 
+                {
                     const newRow = {} as typeof row;
 
-                    for (const col of props.columns) {
+                    for (const col of props.columns) 
+                    {
                         const fieldName = col.fieldName;
 
                         const columnHandler = props.columnHandlers?.find(handler =>
                             handler.fieldName === fieldName);
 
-                        if (columnHandler && columnHandler.columnHandler) {
+                        if (columnHandler && columnHandler.columnHandler) 
+                        {
                             newRow[fieldName] = columnHandler.columnHandler(row[fieldName]);
-                        } else {
+                        } 
+                        else 
+                        {
                             newRow[fieldName] = row[fieldName];
                         }
                     }
@@ -161,8 +189,10 @@
                     component: ComponentPublicInstance
                     fieldToGetDataFrom?: string }> = [];
 
-                for (const col of props.columns) {
-                    if (col.customCell) {
+                for (const col of props.columns) 
+                {
+                    if (col.customCell) 
+                    {
                         arr.push({
                             fieldName: col.fieldName,
                             component: col.customCell.cellComponent,
@@ -174,10 +204,20 @@
                 return arr;
             });
 
+            const toggleSelection = (val: {isSelected: boolean, row: Row}) => {
+                // console.log(val);
+                if (val.isSelected) {
+                    computedSelected.value.push(val.row);
+                } else {
+                    computedSelected.value = computedSelected.value.filter(row => row != val.row);
+                }
+            } 
+
             return {
                 displayableRows,
                 customCells,
-                selectAll
+                selectAll,
+                toggleSelection
             }
         },
     })

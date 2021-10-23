@@ -25,7 +25,9 @@
         <div class="section">
             <div>
                 <button @click="showPopup = true">popup</button>
-                <ModalWrapper v-model:show-modal="showPopup" v-if="showPopup">
+                <ModalWrapper 
+                    v-model:show-modal="showPopup" 
+                    :transition-name="'modal-zoom'">
                     <div>
                         <h1>header</h1>
                         <div>
@@ -198,3 +200,38 @@
     });
 
 </script>
+
+<style lang="scss">
+
+    // this is how we animate the modal window
+    .modal-wrapper-background {
+        opacity: 1;
+    }
+    .modal-wrapper-body {
+        transform: scale(1);
+    }
+
+    .modal-zoom-enter-active,
+    .modal-zoom-leave-active {
+        transition: all .3s;
+
+        .modal-wrapper-background {
+            transition: opacity .3s;
+        }
+
+        .modal-wrapper-body {
+            transition: transform .3s;
+        }
+    }
+
+    .modal-zoom-enter-from,
+    .modal-zoom-leave-to {
+        .modal-wrapper-background {
+            opacity: 0;
+        }
+
+        .modal-wrapper-body {
+            transform: scale(0);
+        }
+    }
+</style>

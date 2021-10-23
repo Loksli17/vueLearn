@@ -20,10 +20,10 @@
                 :row-data="selectedRows" />
 
             
-<!--        <Table 
+            <!-- <VueTable 
                 :columns="tableHeader" 
                 :config="tableConfig"
-                :row-data="books"
+                :row-data="selectedRows"
                 :column-handlers="tableColumnHandlers" /> -->
         </div>
 
@@ -60,7 +60,10 @@
     import Pagination                          from '@/components/Pagination/Pagination.vue';
     import InRange                             from "@/components/InRange.vue"
     import Table                               from "@/components/table/Table.vue";
+
+    // import VueTable                            from "@/components/NewTable/VueTable.vue";
     
+
     import { Column, TableColumnHandler, SortOrder,TableConfig } from "@/components/table/types";
 
 
@@ -68,6 +71,7 @@
 
         components: {
             Table,
+            // VueTable,
             FloatingButton,
             AddButton,
             Pagination,

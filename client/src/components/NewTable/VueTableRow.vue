@@ -1,7 +1,7 @@
 <template>
     <tr>
         <td v-if="selectable">
-            <Checkbox v-model="isSelected" />
+            <Checkbox v-model="isSelected" @change="toggledSelection" />
         </td>
         <template v-for="(value, name) in row" :key="name">
             <td v-if="!customCells[name]">
@@ -38,11 +38,19 @@
                 default: undefined
             }
         },
+
+        emits: ["toggled-selection"],
+
         setup(props, { emit }) {
             const isSelected = ref(false);
 
+            const toggledSelection = () => {
+                emit("toggled-selection", { isSelected: isSelected.value, row: props.row });
+            }
+
             return {
-                isSelected
+                isSelected,
+                toggledSelection
             }
         }
     })
