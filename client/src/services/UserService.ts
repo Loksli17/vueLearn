@@ -8,10 +8,15 @@ const normalUser = (user: Record<string, any>): Record<string, any> => {
     user.animal = `id: ${user.Animal.id}; name: ${user.Animal.name}`;
   
     if(user.Roles != undefined) {
-        user.roles = user.Roles.map((role: Record<string, any>) => {
-            return role.name;
-        });
-        user.roles = user.roles.join('; ');
+
+        if(!user.roles){
+            user.roles = " --- ";
+        } else {
+            user.roles = user.Roles.map((role: Record<string, any>) => {
+                return role.name;
+            });
+            user.roles = user.roles.join('; ');
+        }
     }
 
     delete user.AnimalId; delete user.Animal; delete user.Roles;

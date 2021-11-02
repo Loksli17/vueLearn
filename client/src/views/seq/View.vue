@@ -41,7 +41,7 @@
             return {
                 id    : 0 as number,
                 user  : {} as Record<string, any> | null,
-                fields: ['id', 'animal', 'login', {email: 'E-mail'}, 'avatar'],
+                fields: ['id', 'animal', 'login', {email: 'E-mail'}, 'avatar', 'roles'],
             }
         },
 

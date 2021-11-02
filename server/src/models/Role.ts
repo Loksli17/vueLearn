@@ -6,7 +6,6 @@ interface RoleAttribites {
     name: string; 
 }
 
-
 export interface RoleCreationAttributes extends Optional<RoleAttribites, 'id'> {}
 
 
@@ -31,8 +30,8 @@ Role.init({
                 msg:  'This field must be not empty',
             },
             isUnique: function(value: string, next: any){
-                Role.findOne({where: {name: value}}).then((user: Role | null) => {
-                    if(user != null && user.id != this.id){
+                Role.findOne({where: {name: value}}).then((role: Role | null) => {
+                    if(role != null && role.id != this.id){
                         next('This role already has been used');
                     }else{
                         next();
@@ -48,6 +47,7 @@ Role.init({
     sequelize,
     timestamps: false,
 });
+
 
 export default Role;
 
