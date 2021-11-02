@@ -16,13 +16,8 @@
 
         <div class="add-line">
             <router-link :to="'/'">Go home</router-link>
-        </div>
+            <router-link class="create-btn" :to="'/crud/create'">Create item</router-link>
 
-        <div class="buttons-wrap">
-            <router-link :to="'/crud/create'">Create item</router-link>
-        </div>
-
-        <div class="section">
             <div>
                 <button @click="showPopup = true">popup</button>
                 <ModalWrapper 
@@ -37,6 +32,9 @@
                     </div>
                 </ModalWrapper>
             </div>
+        </div>
+
+        <div class="section">
 
             <div class="table-wrap">
                 <Table
@@ -202,6 +200,21 @@
 </script>
 
 <style lang="scss">
+
+    @import "@/assets/scss/button.scss";
+    @import "@/assets/scss/add-line.scss";
+
+    .add-line{
+        @extend %add-line;
+
+        a{
+            @extend %button;
+        }
+
+        .create-btn{
+            @extend %create-button;
+        }
+    }
 
     // this is how we animate the modal window
     .modal-wrapper-background {

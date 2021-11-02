@@ -71,6 +71,25 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/seq/Edit.vue'),
     },
 
+
+    // ! ---seqCrud animals---
+    {
+        path: '/animals',
+        name: 'Animal',
+        component: () => import('../views/animal/Index.vue'),
+    },
+    {
+        path: '/animals/create',
+        name: 'Animal-create',
+        component: () => import('../views/animal/Create.vue'),
+    },
+    {
+        path: '/animals/:id/edit',
+        name: 'Animal-edit',
+        component: () => import('../views/animal/Edit.vue'),
+    },
+
+
     // ! ---Books---
     {
         path: '/books-crud',

@@ -3,7 +3,7 @@
 
         <div class="add-line">
             <router-link :to="'/'">Go home</router-link>
-            <router-link :to="'/books-crud/create'">Create book</router-link>
+            <router-link class="create-btn" :to="'/books-crud/create'">Create book</router-link>
         </div>
 
         <div>
@@ -151,4 +151,18 @@
 
 <style lang="scss">
     @import "@/assets/scss/checkbox/checkbox.scss";
+    @import "@/assets/scss/button.scss";
+    @import "@/assets/scss/add-line.scss";
+
+    .add-line{
+        @extend %add-line;
+
+        a{
+            @extend %button;
+        }
+
+        .create-btn{
+            @extend %create-button;
+        }
+    }
 </style>

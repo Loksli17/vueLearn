@@ -18,10 +18,7 @@
 
         <div class="add-line">
             <router-link :to="'/'">Go home</router-link>
-        </div>
-
-        <div class="buttons-wrap">
-            <router-link :to="'/seq-crud/create'">Create item</router-link>
+            <router-link class="create-btn" :to="'/seq-crud/create'">Create item</router-link>
         </div>
 
         <div class="section">
@@ -143,3 +140,21 @@
 
 
 </script>
+
+
+<style lang="scss">
+    @import "@/assets/scss/button.scss";
+    @import "@/assets/scss/add-line.scss";
+
+    .add-line{
+        @extend %add-line;
+
+        a{
+            @extend %button;
+        }
+
+        .create-btn{
+             @extend %create-button;
+        }
+    }
+</style>

@@ -1,0 +1,28 @@
+%button{
+    max-width: 100px;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: rgb(102, 102, 235);
+    color:  #fff;
+    text-decoration: none;
+    font-size: 17px;
+    text-align: center;
+    
+    &:hover{
+        transition: .4s;
+        background-color: rgb(146, 146, 233);
+        border-radius: 0px;
+    }
+}
+
+%create-button{
+    @extend %button;
+    background-color: rgb(78, 224, 85);
+
+    &:hover{
+        transition: .4s;
+        background-color: rgb(140, 228, 144);
+        border-radius: 0px;
+    }
+}
