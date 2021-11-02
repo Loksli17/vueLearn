@@ -112,6 +112,14 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/books/Create.vue'),
     },
 
+
+    //! ---Video---
+    {
+        path: '/videos',
+        name: 'Video',
+        component: () => import('../views/video/Index.vue'),
+    }
+
 ];
 
 

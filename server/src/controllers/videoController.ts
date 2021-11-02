@@ -4,7 +4,7 @@ import ErrorMessage                   from "../libs/error";
 
 export default class VideoController {
 
-    private static router: Router;
+    private static router: Router = Router();
 
 
     public static async getVideos(req: Request, res: Response){

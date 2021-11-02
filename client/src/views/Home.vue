@@ -38,6 +38,7 @@
                     {route: '/long',              img: 'long-page.svg',    text: 'Page for test scrollToTop component',                                                       header: 'Scroll To Top component'},
                     {route: '/books-crud?page=1', img: 'book-crud.svg',    text: 'CRUD from BlackLirium',                                                                     header: 'Book'},
                     {route: '/animals?page=1',    img: 'animals-crud.png', text: 'Crud fo testing components',                                                                header: 'Animals'},
+                    {route: '/videos',            img: 'video.png',        text: 'App for video player. No use pagination THIS',                                              header: 'Videos'},
                 ] as Array<linkObject>,
             }
         },
