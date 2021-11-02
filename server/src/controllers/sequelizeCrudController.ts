@@ -310,6 +310,22 @@ export default class SequelizeCrudController{
     }
 
 
+    public static async getAnimalsAmount(req: Request, res: Response){
+
+        let amount: number = 0;
+        
+        try {
+            amount = await Animal.count();
+        } catch (error) {
+            res.status(400).send({error: ErrorMessage.db()});
+            console.error(error);
+            return;
+        }
+        
+        res.status(200).send({amount: amount});
+    } 
+
+
     public static async removeAnimal(req: Request, res: Response){
 
         let 
@@ -372,19 +388,20 @@ export default class SequelizeCrudController{
 
     public static routes(){
 
-        this.router.post(  '/',              this.getUsers);
-        this.router.post(  '/amount',        this.getAmountUsers);
-        this.router.post(  '/animals',       this.getAllAnimals);
-        this.router.post(  '/avatar',        this.uploadAvatar);
-        this.router.post(  '/page-animals',  this.getAnimalsPage);
-        this.router.post(  '/:id',           this.getUser);
+        this.router.post(  '/',                  this.getUsers);
+        this.router.post(  '/amount',            this.getAmountUsers);
+        this.router.post(  '/animals',           this.getAllAnimals);
+        this.router.post(  '/avatar',            this.uploadAvatar);
+        this.router.post(  '/page-animals',      this.getAnimalsPage);
+        this.router.post(  '/amount-animals',    this.getAnimalsAmount);
+        this.router.post(  '/:id',               this.getUser);
 
         this.router.delete('/remove-animal/:id', this.removeAnimal);
         this.router.delete('/:id/remove',        this.removeUser);
         
-        this.router.put(   '/create-animal', this.createAnimal);
-        this.router.put(   '/add',           this.createUser);
-        this.router.put(   '/:id/edit',      this.editUser);
+        this.router.put(   '/create-animal',     this.createAnimal);
+        this.router.put(   '/add',               this.createUser);
+        this.router.put(   '/:id/edit',          this.editUser);
 
         return this.router;
     }

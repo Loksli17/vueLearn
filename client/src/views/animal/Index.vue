@@ -31,7 +31,7 @@
         data(){
             return {
                 animals      : [] as Array<Record<string, any>>,
-                amountAnimals: 2 as number,
+                amountAnimals: 0 as number,
                 take         : 10 as number,
                 skip         : 0 as number,
 
@@ -52,11 +52,18 @@
         
         async mounted(){
             await this.getAnimals({take: this.take, skip: this.skip});
+            await this.amount();
         },
 
+
         methods: {
+
             async getAnimals(data: {take: number, skip: number}){
                this.animals = await AnimalService.getAnimals(data);
+            },
+
+            async amount(){
+                this.amountAnimals = await AnimalService.amount();
             },
 
             async removeAnimal(id: number){

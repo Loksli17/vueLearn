@@ -19,6 +19,21 @@ export default class AnimalService extends Service {
     }
 
 
+    public static async amount(){
+
+        const response: AxiosResponse | void = await axios.post('/seq/amount-animals')
+        .catch((reason) => {
+            this.errorMessage(reason.response.status);
+            console.error(reason);
+        });
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
+        return response.data.amount;
+    }
+
+
     public static async removeOne(id: number){
         
         const response: AxiosResponse | void = await axios.delete(`/seq/remove-animal/${id}`)
