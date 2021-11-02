@@ -19,7 +19,6 @@
             <div v-if="nextPage">
                 <PaginationPage :page="nextPage" @clicked="setCurrentPageEvt(nextPage.link)" :url="url" />    
             </div>
-
             <div v-if="lastPage">
                 <PaginationPage :page="lastPage" @clicked="setCurrentPageEvt(lastPage.link)" :url="url" />    
             </div>
@@ -32,6 +31,11 @@
     import { defineComponent } from 'vue';
     import PaginationPage      from './PaginationPage.vue';
     import { Page }            from './types';
+
+    
+    export function countSkip(getParam: number, take: number){
+        return (Number(getParam) - 1) * take;
+    }
     
 
     export default defineComponent({
@@ -90,7 +94,7 @@
             },
         },
 
-        emits: ["update:take", "update:skip", "page-change"],
+        emits: ["update:take", "update:skip", "page-change", "query"],
         
         data: function(){
             return {
@@ -122,6 +126,7 @@
         computed: {
             localSkip: {
                 get(): number {
+                    console.log('get');
                     return this.skip;
                 },
                 set(val: number): void {
@@ -149,9 +154,13 @@
                 this.activePageClassData = this.activePageClass == undefined ? 'active-page' : this.activePageClass;
 
                 this.localCurrentPage = this.getParam > this.maxPage ? this.maxPage : this.getParam;
-                this.localSkip        = this.take * (this.localCurrentPage - 1);
 
-                console.log('pagination-skip', this.skip, this.localSkip, this.localCurrentPage, this.take, this.take * (this.localCurrentPage - 1));
+                // this.$emit('update:skip', this.take * (this.localCurrentPage - 1));
+                
+                // // this.skip             = this.take * (this.localCurrentPage - 1);
+                // // this.localSkip        = this.take * (this.localCurrentPage - 1);
+
+                console.log('pagination-skip', this.skip, this.localSkip, this.localCurrentPage, this.take * (this.localCurrentPage - 1));
             },
 
             render: function(): void{
@@ -177,7 +186,7 @@
                     first: number = 0,
                     last : number = 0;
                
-                if(Number(this.localCurrentPage) + (this.pageGap / 2) >= this.maxPage){
+                if(Number(this.localCurrentPage) + (this.pageGap / 2) >= this.maxPage) {
                     last  = this.maxPage;
                     first = this.maxPage - this.pageGap + 1;
                 }else if(Number(this.localCurrentPage) - (this.pageGap / 2) <= 1){
@@ -196,7 +205,7 @@
             },
 
 
-            createPages: function(first: number, last: number): Array<Page>{
+            createPages: function(first: number, last: number): Array<Page> {
                 if(this.elementAmount <= this.take){return [];}
                 
                 const pages: Array<Page> = [];
@@ -214,7 +223,7 @@
             },
 
 
-            createStepPages: function(): {next: Page | undefined; prev: Page | undefined}{
+            createStepPages: function(): {next: Page | undefined; prev: Page | undefined} {
                 
                 if(this.elementAmount <= this.take){return {next: undefined, prev: undefined};}
                 

@@ -56,14 +56,14 @@
 
 
 <script lang="ts">
-    import { defineComponent } from 'vue';
-    import Table               from '../../components/table/Table.vue';
-    import Pagination          from '../../components/Pagination/Pagination.vue';
-    import { Action, Column }  from '../../components/table/types';
-    import UserService         from '../../services/UserService';
-    import FlashMessageData    from '../../libs/flashMessage';
-    import SideMenu            from "@/components/sideMenu/SideMenu.vue";
-    import { Button }          from "@/components/sideMenu/types";
+    import { defineComponent }       from 'vue';
+    import Table                     from '../../components/table/Table.vue';
+    import Pagination, { countSkip } from '../../components/Pagination/Pagination.vue';
+    import { Action, Column }        from '../../components/table/types';
+    import UserService               from '../../services/UserService';
+    import FlashMessageData          from '../../libs/flashMessage';
+    import SideMenu                  from "@/components/sideMenu/SideMenu.vue";
+    import { Button }                from "@/components/sideMenu/types";
 
 
     export default defineComponent({
@@ -113,10 +113,9 @@
             // ? i want get computed skip from pagination component, case count skip in VIEW is not good idea!!!
             // ? for this idea we should use ref and create getSkip method from pagination.
             
-            // this.skip = (Number(this.$route.query.page) - 1) * 10;
+            this.skip = countSkip(Number(this.$route.query.page), this.take);
             await this.getUsers({ take: this.take, skip: this.skip });
             await this.getUsersAmount();
-            console.log(this.skip);
         },
 
 
@@ -137,7 +136,7 @@
                 this.getUsers({ take: this.take, skip: this.skip });
 
                 this.$flashMessage.show(FlashMessageData.successMessage('Removing of user', `User with id = ${id} was removed`));
-            }
+            },
         }
 
     });
