@@ -8,10 +8,7 @@
         <div class="add-line">
             <router-link :to="'/'">Go home</router-link>
             <router-link :to="'/crud'">Go index-crud</router-link>
-        </div>
-
-        <div class="buttons-wrap">
-            <router-link :to="'/crud/create'">Create item</router-link>
+            <router-link class="create-btn" :to="'/crud/create'">Create item</router-link>
         </div>
 
         <div class="table-wrap">
@@ -78,6 +75,8 @@
 <style lang="scss">
 
     @import "../../assets/scss/page-progress-bar/page-progress-bar.scss";
+    @import "@/assets/scss/button.scss";
+    @import "@/assets/scss/add-line.scss";
     
     .img-wrap{
         width: 70%;
@@ -90,5 +89,17 @@
 
     .text{
         font-size: 26px;
+    }
+
+    .add-line{
+        @extend %add-line;
+
+        a{
+            @extend %button;
+        }
+
+        .create-btn{
+            @extend %create-button;
+        }
     }
 </style>

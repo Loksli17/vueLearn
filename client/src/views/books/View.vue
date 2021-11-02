@@ -1,6 +1,6 @@
 <template>
     <div class="books-view">
-        <div>\
+        <div>
             <GridView 
                 :data="book" 
                 :fields="fields"
