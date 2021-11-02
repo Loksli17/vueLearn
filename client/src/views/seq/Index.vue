@@ -25,7 +25,7 @@
         </div>
 
         <div class="section">
-
+            
             <div class="table-wrap">
                 <Table
                     v-if="users"

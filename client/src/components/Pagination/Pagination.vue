@@ -114,8 +114,6 @@
 
         watch: {
             elementAmount: function(): void {
-
-                //! think about restructed of this methods
                 this.init();
                 this.render();
                 this.$emit("update:take", this.take);
@@ -126,11 +124,9 @@
         computed: {
             localSkip: {
                 get(): number {
-                    console.log('get');
                     return this.skip;
                 },
                 set(val: number): void {
-                    console.log('setter:', val);
                     this.$emit("update:skip", val);
                 }
             },
@@ -154,13 +150,6 @@
                 this.activePageClassData = this.activePageClass == undefined ? 'active-page' : this.activePageClass;
 
                 this.localCurrentPage = this.getParam > this.maxPage ? this.maxPage : this.getParam;
-
-                // this.$emit('update:skip', this.take * (this.localCurrentPage - 1));
-                
-                // // this.skip             = this.take * (this.localCurrentPage - 1);
-                // // this.localSkip        = this.take * (this.localCurrentPage - 1);
-
-                console.log('pagination-skip', this.skip, this.localSkip, this.localCurrentPage, this.take * (this.localCurrentPage - 1));
             },
 
             render: function(): void{
@@ -249,20 +238,6 @@
                 
             },
 
-            changeGetParam: function(pageNumber: number){
-                //todo: i need in best way of this shit!! it way doesn't work with prev and next page buttons
-                //? may be user watch?
-                this.$router.push(`${this.url}?page=${pageNumber}`);
-            },
-
-            getCurrentPage: function(){
-                return this.localCurrentPage;
-            },
-            
-
-            getSkip: function(){
-                return this.skip;
-            }
         },
     });
 </script>
