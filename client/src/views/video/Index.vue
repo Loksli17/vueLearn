@@ -6,7 +6,7 @@
 
         <div class="add-line">
             <router-link :to="'/'">Go home</router-link>
-            <button class="create-btn" @click="showPopup = true">Create item</button>
+            <button class="create-btn" @click="showPopupUpload = true">Create item</button>
         </div>
 
         <div class="section">
@@ -16,7 +16,7 @@
                     <div class="id">{{video.id}}</div>
                     <div class="name">{{video.name}}</div>
                     <div class="description">{{video.shortDescription}}</div>
-                    <button class="show-video-player">Play</button>
+                    <button @click="showPlayer(video)" class="show-video-player">Play</button>
                 </div>
 
             </div>
@@ -24,7 +24,17 @@
         </div>
 
         <ModalWrapper 
-            v-model:show-modal="showPopup" 
+            v-model:show-modal="showPopupPlay" 
+            :transition-name="'modal-zoom'">
+            
+            <h1>{{playingVideo.id}} / {{playingVideo.name}}</h1>
+
+            <div></div>
+
+        </ModalWrapper>
+
+        <ModalWrapper 
+            v-model:show-modal="showPopupUpload" 
             :transition-name="'modal-zoom'">
             
             <h1>Video upload</h1>
@@ -67,8 +77,10 @@
 
         data(){
             return {
-                videos   : [] as Array<Record<string, any>>,
-                showPopup: false as boolean,
+                videos         : [] as Array<Record<string, any>>,
+                showPopupUpload: false as boolean,
+                showPopupPlay  : false as boolean,
+                playingVideo   : {} as Record<string, any>,
 
                 types   : [] as Array<Record<string, any>>,
                 files   : [] as Array<AddFile>,
@@ -94,6 +106,11 @@
                 });
 
             },
+
+            showPlayer(video: Record<string, any>) {
+                this.showPopupPlay = true;
+                this.playingVideo  = video;
+            }
         }
 
     });
