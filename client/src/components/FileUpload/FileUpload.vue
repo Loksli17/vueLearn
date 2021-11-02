@@ -250,7 +250,7 @@
 
                 const
                     imagesTypes     : Array<string>        = ['.svg', '.jpeg', '.jpg', '.png'],
-                    regExpType      : RegExp               = /\.[a-zA-Z]+$/gi,
+                    regExpType      : RegExp               = /\.[a-zA-Z0-9]+$/gi,
                     dataFile        : string | ArrayBuffer = await readFile(addFile.file),
                     regExpTypeResult: Array<string> | null = addFile.file.name.match(regExpType),
                     clearFileName   : string               = addFile.file.name.slice(0, addFile.file.name.indexOf('.'));
