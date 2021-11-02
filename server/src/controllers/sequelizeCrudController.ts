@@ -125,7 +125,6 @@ export default class SequelizeCrudController{
             return;
         }
         
-
         res.status(200).send({id: userId});
     }
 
@@ -234,7 +233,6 @@ export default class SequelizeCrudController{
             const errors: Record<string, string> = {};
             validationErr.errors.forEach((item: ValidationErrorItem) => { if(item.path) errors[item.path] = item.message });
             res.status(422).send({error: ErrorMessage.db(), validationErrors: errors});
-            return
         }
         
         res.status(200).send({msg: `User was created successfully. Id of User = ${user.id}`});
@@ -265,7 +263,7 @@ export default class SequelizeCrudController{
     }
 
 
-    public static async getAnimals(req: Request, res: Response) {
+    public static async getAllAnimals(req: Request, res: Response) {
 
         let animals: Array<Animal> = [];
 
@@ -279,16 +277,114 @@ export default class SequelizeCrudController{
     }
 
 
+    public static async getAnimalsPage(req: Request, res: Response){
+
+        interface QueryData {
+            take: number;
+            skip: number;
+        }
+
+        let
+            animals   : Array<Animal>          = [],
+            QueryData : QueryData              = req.body as any,
+            dataErrors: Array<keyof QueryData> = [];
+
+        dataErrors = Query.checkData(QueryData, ['skip', 'take']);
+
+        if(dataErrors.length){
+            res.status(400).send({error: ErrorMessage.dataNotSended(dataErrors[0])});
+            return;
+        }
+
+        try {
+            animals = await Animal.findAll({ 
+                limit: Number(QueryData.take), offset: Number(QueryData.skip) 
+            });
+        } catch (error) {
+            res.status(400).send({error: ErrorMessage.db()});
+            console.error(error);
+            return;
+        }
+
+        res.status(200).send({animals: animals});
+    }
+
+
+    public static async removeAnimal(req: Request, res: Response){
+
+        let 
+            id      : number = Number(req.params.id),
+            animalId: number;
+
+        if(id == undefined) {
+            res.status(400).send({error: ErrorMessage.dataNotSended('id')});
+            return;
+        }
+
+        try {
+            animalId = await Animal.destroy({where: {id: id}});
+        } catch (error) {
+            res.status(400).send({error: ErrorMessage.db()});
+            console.error(error);
+            return;
+        }
+        
+        res.status(200).send({id: animalId});
+    }
+
+
+    public static async createAnimal(req: Request, res: Response){
+
+        interface QueryData {
+            animal: {
+                name: string;
+                type: string;
+            }
+        }
+
+        let
+            animal    : Animal                 = new Animal(),
+            dataErrors: Array<keyof QueryData> = [],
+            QueryData : QueryData              = req.body as any;
+
+        dataErrors = Query.checkData(QueryData, ['animal']);
+
+        if(dataErrors.length) {
+            res.status(400).send({msg: ErrorMessage.dataNotSended(dataErrors[0])});
+            return;
+        }
+
+        animal = Animal.build(QueryData.animal);
+
+        try {
+            await animal.validate();
+            await animal.save();
+        } catch (validationErr: any) {
+            const errors: Record<string, string> = {};
+            validationErr.errors.forEach((item: ValidationErrorItem) => { if(item.path) errors[item.path] = item.message });
+            res.status(422).send({error: ErrorMessage.db(), validationErrors: errors});
+        }
+
+        res.status(400).send({msg: `Animal was created successfully. Id of User = ${animal.id}`});
+
+    }
+
+
     public static routes(){
 
-        this.router.post(  '/',           this.getUsers);
-        this.router.post(  '/amount',     this.getAmountUsers);
-        this.router.post(  '/animals',    this.getAnimals);
-        this.router.post(  '/avatar',     this.uploadAvatar);
-        this.router.post(  '/:id',        this.getUser);
-        this.router.delete('/:id/remove', this.removeUser);
-        this.router.put(   '/:id/edit',   this.editUser);
-        this.router.put(   '/add',        this.createUser);
+        this.router.post(  '/',              this.getUsers);
+        this.router.post(  '/amount',        this.getAmountUsers);
+        this.router.post(  '/animals',       this.getAllAnimals);
+        this.router.post(  '/avatar',        this.uploadAvatar);
+        this.router.post(  '/page-animals',  this.getAnimalsPage);
+        this.router.post(  '/:id',           this.getUser);
+
+        this.router.delete('/remove-animal/:id', this.removeAnimal);
+        this.router.delete('/:id/remove',        this.removeUser);
+        
+        this.router.put(   '/create-animal', this.createAnimal);
+        this.router.put(   '/add',           this.createUser);
+        this.router.put(   '/:id/edit',      this.editUser);
 
         return this.router;
     }
