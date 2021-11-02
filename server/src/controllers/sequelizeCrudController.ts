@@ -372,6 +372,8 @@ export default class SequelizeCrudController{
 
         animal = Animal.build(QueryData.animal);
 
+        console.log(animal);
+
         try {
             await animal.validate();
             await animal.save();
@@ -381,7 +383,7 @@ export default class SequelizeCrudController{
             res.status(422).send({error: ErrorMessage.db(), validationErrors: errors});
         }
 
-        res.status(400).send({msg: `Animal was created successfully. Id of User = ${animal.id}`});
+        res.status(200).send({msg: `Animal was created successfully. Id of Animal = ${animal.id}`});
 
     }
 
@@ -394,14 +396,12 @@ export default class SequelizeCrudController{
         this.router.post(  '/avatar',            this.uploadAvatar);
         this.router.post(  '/page-animals',      this.getAnimalsPage);
         this.router.post(  '/amount-animals',    this.getAnimalsAmount);
-        this.router.post(  '/:id',               this.getUser);
-
-        this.router.delete('/remove-animal/:id', this.removeAnimal);
-        this.router.delete('/:id/remove',        this.removeUser);
-        
         this.router.put(   '/create-animal',     this.createAnimal);
         this.router.put(   '/add',               this.createUser);
+        this.router.delete('/remove-animal/:id', this.removeAnimal);
         this.router.put(   '/:id/edit',          this.editUser);
+        this.router.post(  '/:id',               this.getUser);
+        this.router.delete('/:id/remove',        this.removeUser);        
 
         return this.router;
     }

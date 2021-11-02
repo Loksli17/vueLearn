@@ -43,7 +43,6 @@
                 ] as Array<Column>,
                 tableConfig: {dropDownActions: true},
                 tableActions: [
-                        { name: "View",   path: (id: number) => `/animals/${id}/view`, iconPath: require("./../../assets/img/table-icons/view.svg") }, 
                         { name: "Edit",   path: (id: number) => `/animals/${id}/edit`, iconPath: require("./../../assets/img/table-icons/edit.svg") }, 
                         { name: "Delete", handler: this.removeAnimal,                  iconPath: require("./../../assets/img/table-icons/delete.svg") },
                 ] as Array<Action>,
