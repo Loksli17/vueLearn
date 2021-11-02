@@ -24,6 +24,11 @@
                 </template>
             </DragList>
         </div>
+
+        <div>
+            <AudioPlayer src="@/assets/audio/test.mp3" />
+        </div>
+
         <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi interdum vel urna gravida pellentesque. 
             Phasellus ex nisi, molestie eu felis id, maximus vestibulum mi. Phasellus nec ex ornare, vestibulum ipsum eu, 
@@ -96,6 +101,8 @@
     import CollapsableList          from "@/components/CollapsableList/CollapsableList.vue";
     import Toggle                   from "@/components/Toggle.vue";
 
+    import AudioPlayer from "@/components/AudioPlayer/AudioPlayer.vue";
+
 
     export default defineComponent({
         components: {
@@ -105,7 +112,8 @@
             CollapsableList,
             DragList,
             TopMenu,
-            Toggle
+            Toggle,
+            AudioPlayer
         },
 
         data() {

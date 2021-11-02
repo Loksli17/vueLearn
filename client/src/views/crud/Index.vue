@@ -208,7 +208,7 @@
         opacity: 1;
     }
     .modal-wrapper-body {
-        transform: scale(1);
+        transform: scaleX(1);
     }
 
     .modal-zoom-enter-active,
@@ -231,7 +231,7 @@
         }
 
         .modal-wrapper-body {
-            transform: scale(0);
+            transform: scaleX(0);
         }
     }
 </style>

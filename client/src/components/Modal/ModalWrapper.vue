@@ -98,49 +98,9 @@
                 clickedOnBackground
             }
         }
-
-        // mounted() {
-        //     document.body.style.overflow = "hidden";
-        // },
-
-        // beforeUnmount() {
-        //     document.body.style.overflow = "initial";
-        // },
-        
-        // methods: {
-        //     clickedOnBackground() {
-        //         document.body.style.overflow = "initial";
-        //         this.$emit("update:show-modal", false);
-        //     }
-        // }
     })
 </script>
 
 <style lang="scss">
-    .modal-wrapper {
-        position: fixed;
-        z-index: 3000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-
-        .modal-wrapper-body {
-            position: fixed;
-            align-self: center;
-            width: 80%;
-            padding: 40px;
-            border-radius: 20px;
-            background-color: #FFF;
-        }
-
-        .modal-wrapper-background {
-            width: 100%;
-            height: 100%;
-            background-color: #000000e1;
-        }
-    }
+    @import "./modal.scss";
 </style>
