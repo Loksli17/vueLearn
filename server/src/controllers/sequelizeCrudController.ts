@@ -298,7 +298,8 @@ export default class SequelizeCrudController{
 
         try {
             animals = await Animal.findAll({ 
-                limit: Number(QueryData.take), offset: Number(QueryData.skip) 
+                limit: Number(QueryData.take), offset: Number(QueryData.skip),
+                order: [['id', 'desc']],
             });
         } catch (error) {
             res.status(400).send({error: ErrorMessage.db()});

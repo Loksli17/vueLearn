@@ -71,7 +71,6 @@
 
 
             sendForm: async function(data: FormDataView){
-                data.avatar = this.filename!;
                 let response: AxiosResponse | null = await AnimalService.addAnimal({animal: data});
    
                 if(response == null) { console.error("Error with response"); return; }
