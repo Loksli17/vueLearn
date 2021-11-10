@@ -26,3 +26,15 @@
         border-radius: 0px;
     }
 }
+
+
+%delete-button{
+    @extend %button;
+    background-color: rgb(245, 64, 32);
+
+    &:hover{
+        transition: .4s;
+        background-color: rgb(180, 39, 14);
+        border-radius: 0px;
+    }
+}

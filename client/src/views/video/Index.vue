@@ -16,6 +16,8 @@
                     <div class="id">{{video.id}}</div>
                     <div class="name">{{video.name}}</div>
                     <div class="description">{{video.shortDescription}}</div>
+
+                    <button @click="removeVideo(video)" class="delete-btn">Delete</button>
                     <button @click="showPlayer(video)" class="show-video-player">Play</button>
                 </div>
 
@@ -29,7 +31,11 @@
             
             <h1>{{playingVideo.id}} / {{playingVideo.name}}</h1>
 
-            <div></div>
+            <div class="video-wrapper">
+                <VideoPlayer
+                    :src="`http://localhost:3000/videos/${playingVideo.file}`"
+                />
+            </div>
 
         </ModalWrapper>
 
@@ -67,13 +73,17 @@
     import FileUpload               from '../../components/FileUpload/FileUpload.vue';
     import { LoadingFile, AddFile } from '../../components/FileUpload/types';
     import FlashMessageData         from '../../libs/flashMessage';
+    import VideoPlayer              from '../../components/VideoPlayer/VideoPlayer.vue';
+import { AxiosResponse } from 'axios';
+
 
 
     export default defineComponent({
 
         components: {
             ModalWrapper,
-            FileUpload
+            FileUpload,
+            VideoPlayer,
         },
 
         data(){
@@ -83,6 +93,7 @@
                 showPopupPlay  : false as boolean,
                 playingVideo   : {} as Record<string, any>,
 
+                
                 types   : [] as Array<Record<string, any>>,
                 files   : [] as Array<AddFile>,
             }
@@ -99,6 +110,14 @@
             },
 
 
+            async removeVideo(video: Record<string, any>){
+                const response: AxiosResponse | null = await VideoService.removeVideo(video.id);
+                if(response == null) return;
+                this.$flashMessage.show(FlashMessageData.successMessage('File loading', response.data.msg));
+                this.getVideos();
+            },
+
+
             videosLoad: async function(files: Array<LoadingFile>){
                  
                 files.forEach(async (loadingFile: LoadingFile) => {
@@ -107,6 +126,7 @@
                     await VideoService.videoUpload(data, loadingFile);
                 });
 
+                this.getVideos();
             },
 
 
@@ -161,7 +181,7 @@
             padding: 15px 20px;
             background: rgb(247, 245, 245);
 
-            grid-template-columns: max-content 150px 1fr 100px;
+            grid-template-columns: max-content 150px 1fr 80px 120px;
             column-gap: 30px;
             align-items: center;
 
@@ -169,6 +189,10 @@
                 @extend %button;
                 border: 0;
                 cursor: pointer;
+            }
+
+            .delete-btn{
+                @extend %delete-button;
             }
 
             .id{

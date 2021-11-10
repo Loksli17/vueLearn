@@ -52,10 +52,32 @@ export default class VideoController {
         }
     }
 
+
+    public static async removeOne(req: Request, res: Response){
+
+        let
+            id: number = Number(req.params.id);
+
+        if(id == undefined){
+            res.status(400).send({error: ErrorMessage.dataNotSended('id')});
+            return;
+        }
+
+        try {
+            await Video.destroy({where: {id: id}});
+        } catch (error) {
+             res.status(400).send({error: ErrorMessage.db()});
+            return;
+        }
+
+        res.status(200).send({msg: `Video with id = ${id} was removed successfully`});
+    }
+
     
     public static routes(): Router{
-        this.router.get( '/',       this.getVideos);
-        this.router.post('/upload', this.upload);
+        this.router.get   ( '/',          this.getVideos);
+        this.router.post  ('/upload',     this.upload);
+        this.router.delete('/:id/delete', this.removeOne);
 
         return this.router;
     }
