@@ -66,6 +66,7 @@
     import ModalWrapper             from "@/components/Modal/ModalWrapper.vue";
     import FileUpload               from '../../components/FileUpload/FileUpload.vue';
     import { LoadingFile, AddFile } from '../../components/FileUpload/types';
+    import FlashMessageData         from '../../libs/flashMessage';
 
 
     export default defineComponent({
@@ -97,6 +98,7 @@
                 this.videos = await VideoService.getVideos();
             },
 
+
             videosLoad: async function(files: Array<LoadingFile>){
                  
                 files.forEach(async (loadingFile: LoadingFile) => {
@@ -105,6 +107,11 @@
                     await VideoService.videoUpload(data, loadingFile);
                 });
 
+            },
+
+
+            fileTypeError: function(file: LoadingFile, msg: string){
+                this.$flashMessage.show(FlashMessageData.warningMessage('File loading', msg))
             },
 
             showPlayer(video: Record<string, any>) {

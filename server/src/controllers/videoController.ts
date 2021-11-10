@@ -5,6 +5,7 @@ import { FileArray, UploadedFile }   from "express-fileupload";
 import Parser                        from "../libs/parser";
 import Error                         from "../libs/error";
 
+
 export default class VideoController {
 
     private static router: Router = Router();
