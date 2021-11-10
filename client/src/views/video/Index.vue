@@ -170,6 +170,11 @@ import { AxiosResponse } from 'axios';
         height: max-content;
     }
 
+    .video-wrapper{
+        width: 800px;
+        height: 600px;
+    }
+
     .videos-wrap{
         display: grid;
         row-gap: 20px;

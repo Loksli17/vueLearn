@@ -1,6 +1,6 @@
 <template>
-    <video width="700" height="700" :poster="src">
-        <source :src="src">
+    <video controls name="media" autoplay :poster="src">
+        <source :src="src" type="video/mp4">
     </video>
 </template>
 
