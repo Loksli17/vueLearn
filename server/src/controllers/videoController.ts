@@ -15,7 +15,7 @@ export default class VideoController {
         let videos: Array<Video> = [];
 
         try {
-            videos = await Video.findAll();
+            videos = await Video.findAll({order: [['id', 'desc']]});
         } catch (error) {
             res.status(400).send({msg: ErrorMessage.db()});
             console.error(error);
@@ -28,6 +28,7 @@ export default class VideoController {
     public static async upload(req: Request, res: Response) {
 
         let
+            video     : Video,
             filename  : string                 = "",
             files     : FileArray | undefined  = req.files,
             file      : UploadedFile;
@@ -37,11 +38,12 @@ export default class VideoController {
             return;
         }
 
-        file = files.image as UploadedFile;
-        console.log(file);
+        file     = files.image as UploadedFile;
         filename = Parser.createFileName(file.name);
 
         try {
+            video = Video.build({name: file.name, description: 'college boys ahahahha', file: filename});
+            video.save();
             await file.mv(`public/videos/${filename}`);
             res.status(200).send({msg: 'Success', filename: filename});
         } catch (error) {

@@ -72,8 +72,6 @@ const getTypeFromFile = (file: File) => {
         throw new Error('bad type of file');
     }
 
-    console.log(regResult);
-
     return regResult[0];
 }
 
