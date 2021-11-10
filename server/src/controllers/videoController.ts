@@ -38,6 +38,7 @@ export default class VideoController {
         }
 
         file = files.image as UploadedFile;
+        console.log(file);
         filename = Parser.createFileName(file.name);
 
         try {

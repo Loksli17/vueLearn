@@ -29,7 +29,8 @@
     import {defineComponent }                  from 'vue';
     import FileComponent                       from './File.vue';
     import { AddFile, LoadingFile, AddStatus } from './types';
-    import { typeIcons, ProgressBar, normalFileSize, readFile } from './utils';
+
+    import { typeIcons, ProgressBar, normalFileSize, readFile, getTypeFromFile } from './utils';
 
     /**
      * todo some methods in utils file?
@@ -214,11 +215,13 @@
             },
 
             checkFileType: function(file: File){
-                
-                let flag: boolean = false;
 
-                this.types.forEach((type: string) => {
-                    if(file.type.includes(type)){flag = true}
+                let 
+                    type: string = getTypeFromFile(file),
+                    flag: boolean = false;
+
+                this.types.forEach((allowType: string) => {
+                    if(type.includes(allowType)) flag = true
                 });
 
                 if(!flag){
