@@ -20,7 +20,7 @@ export default class AnimalService extends Service {
     }
 
 
-    public static async amount(){
+    public static async amount(): Promise<number | null> {
 
         const response: AxiosResponse | void = await axios.post('/seq/amount-animals')
         .catch((reason) => {
@@ -36,7 +36,7 @@ export default class AnimalService extends Service {
     }
 
 
-    public static async removeOne(id: number){
+    public static async removeOne(id: number): Promise<any> {
         
         const response: AxiosResponse | void = await axios.delete(`/seq/remove-animal/${id}`)
         .catch((reason) => {
@@ -52,7 +52,7 @@ export default class AnimalService extends Service {
     }
 
 
-    public static async addAnimal(data: {animal: Record<string, any>}): Promise<AxiosResponse | null>{
+    public static async addAnimal(data: {animal: Record<string, unknown>}): Promise<AxiosResponse | null>{
 
         const response: AxiosResponse | void = await axios.put('/seq/create-animal', data)
         .catch((reason) => {

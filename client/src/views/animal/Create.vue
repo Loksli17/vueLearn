@@ -48,6 +48,7 @@
                 scheme    : null as Array<Array<FormHtmlItem>> | null,
                 formData  : null as FormDataView | null,
                 formErrors: null as FormErrors | null,
+                filename: "" as string
             }
         },
 
