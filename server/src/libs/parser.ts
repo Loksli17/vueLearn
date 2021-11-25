@@ -5,8 +5,8 @@ export default {
 
     createFileName: (filename: string): string => {
         
-        let 
-            regType: RegExp                  = /\.[A-Za-z]{3,5}/g,
+        let                                    
+            regType: RegExp                  = /\.[A-Za-z0-9]+$/g, 
             regRes : RegExpMatchArray | null = filename.match(regType),
             name   : string                  = "",
             type   : string                  = "";

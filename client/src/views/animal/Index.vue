@@ -77,9 +77,7 @@
         methods: {
 
             async getAnimals(data: {take: number, skip: number}){
-                const res = await AnimalService.getAnimals(data);
-
-                if (res) this.animals = res;
+               this.animals = await AnimalService.getAnimals(data) || [];
             },
 
             async amount(){

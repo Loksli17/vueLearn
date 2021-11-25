@@ -6,7 +6,7 @@
 
         <div class="add-line">
             <router-link :to="'/'">Go home</router-link>
-            <button class="create-btn" @click="showPopup = true">Create item</button>
+            <button class="create-btn" @click="showPopupUpload = true">Create item</button>
         </div>
 
         <div class="section">
@@ -16,7 +16,9 @@
                     <div class="id">{{video.id}}</div>
                     <div class="name">{{video.name}}</div>
                     <div class="description">{{video.shortDescription}}</div>
-                    <button class="show-video-player">Play</button>
+
+                    <button @click="removeVideo(video)" class="delete-btn">Delete</button>
+                    <button @click="showPlayer(video)" class="show-video-player">Play</button>
                 </div>
 
             </div>
@@ -24,7 +26,21 @@
         </div>
 
         <ModalWrapper 
-            v-model:show-modal="showPopup" 
+            v-model:show-modal="showPopupPlay" 
+            :transition-name="'modal-zoom'">
+            
+            <h1>{{playingVideo.id}} / {{playingVideo.name}}</h1>
+
+            <div class="video-wrapper">
+                <VideoPlayer
+                    :src="`http://localhost:3000/videos/${playingVideo.file}`"
+                />
+            </div>
+
+        </ModalWrapper>
+
+        <ModalWrapper 
+            v-model:show-modal="showPopupUpload" 
             :transition-name="'modal-zoom'">
             
             <h1>Video upload</h1>
@@ -56,20 +72,28 @@
     import ModalWrapper             from "@/components/Modal/ModalWrapper.vue";
     import FileUpload               from '../../components/FileUpload/FileUpload.vue';
     import { LoadingFile, AddFile } from '../../components/FileUpload/types';
+    import FlashMessageData         from '../../libs/flashMessage';
+    import VideoPlayer              from '../../components/VideoPlayer/VideoPlayer.vue';
+import { AxiosResponse } from 'axios';
+
 
 
     export default defineComponent({
 
         components: {
             ModalWrapper,
-            FileUpload
+            FileUpload,
+            VideoPlayer,
         },
 
         data(){
             return {
-                videos   : [] as Array<Record<string, any>>,
-                showPopup: false as boolean,
+                videos         : [] as Array<Record<string, any>>,
+                showPopupUpload: false as boolean,
+                showPopupPlay  : false as boolean,
+                playingVideo   : {} as Record<string, any>,
 
+                
                 types   : [] as Array<Record<string, any>>,
                 files   : [] as Array<AddFile>,
             }
@@ -85,6 +109,15 @@
                 this.videos = await VideoService.getVideos();
             },
 
+
+            async removeVideo(video: Record<string, any>){
+                const response: AxiosResponse | null = await VideoService.removeVideo(video.id);
+                if(response == null) return;
+                this.$flashMessage.show(FlashMessageData.successMessage('File loading', response.data.msg));
+                this.getVideos();
+            },
+
+
             videosLoad: async function(files: Array<LoadingFile>){
                  
                 files.forEach(async (loadingFile: LoadingFile) => {
@@ -93,7 +126,18 @@
                     await VideoService.videoUpload(data, loadingFile);
                 });
 
+                this.getVideos();
             },
+
+
+            fileTypeError: function(file: LoadingFile, msg: string){
+                this.$flashMessage.show(FlashMessageData.warningMessage('File loading', msg))
+            },
+
+            showPlayer(video: Record<string, any>) {
+                this.showPopupPlay = true;
+                this.playingVideo  = video;
+            }
         }
 
     });
@@ -126,6 +170,11 @@
         height: max-content;
     }
 
+    .video-wrapper{
+        width: 800px;
+        height: 600px;
+    }
+
     .videos-wrap{
         display: grid;
         row-gap: 20px;
@@ -137,7 +186,7 @@
             padding: 15px 20px;
             background: rgb(247, 245, 245);
 
-            grid-template-columns: max-content 150px 1fr 100px;
+            grid-template-columns: max-content 150px 1fr 80px 120px;
             column-gap: 30px;
             align-items: center;
 
@@ -145,6 +194,10 @@
                 @extend %button;
                 border: 0;
                 cursor: pointer;
+            }
+
+            .delete-btn{
+                @extend %delete-button;
             }
 
             .id{

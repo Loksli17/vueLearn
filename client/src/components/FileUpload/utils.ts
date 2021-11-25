@@ -61,9 +61,25 @@ const readFile = (file: File): Promise<string | ArrayBuffer> => {
 }
 
 
+const getTypeFromFile = (file: File) => {
+
+    let   regResult : RegExpMatchArray | null = [];
+    const regExpType: RegExp                  = /\.[a-zA-Z0-9]+$/gi;
+
+    regResult = file.name.match(regExpType);
+
+    if(regResult == null){
+        throw new Error('bad type of file');
+    }
+
+    return regResult[0];
+}
+
+
 export { 
     typeIcons,
     ProgressBar,
     normalFileSize,
     readFile,
+    getTypeFromFile,
 }

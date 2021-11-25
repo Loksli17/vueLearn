@@ -29,7 +29,8 @@
     import {defineComponent }                  from 'vue';
     import FileComponent                       from './File.vue';
     import { AddFile, LoadingFile, AddStatus } from './types';
-    import { typeIcons, ProgressBar, normalFileSize, readFile } from './utils';
+
+    import { typeIcons, ProgressBar, normalFileSize, readFile, getTypeFromFile } from './utils';
 
     /**
      * todo some methods in utils file?
@@ -214,11 +215,13 @@
             },
 
             checkFileType: function(file: File){
-                
-                let flag: boolean = false;
 
-                this.types.forEach((type: string) => {
-                    if(file.type.includes(type)){flag = true}
+                let 
+                    type: string = getTypeFromFile(file),
+                    flag: boolean = false;
+
+                this.types.forEach((allowType: string) => {
+                    if(type.includes(allowType)) flag = true
                 });
 
                 if(!flag){
@@ -250,14 +253,10 @@
 
                 const
                     imagesTypes     : Array<string>        = ['.svg', '.jpeg', '.jpg', '.png'],
-                    regExpType      : RegExp               = /\.[a-zA-Z0-9]+$/gi,
                     dataFile        : string | ArrayBuffer = await readFile(addFile.file),
-                    regExpTypeResult: Array<string> | null = addFile.file.name.match(regExpType),
                     clearFileName   : string               = addFile.file.name.slice(0, addFile.file.name.indexOf('.'));
 
-                if(!regExpTypeResult) throw Error('file has bad type');
-
-                const typeFile: string = regExpTypeResult[0];
+                const typeFile: string = getTypeFromFile(addFile.file);
 
                 const loadingFile: LoadingFile = {
                     file      : addFile.file, 

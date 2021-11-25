@@ -49,4 +49,20 @@ export default class VideoService extends Service {
 
         return response.data.filename;
     }
+
+
+    public static async removeVideo(id: number): Promise<AxiosResponse | null>{
+
+        const response: AxiosResponse | void = await axios.delete(`/video/${id}/delete`, )
+        .catch((reason) => {
+            this.errorMessage(reason.response.status);
+            console.error(reason);
+        });
+
+        if(response == undefined) { console.error('Bad response'); return null; }
+
+        this.checkResponse(response, [200]);
+
+        return response;
+    } 
 } 
