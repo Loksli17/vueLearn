@@ -2,15 +2,6 @@
     <TopMenu :buttons="buttons" />
     <PageProgressBar margin-top="60px" />
     <div class="long-page-wrapper">
-        <div>
-            <Toggle v-model="toggleVal" name="toggle" />
-            <span>{{ toggleVal ? "show collapse buttons" : "don't show collapse buttons" }}</span>
-        </div>
-
-        <CollapsableList 
-            :items="list" 
-            :only-one-open="true"
-            :show-collapse-button="toggleVal" />
 
         <div class="drag-drop-wrapper">
             <DragList 
@@ -26,7 +17,7 @@
         </div>
 
         <div>
-            <AudioPlayer src="@/assets/audio/test.mp3" />
+            <AudioPlayer src="./../assets/audio/test.mp3" />
         </div>
 
         <p>
@@ -82,6 +73,17 @@
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </p>
 
+        <Card>
+            <template #image>
+                <img src="@/assets/img/card-images/1.jpg" alt="">
+            </template> 
+            <template #content>
+                <h2>Header</h2>
+                <p>Nam ac dolor nulla. Nunc congue maximus lorem</p>
+            </template>   
+        </Card>
+
+
     </div>
 
     <!-- This is more flexible -->
@@ -98,8 +100,8 @@
     import TopMenu                  from "@/components/TopMenu/TopMenu.vue";
     import { LinkButton }           from "@/components/TopMenu/types";
     import DragList                 from "@/components/DragList/DragList.vue";
-    import CollapsableList          from "@/components/CollapsableList/CollapsableList.vue";
-    import Toggle                   from "@/components/Toggle.vue";
+
+    import Card        from "@/components/Card/Card.vue";
 
     import AudioPlayer from "@/components/AudioPlayer/AudioPlayer.vue";
 
@@ -109,11 +111,10 @@
             FloatingButton,
             ScrollToTopButton,
             PageProgressBar,
-            CollapsableList,
             DragList,
             TopMenu,
-            Toggle,
-            AudioPlayer
+            AudioPlayer,
+            Card,
         },
 
         data() {
@@ -131,13 +132,6 @@
                     { name: "hah", num: 55 },
                     { name: "ahha", num: 45 }
                 ] as Array<Record<string, unknown>>,
-
-                list: [
-                    { header: "ПРОГРАММА SETAP BIOS", content: "BIOS – это термин, который используется для описания базовой системы ввода/вывода. Она представляет собой промежуточный слой между про-грам¬м¬ной и аппаратной частями компьютера. Часто под BIOS подразумева-ют драйверы устройств. Однако, кроме системной BIOS, существует еще BIOS адаптеров, которые загружаются при запуске системы. Поэтому базо-вая система ввода-вывода – это комбинация всех типов BIOS, а также загру-жаемые драйверы устройств. Часть BIOS содержится в микросхеме на си-стемной плате или платах адаптеров, именно из-за наличия этих микросхем пользователи чаще всего относят BIOS к аппаратной части компьютера." },
-                    { header: "Общие свойства", content: "В этом разделе устанавливается системное время, настраиваются IDE- и флоппи-дисководы, выбирается реакция системы на ошибки. Здесь же приводит-ся размер инсталлированной в компьютере RAM. " },
-                    { header: "Свойства BIOS", content: "В этом разделе находятся различные опции, так или иначе относящиеся к специфичным настройкам BIOS, CPU, кэша и подобного. " }
-                ],
-                toggleVal: false as boolean
             }
         }
     })
